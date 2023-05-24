@@ -189,7 +189,7 @@ class WhatsAppWrapper:
         """__summary__: Send interactive message"""
         payload = json.dumps({
             "recipient_type": "individual",
-            "to": phone_number,
+            "recipient_id": phone_number,
             "type": "interactive",
             "interactive":{
                 "type": "button",
