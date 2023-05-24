@@ -76,7 +76,7 @@ def facebook(request):
                 new_message = process_threads(from_number=from_number, key=message)
 
                 """send message"""
-                response = wrapper.send_text_message(from_number, new_message)
+                response = wrapper.send_interactive_message(from_number, new_message)
 
             elif message_type == 'location':
                 message_location = wrapper.get_location(data)

@@ -167,7 +167,7 @@ class WhatsAppWrapper:
         return response
 
     def send_text_message(self, phone_number, message):
-        """__summary__: Send templete message """
+        """__summary__: Send text message """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "preview_url": False,
@@ -176,6 +176,50 @@ class WhatsAppWrapper:
             "type": "text",
             "text": {
                 "body": message
+            }
+        })
+
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
+        """return response"""
+        return response
+    
+
+    def send_interactive_message(self, phone_number, message ):
+        """__summary__: Send interactive message"""
+        payload = json.dumps({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": phone_number,
+            "type": "interactive",
+            "interactive":{
+                "type": "list" | "button",
+                "header": {
+                    "type": "text",
+                    "text": ""
+                },
+                "body": {
+                    "text": message
+                },
+                "footer": {},
+                "action": {
+                    "buttons": [
+                    {
+                    "type": "reply",
+                    "reply": {
+                        "id": "unique-postback-id",
+                        "title": "First Button’s Title" 
+                    }
+                    },
+                    {
+                    "type": "reply",
+                    "reply": {
+                        "id": "unique-postback-id",
+                        "title": "Second Button’s Title" 
+                    }
+                    }
+                ] 
+                }
             }
         })
 
