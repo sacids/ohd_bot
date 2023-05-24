@@ -193,7 +193,7 @@ class WhatsAppWrapper:
             "to": phone_number,
             "type": "interactive",
             "interactive":{
-                "type": "list" | "button",
+                "type": "button",
                 "header": {
                     "type": "text",
                     "text": ""
@@ -207,18 +207,18 @@ class WhatsAppWrapper:
                     {
                     "type": "reply",
                     "reply": {
-                        "id": "unique-postback-id",
-                        "title": "First Button’s Title" 
+                        "id": "b1",
+                        "title": "Ndiyo" 
                     }
                     },
                     {
                     "type": "reply",
                     "reply": {
-                        "id": "unique-postback-id",
-                        "title": "Second Button’s Title" 
+                        "id": "b2",
+                        "title": "Hapana" 
                     }
                     }
-                ] 
+                    ] 
                 }
             }
         })
