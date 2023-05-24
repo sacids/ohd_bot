@@ -2,7 +2,7 @@ import json
 import requests
 from django.http import HttpResponse, JsonResponse
 from decouple import config
-
+import logging
 
 class WhatsAppWrapper:
     API_URL = "https://graph.facebook.com/v15.0/"
@@ -185,10 +185,9 @@ class WhatsAppWrapper:
         return response
     
 
-    def send_interactive_message(self, phone_number, message ):
+    def send_interactive_message(self, phone_number, message):
         """__summary__: Send interactive message"""
         payload = json.dumps({
-            "messaging_product": "whatsapp",
             "recipient_type": "individual",
             "to": phone_number,
             "type": "interactive",
@@ -201,25 +200,21 @@ class WhatsAppWrapper:
                 "footer": {},
                 "action": {
                     "buttons": [
-                    {
-                    "type": "reply",
-                    "reply": {
-                        "id": "b1",
-                        "title": "Ndiyo" 
-                    }
-                    },
-                    {
-                    "type": "reply",
-                    "reply": {
-                        "id": "b2",
-                        "title": "Hapana" 
-                    }
-                    }
-                    ] 
+                       {
+                            "type": "reply",
+                            "reply": {
+                                "id": "b1",
+                                "title": "Button 1" 
+                            }
+                        }, 
+                    ]
                 }
             }
         })
 
+        logging.info(payload)
+        
+        """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
 
         """return response"""
