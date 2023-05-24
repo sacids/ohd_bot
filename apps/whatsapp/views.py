@@ -77,6 +77,7 @@ def facebook(request):
 
                 """send message"""
                 response = wrapper.send_interactive_message(from_number, new_message)
+                logging.info("Response From Facebook => ")
                 logging.info(response)
 
             elif message_type == "interactive":
