@@ -1,0 +1,136 @@
+{% extends 'layouts/app-with-nav.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %} Threads {% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0 font-size-18">Responses</h4>
+
+            <div class="page-title-right">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="row mb-2">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Thread</label>
+                                <textarea name="title" id="title" class="form-control"
+                                    placeholder="Write response title..." rows="2" readonly>{{ thread.title }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Response</label>
+                                <textarea name="sub_thread" id="sub_thread" class="form-control"
+                                    placeholder="Write response title..." rows="2" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>View Number</label>
+                                <input type="number" name="view_id" id="view_id" class="form-control"
+                                    placeholder="Write View No..." min="1" required />
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label>Interactive</label>
+                                <select name="show" id="show" class="form-control">
+                                    <option value="">Select</option>
+                                    <option value="NUMBER">NUMBER</option>
+                                    <option value="BUTTON">BUTTON</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <a href="{% url 'threads:lists' %}"
+                                    class="btn btn-outline-danger text-medium">Cancel</a>
+                                <button class="btn btn-primary text-medium" type="submit">
+                                    Submit <i class="fa fa-chevron-circle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="">
+            <div class="table-responsive">
+                <table class="table project-list-table table-nowrap align-middle table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 30px">#</th>
+                            <th scope="col">View No.</th>
+                            <th scope="col">Response</th>
+                            <th scope="col">Interactive</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for val in sub_threads %}
+                        <tr>
+                            <td>
+                                <i class='bx bx-message-square-dots font-size-18 text-success'></i>
+                            </td>
+                            <td>{{ val.view_id }}</td>
+                            <td>{{ val.title }}</td>
+                            <td>{{ val.show }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="{% url 'threads:delete-sub' val.id %}">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<!-- <div class="row">
+    <div class="col-12">
+        <div class="text-center my-3">
+            <a href="javascript:void(0);" class="text-success"><i class="bx bx-loader bx-spin font-size-18 align-middle me-2"></i> Load more </a>
+        </div>
+    </div> 
+</div> -->
+<!-- end row -->
+
+{% endblock %}

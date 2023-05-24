@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock title %} | Laina Finance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Hotel Management System">
+    <meta name="keywords" content="Hotel Management System">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <!-- App favicon -->
+    <link href="{% static 'images/favicon.jpeg' %}" sizes="128x128" rel="image/jpeg" type="image/jpeg" />
+
+    {% include 'partials/css.html' %}
+    {% block extra_css %}{% endblock %}
+
+    <!--./Alpine JS -->
+    <script defer src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"></script>
+
+    <!-- htmx -->
+    <script src="https://unpkg.com/htmx.org@1.8.5"
+        integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous">
+        </script>
+</head>
+
+<body data-topbar="light">
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        {% include 'layouts/topbar.html'%}
+        {% include 'layouts/sidebar.html'%}
+
+        @include('layouts.topbar')
+        @include('layouts.sidebar')
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content bg-light-grey">
+            <div class="page-content">
+                <div class="container-fluid">
+                    {% block content %}
+
+                    {% endblock content %}
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            {% include 'layouts/footer.html' %}
+        </div>
+        <!-- end main content-->
+    </div>
+    <!-- END layout-wrapper -->
+
+    {% include 'partials/js.html' %}
+
+    {% block extra_js %}
+    {% endblock extra_js %}
+</body>
+
+</html>

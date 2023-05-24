@@ -1,0 +1,6 @@
+<select name="sub_thread_id" id="sub_thread_id" class="form-control">
+    <option value="">Select</option>
+    {% for val in sub_threads %}
+        <option value="{{ val.id }}">{{ val.view_id }}. {{ val.title }}</option>
+    {% endfor %}
+</select>

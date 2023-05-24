@@ -1,0 +1,477 @@
+/*!
+ * User: Renfrid Ngolongolo
+ */
+/*Google Fonts */
+/* @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:100,200,400,500,600,700,800'); */
+
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  font-size: 13px;
+  font-weight: 400;
+  color: #424242;
+}
+
+a {
+  color: #424242;
+}
+
+a:hover, a:focus {
+  color: #153567;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #424242;
+}
+
+.font-weight-600 {
+  font-weight: 600 !important;
+}
+
+.font-weight-700 {
+  font-weight: 700 !important;
+}
+
+.font-weight-800 {
+  font-weight: 800 !important;
+}
+
+
+.text-faded {
+  color: rgba(255, 255, 255, .7);
+}
+
+.text-gray-800 {
+  color: #424242
+}
+
+.text-grey-700 {
+  color: #616161;
+}
+
+.text-grey-600 {
+  color: #757575;
+}
+
+.text-grey-500 {
+  color: #9E9E9E;
+}
+
+.text-primary {
+  color: #153567 !important;
+}
+
+.text-secondary {
+  color: #2e2d2d !important;
+}
+
+.text-warning {
+  color: #FF6F00 !important;
+}
+
+.text-danger {
+  color: #C62828 !important;
+}
+
+.text-success {
+  color: #388E3C !important;
+}
+
+.text-success-1 {
+  color: #66BB6A !important;
+}
+
+.text-dark-blue {
+  color: #153567 !important;
+}
+
+.text-light-blue {
+  color: #1976D2 !important;
+}
+
+/*===============================================|
+Sidebar
+================================================*/
+#sidebar-menu {
+  margin: 0 8px;
+  padding: 10px 0 30px
+}
+
+#sidebar-menu .mm-active>.has-arrow:after {
+  -webkit-transform: rotate(-180deg);
+  transform: rotate(-180deg)
+}
+
+#sidebar-menu .has-arrow:after {
+  content: "\f0140";
+  font-family: Material Design Icons;
+  display: block;
+  float: right;
+  -webkit-transition: -webkit-transform .2s;
+  transition: -webkit-transform .2s;
+  transition: transform .2s;
+  transition: transform .2s, -webkit-transform .2s;
+  font-size: 1rem
+}
+
+#sidebar-menu ul li a {
+  display: block;
+  padding: .425rem 1.5rem;
+  margin: 8px 0;
+  color: #616161;
+  position: relative;
+  font-size: 13px;
+  -webkit-transition: all .4s;
+  transition: all .4s
+}
+
+#sidebar-menu ul li a i {
+  display: inline-block;
+  min-width: 1.75rem;
+  padding-bottom: .125em;
+  font-size: 1.25rem;
+  line-height: 1.40625rem;
+  vertical-align: middle;
+  color: #545a6d;
+  -webkit-transition: all .4s;
+  transition: all .4s
+}
+
+#sidebar-menu ul li a:hover, #sidebar-menu ul li a:hover i {
+  color: #153567;
+}
+
+#sidebar-menu ul li .badge {
+  margin-top: 4px
+}
+
+#sidebar-menu ul li ul.sub-menu {
+  padding: 0
+}
+
+#sidebar-menu ul li ul.sub-menu li a {
+  padding: .4rem 1.5rem .4rem 3.5rem;
+  font-size: 13px;
+  color: #545a6d
+}
+
+#sidebar-menu ul li ul.sub-menu li a:hover {
+  color: #383c40
+}
+
+#sidebar-menu ul li ul.sub-menu li ul.sub-menu {
+  padding: 0
+}
+
+#sidebar-menu ul li ul.sub-menu li ul.sub-menu li a {
+  padding: .4rem 1.5rem .4rem 4.5rem;
+  font-size: 13px
+}
+
+
+.mm-active .active, .mm-active .active i, .mm-active>a, .mm-active>a i, .mm-active>i {
+  color: #153567 !important;
+  font-weight: 600;
+  border-radius: 0;
+}
+
+
+/*===============================================|
+Background Color
+================================================*/
+.bg-primary {
+  background: #153567 !important;
+}
+
+.bg-success {
+  background: #388E3C !important;
+} 
+
+.bg-success-1 {
+  background: #66BB6A !important;
+}
+
+ .bg-danger {
+  background: #C62828 !important;
+}
+
+.bg-danger-1 {
+  background: #F44336 !important;
+} 
+
+.bg-light-grey {
+  background-color: #f2f5f7 !important;
+}
+
+.bg-light-grey-1 {
+  background-color: #fafafa !important;
+}
+
+.bg-dark-blue {
+  background-color: #0D47A1 !important;
+}
+
+.bg-light-blue {
+  background-color: #1976D2 !important;
+}
+
+.bg-dark-1 {
+  background-color: #2c3e50 !important;
+}
+
+/*===============================================|
+Button
+================================================*/
+.btn-xss {
+  padding: .12rem .30rem;
+  font-size: .900rem;
+  background: rgba(25, 103, 210, 0.07);
+  line-height: 1.4;
+  border-radius: 2px;
+  color: #1967D2;
+  transition: all 300ms ease;
+}
+
+.btn-primary {
+  background: #153567;
+  border-color: #153567;
+  color: #ffffff;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+  color: #ffffff;
+  background-color: #153567;
+  border-color: #153567;
+}
+
+.btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
+  background-image: none;
+}
+
+.btn-outline-primary {
+  background: #ffffff;
+  border-color: #153567;
+  color: #153567;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active, .btn-outline-primary.active, .open .dropdown-toggle.btn-outline-primary {
+  background: #153567;
+  border-color: #153567;
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  color: #ffffff;
+  background-color: #1565C0;
+  border-color: #1565C0;
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active, .btn-secondary.active, .open .dropdown-toggle.btn-secondary {
+  color: #ffffff;
+  background-color: #1565C0;
+  border-color: #1565C0;
+}
+
+.btn-secondary:active, .btn-secondary.active, .open .dropdown-toggle.btn-secondary {
+  background-image: none;
+}
+
+.btn-outline-secondary {
+  color: #1565C0;
+  background-color: #fff;
+  border-color: #1565C0;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:focus, .btn-outline-secondary:active, .btn-outline-secondary.active, .open .dropdown-toggle.btn-outline-secondary {
+  color: #FFFFFF;
+  background-color: #1565C0;
+  border-color: #1565C0;
+}
+
+
+
+/*=============================================
+offcanvas
+============================================*/
+#offcanvas-wrp {
+  width: 48vw;
+  height: 100%;
+  z-index: 100;
+  margin-top: 60px;
+  padding: 20px 10px;
+  border-left: 1px solid #B0BEC5;
+  background-color: #ECEFF1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 3;
+  overflow-y: scroll;
+}
+
+
+@media screen and (max-width: 600px) {
+  #offcanvas-wrp {
+    width: 64vw;
+    height: calc(100vh - 100px);
+    margin-top: 40px;
+  }
+
+  .oc-shown {
+    display: none;
+  }
+}
+
+.success-template {
+  padding: 10px;
+  text-align: center;
+}
+
+.success-actions {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.success-actions .btn {
+  margin-right: 10px;
+}
+
+.error-template {
+  padding: 20px 10px;
+  text-align: center;
+}
+
+.error-actions {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.error-actions .btn {
+  margin-right: 10px;
+}
+
+/*===============================================|
+Loader-spinner button 
+||==============================================*/
+.loading-spinner {
+  display: none;
+}
+
+.loading-spinner.active {
+  display: inline-block;
+}
+
+/*================FORM WIZARD ===============*/
+.stepwizard-step {
+  /* margin: 10px;*/
+  padding: 8px 4px; 
+  background-color: #E3F2FD;
+  width: 20%;
+}
+
+.stepwizard-step p {
+  margin-top: 10px;
+}
+
+.stepwizard-row {
+  display: table-row;
+}
+
+.stepwizard {
+  display: table;
+  width: 100%;
+  position: relative;
+}
+
+.stepwizard-step button[disabled] {
+  opacity: 1 !important;
+  filter: alpha(opacity=100) !important;
+}
+
+/* .stepwizard-row:before {
+  top: 14px;
+  bottom: 0;
+  position: absolute;
+  content: " ";
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+} */
+
+.stepwizard-step {
+  display: table-cell;
+  text-align: center;
+  position: relative;
+}
+
+.stepwizard-step a.btn-circle {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #1565C0;
+  border-radius: 50%;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  color: #757575;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stepwizard-step a.btn-success {
+  border: none;
+}
+
+.stepwizard-step span {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/*========================================
+|| 
+ ========================================*/
+.error {
+  color: #f00;
+}
+
+.error-messages {
+  border-radius: 4px;
+  padding-left: 12px;
+  background-color: #FFEBEE;
+  color: #f00;
+}
+
+#error-messages {
+  border-radius: 4px;
+  padding: 12px;
+  background-color: #FFEBEE;
+  color: #f00;
+}
+
+#error-messages span {
+  display: block;
+}
+
+.success-messages, #success-messages {
+  border-radius: 4px;
+  padding: 16px;
+  background-color: #E8F5E9;
+  color: #43A047;
+  font-weight: 500;
+}
+
+
+ul.header-social-icon li {
+  display: inline;
+  list-style-type: none;
+}
+
+ul.header-social-icon li a {
+  color: #1684fc;
+  font-size: 1.4375em
+}
+
+ul.header-social-icon i{
+  font-size:24px
+}
