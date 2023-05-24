@@ -20,13 +20,11 @@ from apps.whatsapp import views as whatsapp_views
 from apps.thread.validation import *
 
 urlpatterns = [
-    path("", admin.site.urls),
     path("admin/", admin.site.urls),
     path('threads/', include('apps.thread.urls')),
 
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),
-    path('privacy_policy', whatsapp_views.privacy_policy),
 
     path('api/validation/date', validate_date),
 ]

@@ -252,10 +252,3 @@ def push_data(**kwargs):
     return JsonResponse({'status': 'success', 'message': "data sent"})
 
 
-"""privacy policy"""
-def privacy_policy(request):
-    return render(request, "html/index.html", {})
-
-
-
-
