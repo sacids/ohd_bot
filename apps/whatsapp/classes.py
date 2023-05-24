@@ -5,7 +5,7 @@ from decouple import config
 import logging
 
 class WhatsAppWrapper:
-    API_URL = "https://graph.facebook.com/v15.0/"
+    API_URL = "https://graph.facebook.com/v16.0/"
     API_TOKEN=config('WHATSAPP_API_TOKEN')
     NUMBER_ID=config('WHATSAPP_NUMBER_ID')
 
@@ -193,27 +193,32 @@ class WhatsAppWrapper:
             "type": "interactive",
             "interactive":{
                 "type": "button",
-                "header": {},
                 "body": {
                     "text": message
                 },
-                "footer": {},
                 "action": {
                     "buttons": [
-                       {
+                        {
                             "type": "reply",
                             "reply": {
                                 "id": "b1",
                                 "title": "Button 1" 
                             }
                         }, 
+                        {
+                            "type": "reply",
+                            "reply": {
+                                "id": "b2",
+                                "title": "Button 2" 
+                            }
+                        },
                     ]
                 }
             }
         })
 
         logging.info(payload)
-        
+
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
 
