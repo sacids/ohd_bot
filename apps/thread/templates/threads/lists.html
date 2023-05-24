@@ -35,10 +35,10 @@
                 <table class="table project-list-table table-nowrap align-middle table-borderless">
                     <thead>
                         <tr>
-                            <th scope="col" style="width: 50px">#</th>
+                            <th scope="col" style="width: 40px">#</th>
                             <th scope="col">Thread</th>
-                            <th scope="col">Label</th>
-                            <th scope="col">Validate</th>
+                            <th scope="col">Rules</th>
+                            <th scope="col">Message Type</th>
                             <th scope="col">Created</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -50,16 +50,9 @@
                                 <i class='bx bx-message-square-dots font-size-24 text-success'></i>
                             </td>
                             <td>{{ val.title }}</td>
-                            <td>{{ val.label}}</td>
-                            <td>
-                                {% if val.validate == 0 %}
-                                <span class="badge bg-danger">No</span>
-                                {% elif val.validate == 1 %}
-                                <span class="badge bg-success">Yes</span>
-                                {% endif %}
-                            </td>
+                            <td>{{ val.validation|default:"No" }}</td>
+                            <td>{{ val.message_type }}</td>
                             <td>{{ val.created_at|date:"d-m-Y" }}</td>
-
                             <td>
                                 <div class="dropdown">
                                     <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"

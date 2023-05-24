@@ -73,38 +73,11 @@ class ThreadWrapper:
 
         response = {}
 
-        if thread.validate == 1:
-            """Construct URL"""
-            URL = self.BASE_URL + thread.validate_url
-        
-            """validate thread"""
-            result = requests.get(URL, params={"uuid": uuid, "thread_id": thread_id, "key": key})
+        if thread.validation is not None:
+            """TODO: validate key"""
 
-            if result.json()['validation'] == True:
-                """get key value"""
-                key_value = result.json()['value']
-
-                """call next menu"""
-                response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key_value, channel=channel)
-            else:
-                data = result.json()['data']
-
-                if data == 'INVALID_INPUT':
-                    """response"""
-                    message = result.json()['message']
-                    response = JsonResponse({'status': 'failed', 'message': message, 'action': None, 'action_url': None})
-
-                elif result.json()['data'] == 'WARD_MENU':
-                    """get key value"""
-                    key_value = result.json()['value']
-
-                    """current thread"""
-                    cr_thread = Thread.objects.filter(flag='Thread_Kata').first()
-
-                    """call next menu"""
-                    response = self.current_thread(phone=phone, uuid=uuid, thread_id=cr_thread.id, key=key_value, channel=channel)
-                elif result.json()['data'] == 'DISTRICT_MENU':
-                    pass
+            """normal response"""
+            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
         else: 
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
         return response    

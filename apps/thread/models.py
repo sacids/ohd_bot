@@ -10,19 +10,44 @@ class Thread(models.Model):
         ('PULL', 'PULL'),
     )
 
-    id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    block        = models.IntegerField(default=0)
-    title        =  models.TextField(blank=False, null=False)
-    db_flag      =  models.CharField(max_length=50, blank=False, null=False)
-    label        =  models.CharField(max_length=50, blank=True, null=True)
-    validate     =  models.IntegerField(default=0, null=False)
-    validate_url =  models.CharField(max_length=200, blank=True, null=True)
-    action       =  models.CharField(max_length=20, choices=ACTION_URL_OPTIONS, blank=True, null=True)
-    action_url   =  models.CharField(max_length=200, blank=True, null=True)
-    created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at   = models.DateTimeField(auto_now=True) 
-    created_by   =  models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    updated_by   =  models.ForeignKey(User, related_name="updated_by", blank=True, null=True, on_delete=models.SET_NULL)
+    MESSAGE_TYPE_OPTIONS = (
+        ('TEXT', 'TEXT'),
+        ('DOCUMENT', 'DOCUMENT'),
+        ('IMAGE', 'IMAGE'),
+        ('AUDIO', 'AUDIO'),
+        ('VIDEO', 'VIDEO'),
+        ('CONTACT', 'CONTACT'),
+        ('LOCATION', 'LOCATION'),
+        ('LIST MESSAGE', 'LIST MESSAGE'),
+        ('REPLY BUTTON', 'REPLY BUTTON'),
+    )
+
+    VALIDATION_RULES_OPTIONS = (
+        ('REQUIRED', 'REQUIRED'),
+        ('NUMERIC', 'NUMERIC'),
+        ('EMAIL', 'EMAIL'),
+        ('PHONE', 'PHONE'),
+        ('NIN', 'NIN'),
+        ('DL', 'DRIVER LICENCE'),
+        ('MAX_LENGTH', 'MAX LENGTH'),
+        ('MIN_LENGTH', 'MIN LENGTH'),
+        ('DATE', 'DATE'),
+        ('TIME', 'TIME'),
+    )
+
+    id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    block          = models.IntegerField(default=0)
+    title          =  models.TextField(blank=False, null=False)
+    db_flag        =  models.CharField(max_length=50, blank=False, null=False)
+    label          =  models.CharField(max_length=50, blank=True, null=True)
+    validation     =  models.CharField(max_length=200, choices=VALIDATION_RULES_OPTIONS,  blank=True, null=True)
+    action         =  models.CharField(max_length=20, choices=ACTION_URL_OPTIONS, blank=True, null=True)
+    action_url     =  models.CharField(max_length=200, blank=True, null=True)
+    message_type   =  models.CharField(max_length=20, choices=MESSAGE_TYPE_OPTIONS, blank=False, null=False, default="TEXT")
+    created_at     = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at     = models.DateTimeField(auto_now=True) 
+    created_by     =  models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    updated_by     =  models.ForeignKey(User, related_name="updated_by", blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         db_table = 'lb_threads'
@@ -34,15 +59,9 @@ class Thread(models.Model):
 
 class SubThread(models.Model):
     """Sub Thread Model"""
-    SHOW_OPTIONS = (
-        ('NUMBER', 'Number'),
-        ('BUTTON', 'Button'),
-    )
-
     id          = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     thread      =  models.ForeignKey(Thread, on_delete=models.CASCADE)
     view_id     =  models.CharField(max_length=10, blank=False, null=False)
-    show        =  models.CharField(max_length=20, choices=SHOW_OPTIONS, blank=False, null=False, default="NUMBER")
     created_at  = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at  = models.DateTimeField(auto_now=True) 
     title       =  models.TextField(blank=False, null=False)
