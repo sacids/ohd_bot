@@ -183,6 +183,7 @@ class WhatsAppWrapper:
 
         """return response"""
         return response
+
     
 
     def send_interactive_message(self, phone_number, message):
@@ -193,34 +194,27 @@ class WhatsAppWrapper:
             "to": phone_number,
             "type": "interactive",
             "interactive":{
-                "type": "list",
+                "type": "button",
                 "body": {
                     "text": message
                 },
                 "action": {
-                    "button": "cta-button-content",
-                    "sections":[
-                            {
-                                "title":"Marejesho",
-                                "rows": [
-                                {
-                                    "id":"b1",
-                                    "title": "Marejesho",
-                                    "description": "Laina Marejesho",           
-                                }
-                                ]
-                            },
-                            {
-                                "title":"Mkopo",
-                                "rows": [
-                                {
-                                    "id":"b2",
-                                    "title": "Mkopo",
-                                    "description": "Laina Mkopo",           
-                                }
-                                ]
-                            },
-                    ]
+                    "buttons": [
+                        {
+                        "type": "reply",
+                        "reply": {
+                            "id": "b1",
+                            "title": "Ndiyo" 
+                        }
+                        },
+                        {
+                        "type": "reply",
+                        "reply": {
+                            "id": "b2",
+                            "title": "Hapana" 
+                        }
+                        }
+                    ] 
                 }
             }
         })
