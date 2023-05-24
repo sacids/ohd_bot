@@ -188,6 +188,7 @@ class WhatsAppWrapper:
     def send_interactive_message(self, phone_number, message):
         """__summary__: Send interactive message"""
         payload = json.dumps({
+            "messaging_product": "whatsapp",
             "recipient_type": "individual",
             "to": phone_number,
             "type": "interactive",
