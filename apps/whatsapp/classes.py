@@ -189,35 +189,40 @@ class WhatsAppWrapper:
         """__summary__: Send interactive message"""
         payload = json.dumps({
             "recipient_type": "individual",
-            "recipient_id": phone_number,
+            "to": phone_number,
             "type": "interactive",
             "interactive":{
-                "type": "button",
+                "type": "list",
                 "body": {
-                    "text": "Karibu kwenye huduma za Laina Finance, tafadhali chagua huduma"
+                    "text": message
                 },
                 "action": {
-                    "buttons": [
-                        {
-                            "type": "reply",
-                            "reply": {
-                                "id": "b1",
-                                "title": "Button 1" 
-                            }
-                        }, 
-                        {
-                            "type": "reply",
-                            "reply": {
-                                "id": "b2",
-                                "title": "Button 2" 
-                            }
-                        },
+                    "button": "cta-button-content",
+                    "sections":[
+                            {
+                                "title":"Marejesho",
+                                "rows": [
+                                {
+                                    "id":"b1",
+                                    "title": "Marejesho",
+                                    "description": "Laina Marejesho",           
+                                }
+                                ]
+                            },
+                            {
+                                "title":"Mkopo",
+                                "rows": [
+                                {
+                                    "id":"b2",
+                                    "title": "Mkopo",
+                                    "description": "Laina Mkopo",           
+                                }
+                                ]
+                            },
                     ]
                 }
             }
         })
-
-        logging.info(payload)
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
