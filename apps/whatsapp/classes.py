@@ -194,7 +194,7 @@ class WhatsAppWrapper:
             "interactive":{
                 "type": "button",
                 "body": {
-                    "text": message
+                    "text": "Karibu kwenye huduma za Laina Finance, tafadhali chagua huduma"
                 },
                 "action": {
                     "buttons": [
