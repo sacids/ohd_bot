@@ -194,10 +194,7 @@ class WhatsAppWrapper:
             "type": "interactive",
             "interactive":{
                 "type": "button",
-                "header": {
-                    "type": "text",
-                    "text": ""
-                },
+                "header": {},
                 "body": {
                     "text": message
                 },
