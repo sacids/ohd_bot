@@ -11,7 +11,7 @@ from decouple import config
 import logging
 
 VERIFY_TOKEN = config('WHATSAPP_VERIFY_TOKEN')
-API_URL = "https://graph.facebook.com/v15.0/"
+API_URL = "https://graph.facebook.com/v16.0/"
 
 
 def testing(request):
