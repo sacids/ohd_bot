@@ -46,7 +46,7 @@ def send_interactive_sms(request):
     logging.info("Response => ")
     logging.info(response)
 
-    return JsonResponse({"response": response})
+    return HttpResponse(response)
 
 
 @csrf_exempt
