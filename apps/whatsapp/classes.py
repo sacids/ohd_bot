@@ -161,6 +161,7 @@ class WhatsAppWrapper:
             }
         })
 
+        """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
 
         """return response"""
@@ -179,6 +180,7 @@ class WhatsAppWrapper:
             }
         })
 
+        """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
 
         """return response"""
@@ -186,7 +188,7 @@ class WhatsAppWrapper:
 
     
 
-    def send_interactive_message(self, phone_number, message):
+    def send_interactive_message(self, phone_number, message_type, body, actions):
         """__summary__: Send interactive message"""
         payload = json.dumps({
             "messaging_product": "whatsapp",
@@ -194,28 +196,11 @@ class WhatsAppWrapper:
             "to": phone_number,
             "type": "interactive",
             "interactive":{
-                "type": "button",
+                "type": message_type,
                 "body": {
-                    "text": message
+                    "text": body
                 },
-                "action": {
-                    "buttons": [
-                        {
-                        "type": "reply",
-                        "reply": {
-                            "id": "b1",
-                            "title": "Ndiyo" 
-                        }
-                        },
-                        {
-                        "type": "reply",
-                        "reply": {
-                            "id": "b2",
-                            "title": "Hapana" 
-                        }
-                        }
-                    ] 
-                }
+                "action": actions
             }
         })
 

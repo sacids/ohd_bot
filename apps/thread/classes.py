@@ -74,7 +74,7 @@ class ThreadWrapper:
         response = {}
 
         if thread.validation is not None:
-            """TODO: validate key"""
+            """TODO: validate entries"""
 
             """normal response"""
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)

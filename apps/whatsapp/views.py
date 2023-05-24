@@ -38,10 +38,30 @@ def send_interactive_sms(request):
     wrapper = WhatsAppWrapper()
 
     from_number = "255717705746"
-    new_message = "Welcome to our service"
+    new_message = "Ndugu mteja karibu Karibu Laina Finance, Je unakubaliana na vigezo na masharti?"
+
+    message_type = "button"
+    actions = {
+        "buttons": [
+            {
+            "type": "reply",
+            "reply": {
+                "id": "b1",
+                "title": "Ndiyo" 
+            }
+            },
+            {
+            "type": "reply",
+            "reply": {
+                "id": "b2",
+                "title": "Hapana" 
+            }
+            }
+        ] 
+    }
 
     """send message"""
-    response = wrapper.send_interactive_message(from_number, new_message)
+    response = wrapper.send_interactive_message(from_number, message_type, new_message, actions)
 
     logging.info("Response => ")
     logging.info(response)
