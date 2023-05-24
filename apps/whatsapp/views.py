@@ -50,7 +50,7 @@ def facebook(request):
 
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
+        logging.info(data)
 
         """extract => field, from, key, message_type"""
         field = data["entry"][0]["changes"][0]["field"]
