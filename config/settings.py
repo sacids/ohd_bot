@@ -137,3 +137,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+# Logging errors in django
+import logging
+
+logging.basicConfig(
+    level = logging.INFO,
+    format = '%(asctime)s %(levelname)s %(message)s',
+    filename = 'info.log',
+    )
