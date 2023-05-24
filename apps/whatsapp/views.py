@@ -106,24 +106,22 @@ def facebook(request):
             facebook_id = wrapper.get_messageId(data)
 
             if message_type == 'text':
-                message = wrapper.get_message(data)
+                message_resp = wrapper.get_message(data)
 
                 """process thread"""
-                new_message = process_threads(from_number=from_number, key=message)
+                new_message = process_threads(from_number=from_number, key=message_resp)
 
                 """send message"""
                 response = wrapper.send_text_message(from_number, new_message)
-                logging.info("Response From Facebook => ")
-                logging.info(response)
 
             elif message_type == "interactive":
-                message = wrapper.get_message(data)
+                message_resp = wrapper.get_interactive_message(data)
 
-                """process thread"""
-                new_message = process_threads(from_number=from_number, key=message)
+                intractive_type = message_resp.get("type")
+                message_id = message_resp[intractive_type]["id"]
+                message_text = message_resp[intractive_type]["title"]
+                logging.info(f"Interactive Message; {message_id}: {message_text}")
 
-                """send message"""
-                response = wrapper.send_interactive_message(from_number, new_message)
 
             elif message_type == 'location':
                 message_location = wrapper.get_location(data)
@@ -133,11 +131,8 @@ def facebook(request):
                 longitude    = message_location["longitude"]
                 new_location = f"{latitude} {longitude}"
 
-                """process thread"""
-                new_message = process_threads(from_number=from_number, key=new_location)
+                logging.info(f"{from_number} sent {new_location}")
 
-                """send message"""
-                response = wrapper.send_text_message(from_number, new_message)
 
             elif message_type == 'image':
                 image = wrapper.get_image(data)  
@@ -145,21 +140,23 @@ def facebook(request):
                 """get image data"""
                 image_id, mime_type = image["id"], image["mime_type"]
                 image_url = wrapper.query_media_url(image_id)
-                logging.info(image_url)
+
+                logging.info(f"{from_number} sent file {image_url}")
 
                 """TODO: save image to a folder"""
 
-                """process thread"""
-                new_message = process_threads(from_number=from_number, key="image_url")
 
-                """send message"""
-                response = wrapper.send_text_message(from_number, new_message)
             elif message_type == 'document':
-                """process thread"""
-                new_message = process_threads(from_number=from_number, key="document_url")
+                file = wrapper.get_document(data)
 
-                """send message"""
-                response = wrapper.send_text_message(from_number, new_message)
+                file_id, mime_type = file["id"], file["mime_type"]
+                file_url = wrapper.query_media_url(file_id)
+                file_filename = wrapper.download_media(file_url, mime_type)
+
+                logging.info(f"{from_number} sent file {file_filename}")
+
+                """TODO: save document to a folder"""
+
         else:
             delivery = wrapper.get_delivery(data)
             if delivery:

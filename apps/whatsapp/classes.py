@@ -29,12 +29,14 @@ class WhatsAppWrapper:
         if "contacts" in data:
             return data['contacts'][0]['wa_id'] 
 
+
     def get_profile_name(self, data):
         """get profile data from the data"""
         data = self.preprocess(data)
 
         if "contacts" in data:
             return data['contacts'][0]['profile']['name'] 
+
 
     def get_message(self, data):
         """get message from the data""" 
@@ -43,6 +45,16 @@ class WhatsAppWrapper:
         if 'messages' in data:
             return data['messages'][0]['text']['body']
 
+
+    def get_interactive_message(self, data):
+        """get interactive message """
+        data = self.preprocess(data)
+
+        if "messages" in data:
+            if "interactive" in data["messages"][0]:
+                return data["messages"][0]["interactive"]    
+
+
     def get_location(self, data):
         """get location from the data"""
         data = self.preprocess(data)
@@ -50,6 +62,7 @@ class WhatsAppWrapper:
         if "messages" in data:
             if "location" in data["messages"][0]:
                 return data["messages"][0]["location"]
+
 
     def get_image(self, data):
         """get image from the data"""
@@ -125,6 +138,7 @@ class WhatsAppWrapper:
         if 'messages' in data:
             return data['messages'][0]['id']  
 
+
     def get_message_timestamp(self, data):
         """get message timestamp from data"""
         data = self.preprocess(data) 
@@ -132,12 +146,14 @@ class WhatsAppWrapper:
         if 'messages' in data:
             return data['messages'][0]['timestamp']                  
 
+
     def get_message_type(self, data):
         """get message type from data"""
         data = self.preprocess(data) 
 
         if 'messages' in data:
             return data['messages'][0]['type']  
+
 
     def get_delivery(self, data):
         """get message type from data"""
