@@ -32,6 +32,20 @@ def testing(request):
         ]
     }), 'application/json') 
 
+@csrf_exempt
+def send_interactive_sms(request):
+    """__summary__: Get message from the webhook"""
+    wrapper = WhatsAppWrapper()
+
+    from_number = "255717705746"
+    new_message = "Welcome to our service"
+
+    """send message"""
+    response = wrapper.send_interactive_message(from_number, new_message)
+
+    logging.info("Response => ")
+    logging.info(response)
+
 
 @csrf_exempt
 def facebook(request):

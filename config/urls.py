@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),
+    path('webhook/send-iteractive-sms', whatsapp_views.send_interactive_sms),
 
     path('api/validation/date', validate_date),
 ]
