@@ -5,7 +5,7 @@ from decouple import config
 import logging
 
 class WhatsAppWrapper:
-    API_URL = "https://graph.facebook.com/v17.0/"
+    BASE_API_URL = "https://graph.facebook.com/v17.0/"
     API_TOKEN=config('WHATSAPP_API_TOKEN')
     NUMBER_ID=config('WHATSAPP_NUMBER_ID')
 
@@ -14,7 +14,7 @@ class WhatsAppWrapper:
             "Authorization": f"Bearer {self.API_TOKEN}",
             "Content-Type": "application/json",
         }
-        self.API_URL = self.API_URL + self.NUMBER_ID
+        self.API_URL = self.BASE_API_URL + self.NUMBER_ID
 
 
     def preprocess(self, data):
@@ -101,10 +101,10 @@ class WhatsAppWrapper:
 
 
     def query_media_url(self, media_id):
-        """Query media url from media id obtained either by manually uploading media or received media"""
-        response = requests.get(f"{self.API_URL}/{media_id}", headers=self.headers)
+        """Query media url from media id"""
+        response = requests.get(f"{self.BASE_API_URL}/{media_id}", headers=self.headers)
 
-        logging.info(f"{self.API_URL}/{media_id}")
+        logging.info(f"{self.BASE_API_URL}/{media_id}")
         logging.info(response.json())
 
         if response.status_code == 200:
@@ -116,7 +116,7 @@ class WhatsAppWrapper:
 
 
     def download_media(self, media_url, mime_type, file_path= "temp"):
-        """Download media from media url obtained either by manually uploading media or received media"""
+        """Download media from media url"""
         r = requests.get(media_url, headers=self.headers)
         content = r.content
         extension = mime_type.split("/")[1]
