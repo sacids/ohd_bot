@@ -105,6 +105,7 @@ class WhatsAppWrapper:
         response = requests.get(f"{self.API_URL}/{media_id}", headers=self.headers)
 
         logging.info("media response")
+        logging.info(f"{self.API_URL}/{media_id}")
         logging.info(response.json())
 
         if response.status_code == 200:
