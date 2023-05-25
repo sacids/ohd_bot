@@ -205,7 +205,8 @@ class ThreadWrapper:
             for val in sub_threads:
                 tree = {
                     "view_id" : val.view_id,
-                    "title": val.title
+                    "title": val.title,
+                    "description": val.description
                 }
                 arr_trees.append(tree)
 

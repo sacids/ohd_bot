@@ -52,16 +52,17 @@ class ThreadDetailView(generic.DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        thread_id   = kwargs['pk']  
-        view_id     = request.POST.get('view_id')    
-        sub_thread  = request.POST.get('sub_thread') 
+        thread_id       = kwargs['pk']  
 
-        new_sub           = SubThread()
-        new_sub.title     = sub_thread
-        new_sub.view_id   = view_id 
-        new_sub.thread_id = thread_id 
+        #create new entry
+        new_sub             = SubThread()
+        new_sub.title       = request.POST.get('sub_thread')
+        new_sub.description = request.POST.get('description') 
+        new_sub.view_id     = request.POST.get('view_id') 
+        new_sub.thread_id   = thread_id 
         new_sub.save()
 
+        """redirect"""
         return HttpResponseRedirect(reverse_lazy('threads:show', kwargs={'pk': thread_id}))
 
 
