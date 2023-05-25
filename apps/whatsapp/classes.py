@@ -5,7 +5,7 @@ from decouple import config
 import logging
 
 class WhatsAppWrapper:
-    API_URL = "https://graph.facebook.com/v16.0/"
+    API_URL = "https://graph.facebook.com/v17.0/"
     API_TOKEN=config('WHATSAPP_API_TOKEN')
     NUMBER_ID=config('WHATSAPP_NUMBER_ID')
 
@@ -104,7 +104,6 @@ class WhatsAppWrapper:
         """Query media url from media id obtained either by manually uploading media or received media"""
         response = requests.get(f"{self.API_URL}/{media_id}", headers=self.headers)
 
-        logging.info("media response")
         logging.info(f"{self.API_URL}/{media_id}")
         logging.info(response.json())
 
