@@ -110,7 +110,7 @@ def facebook(request):
                 """get image data"""
                 image_id, mime_type = image["id"], image["mime_type"]
                 image_url = wrapper.query_media_url(image_id)
-                image_filename = wrapper.download_media(file_url, mime_type)
+                image_filename = wrapper.download_media(image_url, mime_type, image_id)
                 logging.info(f"{from_number} sent file {image_filename}")
 
                 """process thread"""
@@ -122,7 +122,7 @@ def facebook(request):
 
                 file_id, mime_type = file["id"], file["mime_type"]
                 file_url = wrapper.query_media_url(file_id)
-                file_filename = wrapper.download_media(file_url, mime_type)
+                file_filename = wrapper.download_media(file_url, mime_type, file_id)
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 """process thread"""
@@ -134,14 +134,25 @@ def facebook(request):
 
                 audio_id, mime_type = audio["id"], audio["mime_type"]
                 audio_url = wrapper.query_media_url(audio_id)
-                audio_filename = wrapper.download_media(audio_url, mime_type)
+                audio_filename = wrapper.download_media(audio_url, mime_type, audio_id)
                 logging.info(f"{from_number} sent audio {audio_filename}")
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=audio_filename)
                 response = json.loads(request.content)
 
-           
+            elif message_type == "video":
+                video = wrapper.get_video(data)
+
+                video_id, mime_type = video["id"], video["mime_type"]
+                video_url = wrapper.query_media_url(video_id)
+                video_filename = wrapper.download_media(video_url, mime_type, video_id)
+                logging.info(f"{from_number} sent video {video_filename}")  
+
+                """process thread"""
+                request = process_threads(from_number=from_number, key=video_filename)
+                response = json.loads(request.content)  
+
             """data"""
             message = response['message']
             show_type = response['message_type']
