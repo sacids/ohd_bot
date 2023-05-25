@@ -126,13 +126,10 @@ class WhatsAppWrapper:
         content = request.content
         extension = mime_type.split("/")[1]
 
-        #folder name
-        folder_name = os.path.join(BASE_DIR, "assets/uploads")
-
         # create a temporary file
         try:
             save_file_here = (
-                f"{folder_name}/{file_name}" if file_name else f"{folder_name}/temp.{extension}"
+                f"{file_name}" if file_name else f"temp.{extension}"
             )
             with open(save_file_here, "wb") as f:
                 f.write(content)
