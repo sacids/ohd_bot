@@ -206,7 +206,6 @@ class WhatsAppWrapper:
                 "button": "Bonyeza Hapa",
                 "sections": arr_data
             }
-
             logging.info(new_arr_data)    
  
             #send list message 
@@ -225,8 +224,9 @@ class WhatsAppWrapper:
                 arr_data.append(data)
 
             #array new data
-            new_arr_data = {"buttons": arr_data}
-
+            new_arr_data = {
+                "buttons": arr_data
+            }
             logging.info(new_arr_data)
 
             #send button message
