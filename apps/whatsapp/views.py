@@ -19,54 +19,30 @@ def testing(request):
     message = request.GET.get('message')
     from_number = request.GET.get('from_number')
 
+    wrapper = WhatsAppWrapper()
+
     print("key => " + message)
     print("from number => " + from_number)
 
     """process thread"""
-    new_message = process_threads(from_number=from_number, key=message)
+    request = process_threads(from_number=from_number, key=message)
+    response = json.loads(request.content)
+
+    """data"""
+    message = response['message']
+    show_type = response['message_type']
+    arr_trees = response['arr_trees']
+
+    """structure the whatsapp response"""
+    response = wrapper.structure_response(from_number, show_type, message, arr_trees)
+
 
     """return response to telerivet"""
     return HttpResponse(json.dumps({
         'messages': [
-            {"content": new_message}
+            {"content": response}
         ]
     }), 'application/json') 
-
-@csrf_exempt
-def send_interactive_sms(request):
-    """__summary__: Get message from the webhook"""
-    wrapper = WhatsAppWrapper()
-
-    from_number = "255717705746"
-    new_message = "Ndugu mteja karibu Karibu Laina Finance, Je unakubaliana na vigezo na masharti?"
-
-    message_type = "button"
-    actions = {
-        "buttons": [
-            {
-            "type": "reply",
-            "reply": {
-                "id": "b1",
-                "title": "Ndiyo" 
-            }
-            },
-            {
-            "type": "reply",
-            "reply": {
-                "id": "b2",
-                "title": "Hapana" 
-            }
-            }
-        ] 
-    }
-
-    """send message"""
-    response = wrapper.send_interactive_message(from_number, message_type, new_message, actions)
-
-    logging.info("Response => ")
-    logging.info(response)
-
-    return HttpResponse(response)
 
 
 @csrf_exempt
@@ -109,10 +85,8 @@ def facebook(request):
                 message_resp = wrapper.get_message(data)
 
                 """process thread"""
-                new_message = process_threads(from_number=from_number, key=message_resp)
-
-                """send message"""
-                response = wrapper.send_text_message(from_number, new_message)
+                request = process_threads(from_number=from_number, key=message_resp)
+                response = json.loads(request.content)
 
             elif message_type == "interactive":
                 message_resp = wrapper.get_interactive_message(data)
@@ -122,6 +96,9 @@ def facebook(request):
                 message_text = message_resp[intractive_type]["title"]
                 logging.info(f"Interactive Message; {message_id}: {message_text}")
 
+                """process thread"""
+                request = process_threads(from_number=from_number, key=message_id)
+                response = json.loads(request.content)
 
             elif message_type == 'location':
                 message_location = wrapper.get_location(data)
@@ -130,9 +107,11 @@ def facebook(request):
                 latitude     = message_location["latitude"]
                 longitude    = message_location["longitude"]
                 new_location = f"{latitude} {longitude}"
-
                 logging.info(f"{from_number} sent {new_location}")
 
+                """process thread"""
+                request = process_threads(from_number=from_number, key=new_location)
+                response = json.loads(request.content)
 
             elif message_type == 'image':
                 image = wrapper.get_image(data)  
@@ -140,11 +119,13 @@ def facebook(request):
                 """get image data"""
                 image_id, mime_type = image["id"], image["mime_type"]
                 image_url = wrapper.query_media_url(image_id)
-
                 logging.info(f"{from_number} sent file {image_url}")
 
                 """TODO: save image to a folder"""
 
+                """process thread"""
+                request = process_threads(from_number=from_number, key=image_url)
+                response = json.loads(request.content)
 
             elif message_type == 'document':
                 file = wrapper.get_document(data)
@@ -152,10 +133,22 @@ def facebook(request):
                 file_id, mime_type = file["id"], file["mime_type"]
                 file_url = wrapper.query_media_url(file_id)
                 file_filename = wrapper.download_media(file_url, mime_type)
-
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 """TODO: save document to a folder"""
+
+                """process thread"""
+                request = process_threads(from_number=from_number, key=file_filename)
+                response = json.loads(request.content)
+           
+            """data"""
+            message = response['message']
+            show_type = response['message_type']
+            arr_trees = response['arr_trees']     
+
+            """structure the whatsapp response""" 
+            response = wrapper.structure_response(from_number, show_type, message, arr_trees)
+            logging.info(response)
 
         else:
             delivery = wrapper.get_delivery(data)
@@ -173,8 +166,10 @@ def process_threads(**kwargs):
     from_number = kwargs['from_number']
     key         = kwargs['key']
 
-    """initiate message"""
+    """initiate variables"""
     message = ""
+    message_type = ""
+    arr_trees = []
 
     """thread wrapper"""
     wrapper = ThreadWrapper()
@@ -189,7 +184,13 @@ def process_threads(**kwargs):
         customer.save()
 
         """init thread"""
-        message = wrapper.init_thread(phone=from_number, flag="thread_start", channel="WHATSAPP") 
+        request = wrapper.init_thread(phone=from_number, flag="thread_start", channel="WHATSAPP") 
+        response = json.loads(request.content)
+
+        """variables"""
+        message = response['message']
+        message_type = response['message_type']
+        arr_trees = response['arr_trees']
     else:
         """initialize citizen"""
         customer = customer.first()
@@ -203,7 +204,14 @@ def process_threads(**kwargs):
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
                 """init service menu"""
-                message = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                response = json.loads(request.content)
+
+                """variables"""
+                message = response['message']
+                message_type = response['message_type']
+                arr_trees = response['arr_trees']
+
             else:
                 m_session = ThreadSession.objects.filter(phone=from_number, active=0).latest('id')
                 thread_response = wrapper.check_thread_link(m_session.thread_id, key) 
@@ -214,41 +222,40 @@ def process_threads(**kwargs):
 
                 if thread_response == 'NEXT_MENU':
                     """result"""
-                    result = wrapper.validate_thread(phone=from_number, uuid=OD_uuid, thread_id=OD_thread_id, key=key, channel="WHATSAPP")
-                    data = json.loads(result.content)
+                    request = wrapper.validate_thread(phone=from_number, uuid=OD_uuid, thread_id=OD_thread_id, key=key, channel="WHATSAPP")
+                    response = json.loads(request.content)
 
                     """status"""
-                    status = data['status']
+                    status = response['status']
 
                     if status == 'success':
                         """update thread session"""
                         m_session.active = 1
-                        m_session.values = data['value']
+                        m_session.values = response['value']
                         m_session.save()
 
-                        """message"""
-                        message = data['message']
+                        """variables"""
+                        message = response['message']
+                        message_type = response['message_type']
+                        arr_trees = response['arr_trees']
 
                         """check for action = None"""
-                        if(data['action'] is not None):
+                        if(response['action'] is not None):
                             """process data"""
                             my_data = wrapper.process_data(uuid=OD_uuid)
                             logging.info(my_data)
 
-                            if data['action'] == 'PUSH':
-                                """update and end thread session"""
-                                ThreadSession.objects.filter(uuid=OD_uuid).update(active=1)
-
-                                """push data"""
-                                result = push_data(payload=my_data, action_url=data['action_url'])
                     
                     elif status == 'failed':
-                        """message"""
-                        message = data['message']
+                        """TODO: if validation failed"""
+                        pass
 
                 elif thread_response == 'INVALID_INPUT':
                     """invalid input"""
                     message = "Chaguo batili, tafadhali chagua tena!"
+                    message_type = response['message_type']
+                    arr_trees = response['arr_trees']
+
                 elif thread_response == 'END_MENU':
                     """update and end thread session"""
                     ThreadSession.objects.filter(code=OD_uuid).update(active=1)
@@ -263,24 +270,30 @@ def process_threads(**kwargs):
                         my_data = wrapper.process_data(uuid=OD_uuid)
                         logging.info(my_data)
 
-                        if thread.action == 'PUSH':
-                            """push data"""
-                            result = push_data(payload=my_data, action_url=thread.action_url)
+                        """TODO: perform any action in here => PUSH, CALL"""
 
                     """initiate thread session"""
-                    message = "End of session"   
+                    message = "Asante kwa kutumia huduma za Laina Finance" 
+                    message_type = "TEXT"  
         else:
             if key.upper() == "LAINA" or key.upper() == "HUDUMA":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
                 """init service menu"""
-                message = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                response = json.loads(request.content)
+
+                """variables"""
+                message = response['message']
+                message_type = response['message_type']
+                arr_trees = response['arr_trees']
             else:
                 message = "Karibu Laina Finance, kutumia huduma hii andika neno LAINA au HUDUMA."
+                message_type = "TEXT" 
 
-    """return message"""
-    return message
+    """return response"""
+    return JsonResponse({"status": "success", "message": message, "message_type": message_type, "arr_trees": arr_trees})
 
     
 def push_data(**kwargs):

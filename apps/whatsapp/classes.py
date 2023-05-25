@@ -163,6 +163,79 @@ class WhatsAppWrapper:
             return data['statuses'][0]['status']              
 
 
+    def structure_response(self, from_number, message_type, message, arr_trees):
+        """__summary__: Structure response """
+        if message_type == "TEXT":
+            sub_message = ""
+            for val in arr_trees:
+                sub_message += val['view_id'] + ". " + val['title'] + "\r\n"
+            message = message + "\r\n" + sub_message
+
+            #send text message now
+            response = self.send_text_message(from_number, message)  
+        elif message_type == "DOCUMENT":
+            pass
+        elif message_type == "IMAGE":
+            pass
+        elif message_type == "AUDIO":
+            pass
+        elif message_type == "VIDEO":
+            pass
+        elif message_type == "CONTACT":
+            pass
+        elif message_type == "LOCATION":
+            pass
+        elif message_type == "LIST MESSAGE":
+            #create list format
+            arr_data = []
+            for val in arr_trees:
+                data = {
+                    "title": val['title'],
+                    "rows": [
+                        {
+                            "id":val['view_id'],
+                            "title": val['title'],
+                            "description": val['title'],           
+                        }
+                    ]      
+                }
+                arr_data.append(data)
+
+            #array new data
+            new_arr_data = {
+                "button": "Bonyeza Hapa",
+                "sections": arr_data
+            }
+
+            logging.info(new_arr_data)    
+ 
+            #send list message 
+            response = self.send_interactive_message(from_number, "list", message, new_arr_data)   
+        elif message_type == "REPLY BUTTON":
+            #create button format
+            arr_data = []
+            for val in arr_trees:
+                data = {
+                    "type": "reply",
+                    "reply": {
+                      "id": val['view_id'],
+                      "title": val['title']  
+                    }      
+                }
+                arr_data.append(data)
+
+            #array new data
+            new_arr_data = {"buttons": arr_data}
+
+            logging.info(new_arr_data)
+
+            #send button message
+            response = self.send_interactive_message(from_number, 'button', message, new_arr_data)
+
+        #return response
+        return response
+
+
     def send_template_message(self, template_name, language_code, phone_number):
         """__summary__: Send templete message """
         payload = json.dumps({
@@ -201,8 +274,80 @@ class WhatsAppWrapper:
 
         """return response"""
         return response
-
     
+
+    def send_location(self, phone_number, latitude, longitude, name, address):
+        """__summary__: Send Location """
+        payload = json.dumps({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": phone_number,
+            "type": "location",
+            "location": {
+                "latitude": latitude,
+                "longitude": longitude,
+                "name": name,
+                "address": address,
+            },
+        })
+
+        """response"""
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
+        """return response"""
+        return response
+    
+
+    def send_audio(self, phone_number, audioURL):
+        """__summary__: Send Audio """
+        payload = json.dumps({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": phone_number,
+            "type": "audio",
+                "audio": {"link": audioURL},
+        })
+
+        """response"""
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
+        """return response"""
+        return response
+    
+
+    def send_video(self, phone_number, videoURL, caption):
+        """__summary__: Send video """
+        payload = json.dumps({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": phone_number,
+            "type": "video",
+                "video": {"link": videoURL, "caption": caption},
+        })
+
+        """response"""
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
+        """return response"""
+        return response
+    
+
+    def send_document(self, phone_number, documentURL, caption):
+        """__summary__: Send document """
+        payload = json.dumps({
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": phone_number,
+            "type": "document",
+                "document": {"link": documentURL, "caption": caption},
+        })
+
+        """response"""
+        response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+
+        """return response"""
+        return response
+
 
     def send_interactive_message(self, phone_number, message_type, body, actions):
         """__summary__: Send interactive message"""

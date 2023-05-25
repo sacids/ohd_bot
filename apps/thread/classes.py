@@ -29,9 +29,11 @@ class ThreadWrapper:
         """Create menu session"""
         session_id = self.create_thread_session(phone=phone, thread_id=thread.id, uuid=uuid, channel=channel)
 
-        message = self.process_thread(thread.id, uuid)
+        """response"""
+        thread_response = self.process_thread(thread.id, uuid)
 
-        return message
+        """return response"""
+        return thread_response
 
 
     def check_thread_link(self, thread_id, key):
@@ -80,32 +82,9 @@ class ThreadWrapper:
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
         else: 
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
+
+        """response"""   
         return response    
-
-
-    def current_thread(self, **kwargs):
-        """Triggering current menu"""
-        phone       = kwargs['phone']
-        uuid        = kwargs['uuid']
-        thread_id   = kwargs['thread_id']
-        key         = kwargs['key']
-        channel     = kwargs['channel']
-
-        """action"""
-        action = None
-        action_url = None
-
-        """thread"""
-        thread = Thread.objects.get(pk=thread_id)
-
-        """create session"""
-        session_id = self.create_thread_session(phone=phone, thread_id=thread.pk, uuid=uuid, channel=channel)
-
-        """process thread"""
-        message = self.process_thread(thread.id, uuid)
-
-        """return response"""
-        return JsonResponse({'status': 'success', 'value': key, 'message': message, 'action': action, 'action_url': action_url})
 
 
     def next_thread(self, **kwargs):
@@ -118,76 +97,128 @@ class ThreadWrapper:
 
         """action"""
         action = None
-        action_url = None
+        actionURL = None
    
         """sub thread"""
         sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key)
 
-        message = ""
+        new_response = {}
         if (sub_thread_key):
-            thread_link = ThreadLink.objects.filter(
-                thread_id=thread_id, sub_thread_id=sub_thread_key[0].id)
+            sub_thread_key = sub_thread_key.first()
+
+            """thread link"""
+            thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
 
             if(thread_link):
-                """create session"""
-                session_id = self.create_thread_session(phone=phone, thread_id=thread_link[0].link_id, uuid=uuid, channel=channel)
+                thread_link = thread_link.first()
+
+                """create new session"""
+                self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                message = self.process_thread(thread_link[0].link_id, uuid)
+                request = self.process_thread(thread_link.link_id, uuid)
+                response = json.loads(request.content)
 
                 """thread action"""
-                thread = Thread.objects.get(pk=thread_link[0].link_id)
+                thread = Thread.objects.get(pk=thread_link.link_id)
 
                 if thread.action is not None:
-                    action = thread.action           
-                    action_url = thread.action_url           
+                    action = thread.action
+                    actionURL = thread.action_url 
+
+                """new response"""
+                new_response = {
+                    'status': 'success', 
+                    'value': key, 
+                    'message': response['message'], 
+                    "message_type": response['message_type'], 
+                    "arr_trees": response['arr_trees'], 
+                    'action': action, 
+                    'actionURL': actionURL
+                }
             else:
-                """message"""
-                message = "Invalid input"
+                """new response"""
+                new_response = {
+                    "status": 'success', 
+                    "message": "Invalid input", 
+                    "message_type": "TEXT", 
+                    "arr_trees": [], 
+                    "action": action, 
+                    "actionURL": actionURL 
+                }    
         else:
             thread_link = ThreadLink.objects.filter(thread_id=thread_id)
 
             if(thread_link):
+                thread_link = thread_link.first()
+
                 """create session"""
-                session_id = self.create_thread_session(phone=phone, thread_id=thread_link[0].link_id, uuid=uuid, channel=channel)
+                self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                message = self.process_thread(thread_link[0].link_id, uuid)
+                request = self.process_thread(thread_link.link_id, uuid)
+                response = json.loads(request.content)
 
                 """thread action"""
-                thread = Thread.objects.get(pk=thread_link[0].link_id)
+                thread = Thread.objects.get(pk=thread_link.link_id)
 
                 if thread.action is not None:
                     action = thread.action
-                    action_url = thread.action_url  
+                    actionURL = thread.action_url 
+
+                """new response"""
+                new_response = {
+                    'status': 'success', 
+                    'value': key, 
+                    'message': response['message'],
+                    "message_type": response['message_type'], 
+                    "arr_trees": response['arr_trees'], 
+                    'action': action, 
+                    'actionURL': actionURL
+                }
             else:
-                """message"""
-                message = "Invalid input"
+                """new response"""
+                new_response = {
+                    "status": 'success', 
+                    "message": "Invalid input", 
+                    "message_type": "TEXT", 
+                    "arr_trees": [], 
+                    "action": action, 
+                    "actionURL": actionURL 
+                }
 
         """return response"""
-        return JsonResponse({'status': 'success', 'value': key, 'message': message, 'action': action, 'action_url': action_url})
+        return JsonResponse(new_response)
 
 
     def process_thread(self, thread_id, uuid):
         """Process Thread"""
-        message = ""
-
-        """Query Thread"""
-        thread = Thread.objects.get(pk=thread_id)
-        message = thread.title
+        thread       = Thread.objects.get(pk=thread_id)
+        message_type = thread.message_type
+        message      = thread.title
     
         """if there response"""
         sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
 
+        arr_trees = []
         if(sub_threads):
-            sub_message = ""
             for val in sub_threads:
-                sub_message += val.view_id + ". " + val.title + "\r\n"
+                tree = {
+                    "view_id" : val.view_id,
+                    "title": val.title
+                }
+                arr_trees.append(tree)
 
-            message = message + "\r\n" + sub_message
+        """thread response"""    
+        thread_response = {
+            "status": 'success', 
+            "message": message, 
+            "message_type": message_type, 
+            "arr_trees": arr_trees
+        }    
 
-        """Return message"""        
-        return message 
+        """Return message""" 
+        return JsonResponse(thread_response)
 
     
     def create_thread_session(self, **kwargs):
@@ -209,6 +240,7 @@ class ThreadWrapper:
         session.flag = thread.db_flag
         session.save()
 
+        """return session ID"""
         return session.id
 
 
