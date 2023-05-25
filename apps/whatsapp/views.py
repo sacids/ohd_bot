@@ -108,9 +108,9 @@ def facebook(request):
                 image = wrapper.get_image(data)  
 
                 """get image data"""
-                image_id, image_name,  mime_type = image["id"], image['filename'].replace(" ", ""), image["mime_type"]
-                image_url = wrapper.query_media_url(image_id, image_name)
-                image_filename = wrapper.download_media(file_url, mime_type, image_name)
+                image_id, mime_type = image["id"], image["mime_type"]
+                image_url = wrapper.query_media_url(image_id)
+                image_filename = wrapper.download_media(file_url, mime_type)
                 logging.info(f"{from_number} sent file {image_filename}")
 
                 """process thread"""
@@ -120,9 +120,9 @@ def facebook(request):
             elif message_type == 'document':
                 file = wrapper.get_document(data)
 
-                file_id, file_name,  mime_type = file["id"], file['filename'].replace(" ", ""), file["mime_type"]
+                file_id, mime_type = file["id"], file["mime_type"]
                 file_url = wrapper.query_media_url(file_id)
-                file_filename = wrapper.download_media(file_url, mime_type, file_name)
+                file_filename = wrapper.download_media(file_url, mime_type)
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 """process thread"""
@@ -132,9 +132,9 @@ def facebook(request):
             elif message_type == 'audio':
                 audio = wrapper.get_audio(data)
 
-                audio_id, audio_name, mime_type = audio["id"], audio['filename'].replace(" ", ""), audio["mime_type"]
+                audio_id, mime_type = audio["id"], audio["mime_type"]
                 audio_url = wrapper.query_media_url(audio_id)
-                audio_filename = wrapper.download_media(audio_url, mime_type, audio_name)
+                audio_filename = wrapper.download_media(audio_url, mime_type)
                 logging.info(f"{from_number} sent audio {audio_filename}")
 
                 """process thread"""
