@@ -28,15 +28,6 @@ def testing(request):
     request = process_threads(from_number=from_number, key=message)
     response = json.loads(request.content)
 
-    """data"""
-    message = response['message']
-    show_type = response['message_type']
-    arr_trees = response['arr_trees']
-
-    """structure the whatsapp response"""
-    response = wrapper.structure_response(from_number, show_type, message, arr_trees)
-
-
     """return response to telerivet"""
     return HttpResponse(json.dumps({
         'messages': [
@@ -132,6 +123,8 @@ def facebook(request):
 
                 file_id, mime_type = file["id"], file["mime_type"]
                 file_url = wrapper.query_media_url(file_id)
+                logging.info("file URL => " + file_url)
+
                 file_filename = wrapper.download_media(file_url, mime_type)
                 logging.info(f"{from_number} sent file {file_filename}")
 

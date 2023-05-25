@@ -250,7 +250,7 @@ class ThreadWrapper:
         uuid  = kwargs["uuid"]
 
         """thread sessions"""
-        thread_sessions = ThreadSession.objects.filter(uuid=uuid)
+        thread_sessions = ThreadSession.objects.filter(code=uuid)
 
         if thread_sessions:
             arr_data = {}
