@@ -121,11 +121,11 @@ def facebook(request):
             elif message_type == 'document':
                 file = wrapper.get_document(data)
 
-                file_id, mime_type = file["id"], file["mime_type"]
+                file_id, file_name,  mime_type = file["id"], file['filename'].replace(" ", ""), file["mime_type"]
                 file_url = wrapper.query_media_url(file_id)
                 logging.info("file URL => " + file_url)
 
-                file_filename = wrapper.download_media(file_url, mime_type)
+                file_filename = wrapper.download_media(file_url, mime_type, file_name)
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 """TODO: save document to a folder"""

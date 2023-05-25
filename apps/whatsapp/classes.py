@@ -115,10 +115,10 @@ class WhatsAppWrapper:
         return None
 
 
-    def download_media(self, media_url, mime_type, file_path= "temp"):
+    def download_media(self, media_url, mime_type, file_path):
         """Download media from media url"""
-        r = requests.get(media_url, headers=self.headers)
-        content = r.content
+        request = requests.get(media_url, headers=self.headers)
+        content = request.content
         extension = mime_type.split("/")[1]
 
         # create a temporary file
