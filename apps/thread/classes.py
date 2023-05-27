@@ -97,7 +97,7 @@ class ThreadWrapper:
         thread_id   = kwargs['thread_id']
         key         = kwargs['key']
         channel     = kwargs['channel']
-        language       = kwargs['language']
+        language    = kwargs['language']
 
         """thread"""
         thread = Thread.objects.filter(id=thread_id).first()
