@@ -195,7 +195,7 @@ class WhatsAppWrapper:
             arr_data = []
             for val in arr_trees:
                 data = {
-                    "title": val['title'],
+                    "title": "",
                     "rows": [
                         {
                             "id":val['view_id'],
