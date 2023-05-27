@@ -195,15 +195,10 @@ class WhatsAppWrapper:
             arr_data = []
             for val in arr_trees:
                 data = {
-                    "title": val['title'],
-                    "rows": [
-                        {
-                            "id":val['view_id'],
-                            "title": val['description'],
-                            "description": "",           
+                        "id":val['view_id'],
+                        "title": val['title'],
+                        "description": val['description'],           
                         }
-                    ]      
-                }
                 arr_data.append(data)
 
             #change button message based on language
@@ -215,7 +210,12 @@ class WhatsAppWrapper:
             #array new data
             new_arr_data = {
                 "button": button_txt,
-                "sections": arr_data
+                "sections": [
+                    {
+                        "title" : "Laina Finance",
+                        "rows": arr_data
+                    }
+                ]
             }
             logging.info(new_arr_data)    
  
