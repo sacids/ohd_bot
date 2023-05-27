@@ -95,16 +95,17 @@ class ThreadSession(models.Model):
         ('WHATSAPP', 'Whatsapp'),
     )
 
-    id          = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id          =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     code        =  models.CharField(max_length=100, blank=True, null=True)
     phone       =  models.CharField(max_length=20, blank=True, null=True)
     channel     =  models.CharField(max_length=50, choices=CHANNEL_OPTIONS, blank=False, null=False, default='WHATSAPP')  
     thread      =  models.ForeignKey(Thread, on_delete=models.CASCADE, null=True, blank=True)
     flag        =  models.CharField(max_length=100, blank=True, null=True)
     values      =  models.TextField(blank=True, null=True)
+    facebook_id =  models.TextField(blank=True, null=True)
     active      =  models.IntegerField(blank=False, null=False, default=0)
-    created_at  = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at  = models.DateTimeField(auto_now=True) 
+    created_at  =  models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at  =  models.DateTimeField(auto_now=True) 
 
     class Meta:
         db_table = 'lb_thread_sessions'
