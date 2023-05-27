@@ -140,5 +140,28 @@ class Customer(models.Model):
 
     def __str__(self):
         return str(self.phone)
+    
+
+class CustomerLanguage(models.Model): 
+    LANGUAGE_OPTIONS = (
+        ('SW', 'Swahili'),
+        ('EN', 'English'),
+    )
+  
+    phone             = models.CharField(max_length=20, blank=False, null=False, unique = True)
+    language          = models.CharField(max_length=20, choices=LANGUAGE_OPTIONS,default='SW', blank=True, null=True)
+    created_at        = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at        = models.DateTimeField(auto_now=True)  
+
+    class Meta:
+        db_table     = 'lb_customer_languages'
+        managed      = True
+        verbose_name = 'Language'
+        verbose_name_plural = 'Languages'
+
+    def __str__(self):
+        return str(self.phone)
+    
+
 
 
