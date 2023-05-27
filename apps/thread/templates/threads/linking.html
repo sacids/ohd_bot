@@ -71,7 +71,7 @@
                 <template x-for="(thread, index) in filteredThreads" :key="index">
                     <li class="list-group-item d-flex justify-content-between align-items-start">
                         <div class="">
-                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id">
+                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id" required>
                         </div>
 
                         <div class="ms-2 me-auto">
@@ -87,7 +87,7 @@
                 <div class="col-md-12">
                     <div class="text-sm-start">
                         <button type='button' class="btn btn-outline-danger text-medium"
-                            x-on:click="eModal== 'Current_Links'">Cancel</button>
+                            x-on:click="eModal = 'Current_Links'">Cancel</button>
                         <button type="submit" name="submit" class="btn btn-primary" x-text="buttonSubmit"
                             :disabled="formLoading"></button>
                     </div>
@@ -111,7 +111,7 @@
             <div class="my-3 row" x-init="fetchResponses();">
                 <label class="col-md-4 col-form-label">Response: </label>
                 <div class="col-md-8">
-                    <select name="response_id" x-model="formThread.response_id" class="form-control">
+                    <select name="response_id" x-model="formThread.response_id" class="form-control" required>
                         <option value="">Select</option>
                         <template x-for="(val, index) in responses" :key="index">
                             <option x-bind:value="val.id"><span x-text="val.title"></span></option>
@@ -130,7 +130,7 @@
                 <template x-for="(thread, index) in filteredThreads" :key="index">
                     <li class="list-group-item d-flex justify-content-between align-items-start">
                         <div class="">
-                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id">
+                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id" required>
                         </div>
 
                         <div class="ms-2 me-auto">
@@ -146,7 +146,7 @@
                 <div class="col-md-12">
                     <div class="text-sm-start">
                         <button type='button' class="btn btn-outline-danger text-medium"
-                            x-on:click="eModal== 'Current_Links'">Cancel</button>
+                            x-on:click="eModal = 'Current_Links'">Cancel</button>
                         <button type="submit" name="submit" class="btn btn-primary" x-text="buttonSubmit"
                             :disabled="formLoading"></button>
                     </div>
