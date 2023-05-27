@@ -102,15 +102,6 @@ class ThreadWrapper:
 
         """thread"""
         thread = Thread.objects.filter(id=thread_id).first()
-        logging.info(thread.db_flag)
-
-        #switch language
-        if (thread.db_flag == "thread_services"):
-            logging.info("Reached switching call")
-            language = self.switch_language(uuid, thread.db_flag, language)
-
-        logging.info("Switched Language");    
-        logging.info(language);    
 
         """action"""
         action = None
@@ -135,6 +126,8 @@ class ThreadWrapper:
                 """process thread"""
                 request = self.process_thread(thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
+                print("New Language")
+                print(response['language'])  
 
                 """thread action"""
                 thread = Thread.objects.get(pk=thread_link.link_id)
@@ -147,7 +140,7 @@ class ThreadWrapper:
                 new_response = {
                     'status': 'success', 
                     'value': key, 
-                    'language': language,
+                    'language': response['language'],
                     'message': response['message'], 
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
@@ -195,7 +188,7 @@ class ThreadWrapper:
                 new_response = {
                     'status': 'success', 
                     'value': key, 
-                    'language': language,
+                    'language': response['language'],
                     'message': response['message'],
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
@@ -229,6 +222,10 @@ class ThreadWrapper:
         thread       = Thread.objects.get(pk=thread_id)
         message_type = thread.message_type
         message      = thread.title
+
+        #switch language
+        if (thread.db_flag == "thread_services"):
+            language = self.switch_language(uuid, thread.db_flag, language) 
         
         #change message based on language
         if language == "SW":
@@ -268,7 +265,7 @@ class ThreadWrapper:
             "message": message, 
             "message_type": message_type, 
             "arr_trees": arr_trees
-        }    
+        } 
 
         """Return message""" 
         return JsonResponse(thread_response)
@@ -302,11 +299,10 @@ class ThreadWrapper:
         thread_session = ThreadSession.objects.filter(code=uuid,flag=db_flag, active=1)
 
         if thread_session.count() > 0:
-            thread_session = thread_session.last()
+            thread_session = thread_session.first()
 
             #language values
             lang_val = thread_session.values
-            logging.info("Reached this fxn")
 
             #query for sub thread
             sub_thread = SubThread.objects.filter(thread_id=thread_session.thread.id, view_id=lang_val)
@@ -331,6 +327,9 @@ class ThreadWrapper:
                             lbLanguage.language = "EN"
                             language = "EN"
                         lbLanguage.save()     
+
+        print("Switched language")
+        print(language)
 
         #return language
         return language

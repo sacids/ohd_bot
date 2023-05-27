@@ -204,8 +204,8 @@ def process_threads(**kwargs):
         lbLanguage.language = "SW"  
         lbLanguage.save() 
 
-    logging.info("Language => ")
-    logging.info(language)     
+    print("Language=>")
+    print(language)     
 
     if customer.count() == 0:
         """create profile"""
@@ -238,10 +238,10 @@ def process_threads(**kwargs):
                 response = json.loads(request.content)
 
                 """variables"""
+                language = response['language']
                 message = response['message']
                 message_type = response['message_type']
                 arr_trees = response['arr_trees']
-
             else:
                 m_session = ThreadSession.objects.filter(phone=from_number, active=0).latest('id')
                 thread_response = wrapper.check_thread_link(m_session.thread_id, key) 
@@ -251,6 +251,11 @@ def process_threads(**kwargs):
                 OD_thread_id = m_session.thread_id
 
                 if thread_response == 'NEXT_MENU':
+                    """update thread session"""
+                    m_session.active = 1
+                    m_session.values = key
+                    m_session.save()
+                    
                     """result"""
                     request = wrapper.validate_thread(phone=from_number, uuid=OD_uuid, thread_id=OD_thread_id, key=key, channel="WHATSAPP", language=language)
                     response = json.loads(request.content)
@@ -260,11 +265,11 @@ def process_threads(**kwargs):
 
                     if status == 'success':
                         """update thread session"""
-                        m_session.active = 1
                         m_session.values = response['value']
                         m_session.save()
 
                         """variables"""
+                        language = response['language']
                         message = response['message']
                         message_type = response['message_type']
                         arr_trees = response['arr_trees']
@@ -276,8 +281,11 @@ def process_threads(**kwargs):
                             logging.info(my_data)
 
                     elif status == 'failed':
-                        """TODO: if validation failed"""
-                        pass
+                        """IF VALIDATION FAIL => update thread session"""
+                        m_session.active = 0
+                        m_session.save()
+
+                        """ MESSAGE to END USER """
 
                 elif thread_response == 'INVALID_INPUT':
                     """invalid input"""
@@ -285,9 +293,7 @@ def process_threads(**kwargs):
                         message = "Chaguo batili, tafadhali chagua tena."
                     elif language == "EN":
                         message = "Invalid input, Please select option again."
-
-                    message_type = response['message_type']
-                    arr_trees = response['arr_trees']
+                    message_type = "TEXT"
 
                 elif thread_response == 'END_MENU':
                     """update and end thread session"""
@@ -310,7 +316,6 @@ def process_threads(**kwargs):
                         message = "Asante kwa kutumia huduma za Laina Finance." 
                     elif language == "EN":
                         message = "Thank you for using Laina Finance services."
-
                     message_type = "TEXT"  
         else:
             if key.upper() == "LAINA" or key.upper() == "HUDUMA":
@@ -322,6 +327,7 @@ def process_threads(**kwargs):
                 response = json.loads(request.content)
 
                 """variables"""
+                language = response['language']
                 message = response['message']
                 message_type = response['message_type']
                 arr_trees = response['arr_trees']
