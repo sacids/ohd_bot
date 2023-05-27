@@ -199,8 +199,8 @@ class WhatsAppWrapper:
                     "rows": [
                         {
                             "id":val['view_id'],
-                            "title": "",
-                            "description": val['description'],           
+                            "title": val['description'],
+                            "description": "",           
                         }
                     ]      
                 }
