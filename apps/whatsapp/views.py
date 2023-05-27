@@ -154,14 +154,14 @@ def facebook(request):
                 response = json.loads(request.content)  
 
             """data"""
-            message = response['message']
+            language  = response['language']
+            message   = response['message']
             show_type = response['message_type']
             arr_trees = response['arr_trees']     
 
             """structure the whatsapp response""" 
-            response = wrapper.structure_response(from_number, show_type, message, arr_trees)
+            response = wrapper.structure_response(from_number, show_type, language, message, arr_trees)
             logging.info(response)
-
         else:
             delivery = wrapper.get_delivery(data)
             if delivery:
@@ -179,7 +179,7 @@ def process_threads(**kwargs):
     key         = kwargs['key']
 
     """initiate variables"""
-    language = 'SW' #declare default language
+    language = "SW" #declare default language
     message = ""
     message_type = ""
     arr_trees = []

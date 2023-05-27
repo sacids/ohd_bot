@@ -168,7 +168,7 @@ class WhatsAppWrapper:
             return data['statuses'][0]['status']              
 
 
-    def structure_response(self, from_number, message_type, message, arr_trees):
+    def structure_response(self, from_number, message_type, language, message, arr_trees):
         """__summary__: Structure response """
         if message_type == "TEXT":
             sub_message = ""
@@ -206,9 +206,15 @@ class WhatsAppWrapper:
                 }
                 arr_data.append(data)
 
+            #change button message based on language
+            if language == "SW":
+                button_txt = "Bonyeza Hapa" 
+            elif language == "EN":
+                button_txt = "Click Here" 
+
             #array new data
             new_arr_data = {
-                "button": "Bonyeza Hapa",
+                "button": button_txt,
                 "sections": arr_data
             }
             logging.info(new_arr_data)    
