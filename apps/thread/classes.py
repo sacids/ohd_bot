@@ -102,9 +102,11 @@ class ThreadWrapper:
 
         """thread"""
         thread = Thread.objects.filter(id=thread_id).first()
+        logging.info(thread.db_flag)
 
         #switch language
         if (thread.db_flag == "thread_services"):
+            logging.info("Reached switching call")
             language = self.switch_language(uuid, thread.db_flag, language)
 
         logging.info("Switched Language");    
