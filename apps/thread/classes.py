@@ -3,6 +3,7 @@ import random
 import string
 import requests
 import json
+import logging
 from django.http import JsonResponse
 from .models import *
 
@@ -105,6 +106,9 @@ class ThreadWrapper:
         #switch language
         if (thread.db_flag == "thread_services"):
             language = self.switch_language(uuid, thread.db_flag, language)
+
+        logging.info("Switched Language");    
+        logging.info(language);    
 
         """action"""
         action = None
