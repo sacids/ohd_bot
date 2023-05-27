@@ -202,7 +202,10 @@ def process_threads(**kwargs):
         lbLanguage = CustomerLanguage()
         lbLanguage.phone = from_number
         lbLanguage.language = "SW"  
-        lbLanguage.save()  
+        lbLanguage.save() 
+
+    logging.info("Language => ")
+    logging.info(language)     
 
     if customer.count() == 0:
         """create profile"""
