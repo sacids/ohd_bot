@@ -21,9 +21,8 @@ from apps.thread import views, validation
 
 
 urlpatterns = [
-    path('', views.ThreadListView.as_view()),
+    path('', include('apps.account.urls')),
     path("admin/", admin.site.urls),
-    path('auth/', include('apps.account.urls')),
     path('threads/', include('apps.thread.urls')),
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),

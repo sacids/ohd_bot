@@ -29,8 +29,11 @@ class LoginView(View):
     success_url = 'threads:lists'
 
     def get(self, request, *args, **kwargs):
-        form = LoginForm()
-        return render(request, self.template_name, {'form': form})
+        if request.user.is_authenticated:
+            return redirect(self.success_url)
+        else:    
+            form = LoginForm()
+            return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = LoginForm(data=request.POST)
@@ -57,7 +60,7 @@ class LoginView(View):
             else:
                 messages.error(request, 'Wrong credentials, try again!')
 
-       # render
+       # render view
         return render(request, self.template_name, {'form': form})
 
     
