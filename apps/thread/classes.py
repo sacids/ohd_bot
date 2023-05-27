@@ -304,6 +304,7 @@ class ThreadWrapper:
 
             #language values
             lang_val = thread_session.values
+            logging.info("Reached this fxn")
 
             #query for sub thread
             sub_thread = SubThread.objects.filter(thread_id=thread_session.thread.id, view_id=lang_val)
