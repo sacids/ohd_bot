@@ -11,10 +11,19 @@ urlpatterns = [
     path('delete/<str:pk>', views.ThreadDeleteView.as_view(), name='delete'),
 
     path('delete-sub/<str:pk>', views.SubThreadDeleteView.as_view(), name='delete-sub'),
-
     path('get-lists/<str:thread_id>', views.get_sub_threads, name='sub-thread-lists'), 
+
+    path("list-threads/", views.list_threads, name="list-threads"),
+    path("list-responses/", views.list_responses, name="list-responses"),
+    path("detail-response/", views.detail_response, name="detail-response"),
+    path("create-response", views.create_response, name="create-response"),
+    path("edit-response/", views.edit_response, name="edit-response"),
+    path("delete-response/", views.delete_response, name="delete-response"),
     
     path('links', views.ThreadLinkListView.as_view(), name='links'),
+    path('current-links/', views.current_links, name='current-links'),
+    path('linking', views.link_thread, name='link-thread'),
+    path('delete-link/', views.delete_link, name='delete-link'),
     path('links/delete/<str:pk>', views.ThreadLinkDeleteView.as_view(), name='delete-link'),
 
     path('privacy-policy',views.privacy_policy, name="privacy-policy")

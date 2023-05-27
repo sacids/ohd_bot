@@ -1,3 +1,4 @@
+import json
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -51,19 +52,130 @@ class ThreadDetailView(generic.DetailView):
         context['sub_threads'] = sub_threads
         return context
 
-    def post(self, request, *args, **kwargs):
-        thread_id       = kwargs['pk']  
+def list_threads(request):
+    """Lists threads"""
+    uuid = request.GET.get("uuid")
 
-        #create new entry
-        new_sub             = SubThread()
-        new_sub.title       = request.POST.get('sub_thread')
-        new_sub.description = request.POST.get('description') 
-        new_sub.view_id     = request.POST.get('view_id') 
-        new_sub.thread_id   = thread_id 
-        new_sub.save()
+    """threads"""
+    threads = Thread.objects.order_by('block')
 
-        """redirect"""
-        return HttpResponseRedirect(reverse_lazy('threads:show', kwargs={'pk': thread_id}))
+    arr_data = []
+    for val in threads:
+        data = {
+            'id': val.id,
+            'title': val.title,
+            'label': val.label,
+            'message_type': val.message_type
+        }
+        arr_data.append(data)
+
+    """response"""
+    return JsonResponse(arr_data, safe=False)
+
+def list_responses(request):
+    """Lists responses"""
+    uuid = request.GET.get("uuid")
+
+    """responses"""
+    responses = SubThread.objects.filter(thread_id=uuid).order_by('view_id')
+
+    arr_data = []
+    for val in responses:
+        data = {
+            'id': val.id,
+            'view_id': val.view_id,
+            'title': val.title,
+            'description': val.description,
+        }
+        arr_data.append(data)
+
+    """response"""
+    return JsonResponse(arr_data, safe=False)
+
+
+def edit_response(request):
+    """ response details"""
+    uuid = request.GET.get("uuid")
+
+    """response"""
+    response = SubThread.objects.filter(pk=uuid).first()
+
+    arr_data = {
+        'id': response.id,
+        'view_id': response.view_id,
+        'title': response.title,
+        'title_en': response.title_en_us,
+        'description': response.description,
+        'description_en': response.description_en_us,
+    }
+
+    """response"""
+    return JsonResponse(arr_data, safe=False)
+
+
+def detail_response(request):
+    """ response details"""
+    uuid = request.GET.get("uuid")
+
+    #response
+    thread = Thread.objects.filter(pk=uuid).first()
+
+    #render view
+    return render(request, 'threads/linking.html', {'thread': thread})   
+
+
+def create_response(request):
+    """create new response"""
+    if request.method == 'POST':
+        post_data = json.loads(request.body)
+        action = post_data['action']
+
+        message = ""
+        if action == 'create':
+            new_sub                   = SubThread()
+            new_sub.title             = post_data['title']
+            new_sub.title_en_us       = post_data['title_en']
+            new_sub.description       = post_data['description']
+            new_sub.description_en_us = post_data['description_en']
+            new_sub.view_id           = post_data['view_id']
+            new_sub.thread_id         = post_data["thread_id"]
+            new_sub.save()
+
+            #response message
+            message = "Response created"
+
+        elif action == 'edit':
+            response_id = post_data['response_id']
+            sub_thread  = SubThread.objects.get(pk=response_id)
+            sub_thread.title             = post_data['title']
+            sub_thread.title_en_us       = post_data['title_en']
+            sub_thread.description       = post_data['description']
+            sub_thread.description_en_us = post_data['description_en']
+            sub_thread.view_id           = post_data['view_id']
+            sub_thread.save()
+
+            #response message
+            message = "Response updated"
+        
+        """return response"""
+        return JsonResponse({"error": False, "success_msg": message} , safe=False)
+
+
+def delete_response(request):
+    """delete response"""
+    uuid = request.GET.get("uuid")
+
+    #response
+    response = SubThread.objects.filter(pk=uuid)
+
+    if response.count() > 0:
+        response.delete()
+
+        #delete linking if available
+        ThreadLink.objects.filter(sub_thread_id=uuid).delete()
+
+    """response"""
+    return JsonResponse({"error": False, "success_msg": "Response deleted"}, safe=False)   
 
 
 class ThreadCreateView(generic.CreateView):
@@ -82,8 +194,7 @@ class ThreadCreateView(generic.CreateView):
             dt_menu.created_by = request.user
             dt_menu.save()
 
-            messages.success(request, 'Thread registered!')
-
+            messages.success(request, 'Thread created')
             return HttpResponseRedirect(reverse_lazy('threads:lists'))
         return render(request, 'threads/create.html', {'form': form})  
 
@@ -96,12 +207,11 @@ class ThreadUpdateView(generic.UpdateView):
     template_name = 'threads/edit.html'
 
     def form_valid(self, form):
-        response = form.save(commit=False)
-        response.updated_by = self.request.user
-        response.save()
+        dt_menu = form.save(commit=False)
+        dt_menu.updated_by = self.request.user
+        dt_menu.save()
 
-        messages.success(self.request, 'Thread information updated!')
-
+        messages.success(self.request, 'Thread updated')
         return HttpResponseRedirect(reverse_lazy('threads:lists')) 
 
 
@@ -111,7 +221,7 @@ class ThreadDeleteView(generic.DeleteView):
     template_name = "threads/confirm_delete.html"
 
     def get_success_url(self):
-        messages.success(self.request, "Thread deleted successfully")
+        messages.success(self.request, "Thread deleted")
         return reverse_lazy('threads:lists') 
 
 
@@ -121,7 +231,7 @@ class SubThreadDeleteView(generic.DeleteView):
     template_name = "threads/confirm_delete.html"
 
     def get_success_url(self, ):
-        messages.success(self.request, "Sub thread deleted successfully")
+        messages.success(self.request, "Sub thread deleted")
         return reverse_lazy('threads:lists') 
 
 
@@ -159,14 +269,71 @@ class ThreadLinkListView(generic.ListView):
         """update or create menu link"""
         thread_link, created = ThreadLink.objects.update_or_create(
             thread_id=thread_id, sub_thread_id=sub_thread_id, 
-            defaults={"link_id" : link_id}
-        )
+            defaults={"link_id" : link_id})
         
         #message
         messages.success(request, 'Thread tree created/update!')
 
         #redirect
         return HttpResponseRedirect(reverse_lazy('threads:links'))
+
+
+def current_links(request):
+    """Current Links"""
+    uuid = request.GET.get("uuid")
+
+    thread_links = ThreadLink.objects.filter(thread_id=uuid).order_by('sub_thread__view_id')
+
+    print(thread_links)
+
+    arr_data = []
+    for val in thread_links:
+        data = {
+            'id': val.id,
+            'view_id': val.sub_thread.view_id if val.sub_thread else "A",
+            'title': val.sub_thread.title if val.sub_thread else "Any Text",
+            'link': val.link.title,
+        }
+        arr_data.append(data)
+
+    """response"""
+    return JsonResponse(arr_data, safe=False)
+
+
+def link_thread(request):
+    """Linking Thread"""  
+    if request.method == 'POST':
+        post_data = json.loads(request.body)
+        thread_id = post_data['thread_id']  
+        link_id = post_data['link_id']  
+
+        print(post_data)
+
+        response_id = None
+        if post_data['response_id'] != '':
+            response_id = post_data['response_id'] 
+
+        """update or create menu link"""
+        thread_link, created = ThreadLink.objects.update_or_create(
+            thread_id=thread_id, sub_thread_id=response_id,  
+            defaults={"link_id" : link_id})
+
+    """response"""
+    return JsonResponse({"error": False, "success_msg": "Thread linked"}, safe=False)  
+        
+
+def delete_link(request):
+    """delete response"""
+    uuid = request.GET.get("uuid")
+
+    #link
+    thread_link = ThreadLink.objects.filter(pk=uuid)
+
+    if thread_link.count() > 0:
+        thread_link.delete()
+
+    """response"""
+    return JsonResponse({"error": False, "success_msg": "Thread link deleted"}, safe=False)   
 
 class ThreadLinkDeleteView(generic.DeleteView):
     """Delete a thread link""" 

@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Trees</h4>
+            <h4 class="mb-sm-0 font-size-18">Linked Trees</h4>
 
             <div class="page-title-right">
                 <!-- <a href="{% url 'threads:create' %}" class="btn btn-outline-primary btn-sm">
@@ -21,90 +21,26 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-
-                    <div class="row mb-2">
-                        <div class="col-lg-5 col-md-5 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Thread</label>
-                                <select name="thread_id" id="thread_id" class="form-control" required>
-                                    <option value="">Select</option>
-                                    {% for val in threads %}
-                                    <option value="{{ val.id }}">{{ val.title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2 col-md-2 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Response</label>
-                                <select name="sub_thread_id" id="sub_thread_id" class="form-control">
-                                    <option value="">Select</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-5 col-md-5 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label>Node</label>
-                                <select name="link_id" id="link_id" class="form-control" required>
-                                    <option value="">Select</option>
-                                    {% for val in threads %}
-                                    <option value="{{ val.id }}">{{ val.title }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="pull-right">
-                                <a href="#" class="btn btn-outline-danger text-medium">Cancel</a>
-                                <button class="btn btn-primary text-medium" type="submit">
-                                    Submit <i class="fa fa-chevron-circle-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-
         <div class="">
-            {% if messages %}
-            {% for message in messages %}
-            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %}
-            {% endif %}
-
             <div class="table-responsive">
                 <table class="table project-list-table table-nowrap align-middle table-borderless">
                     <thead>
                         <tr>
                             <th scope="col" style="width: 50px">#</th>
                             <th scope="col">Thread</th>
-                            <th scope="col">Response</th>
-                            <th scope="col">Node</th>
-                            <th scope="col">Action</th>
+                            <th scope="col" style="width: 40px">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for val in thread_links %}
                         <tr>
+                            <td><i class='bx bx-message-square-dots font-size-24 text-success'></i></td>
                             <td>
-                                <i class='bx bx-message-square-dots font-size-24 text-success'></i>
+                                {{ val.thread.title }}<br />
+                                <span class="font-weight-600">{{ val.sub_thread.title|default:"Any Text" }}</span> 
+                                <i class='bx bx-right-arrow-alt'></i>
+                                {{ val.link.title }}
                             </td>
-                            <td>{{ val.thread.title }}</td>
-                            <td>{{ val.sub_thread.title|default:"Free Text" }}</td>
-                            <td>{{ val.link.title }}</td>
 
                             <td>
                                 <div class="dropdown">
@@ -113,7 +49,8 @@
                                         <i class="mdi mdi-dots-horizontal font-size-18"></i>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="{% url 'threads:delete-link' val.id %}">Delete</a>
+                                        <a class="dropdown-item"
+                                            href="{% url 'threads:delete-link' val.id %}">Delete</a>
                                     </div>
                                 </div>
                             </td>

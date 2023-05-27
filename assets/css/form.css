@@ -12,10 +12,11 @@ form label {
     font-size: 12px;
 }
 
-form span.red, span.text-danger {
+form span.red, span.asteriskField, span.text-danger {
     color: #CC0000;
     font-size: 11px;
-    font-weight: 600;
+    padding-left: 2px;
+    font-weight: 500;
 }
 
 .error {

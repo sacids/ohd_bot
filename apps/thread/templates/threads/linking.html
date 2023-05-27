@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-between py-2 mb-2">
+    <div>
+        <button type="button" class="btn waves-effect text-medium btn-sm"
+            :class="{ 'btn-primary': eModal === 'Current_Links', 'btn-outline-primary': eModal !='Current_Links' }"
+            x-on:click="fetchData(), eModal='Current_Links'">
+            Current Links
+        </button>
+
+        <button type="button" class="btn waves-effect text-medium btn-sm"
+            :class="{ 'btn-primary': eModal === 'Linking_Thread', 'btn-outline-primary': eModal !='Linking_Thread' }"
+            x-on:click="fetchData(), eModal='Linking_Thread'">
+            Linking Thread
+        </button>
+
+        <button type="button" class="btn waves-effect text-medium btn-sm btn-outline-primary"
+            :class="{ 'btn-primary': eModal === 'Linking_Response', 'btn-outline-primary': eModal !='Linking_Response' }"
+            x-on:click="fetchData(), eModal='Linking_Response'">
+            Linking Response
+        </button>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-outline-danger text-medium btn-sm" x-on:click="sidebarOpen = false"
+            x-transition>
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<template x-if="eModal=='Current_Links'">
+    <div class="d-flex flex-column justify-content-start" x-init="fetchThreadLinks();">
+        <ul class="list-group">
+            <template x-for="(val, index) in current_links" :key="index">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div>
+                        <span class="badge bg-primary rounded-pill" x-text="val.view_id"></span>
+                    </div>
+
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold" x-text="val.title"></div>
+                        <span x-text="val.link"></span>
+                    </div>
+                    <div class="">
+                        <button type="button" class="btn waves-effect" x-on:click="deleteLink(val.id)">
+                            <i class='bx bx-trash text-danger'></i>
+                        </button>
+                    </div>
+                </li>
+            </template>
+        </ul>
+    </div>
+</template>
+
+<template x-if="eModal=='Linking_Thread'">
+    <div class="d-flex flex-column justify-content-start" x-init="fetchThreads();">
+        <!--form message => success or danger -->
+        <div class="thread_message_wrp"></div>
+
+        <form @submit.prevent="linkThread();" autocomplete="off">
+            {% csrf_token %}
+
+            <input type="hidden" name="thread_id" x-model="formThread.thread_id">
+
+            <div class="input-group mb-3">
+                <input x-ref="searchThread" x-model="searchThread"
+                    x-on:keydown.window.prevent.slash="$refs.searchThread.focus()" placeholder="Search thread..."
+                    type="text" class="form-control">
+            </div>
+
+            <ul class="list-group mb-3">
+                <template x-for="(thread, index) in filteredThreads" :key="index">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="">
+                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id">
+                        </div>
+
+                        <div class="ms-2 me-auto">
+                            <div class="font-weight-500">
+                                <span x-text="thread.title"></span>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-sm-start">
+                        <button type='button' class="btn btn-outline-danger text-medium"
+                            x-on:click="eModal== 'Current_Links'">Cancel</button>
+                        <button type="submit" name="submit" class="btn btn-primary" x-text="buttonSubmit"
+                            :disabled="formLoading"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>
+
+
+<template x-if="eModal=='Linking_Response'">
+    <div class="d-flex flex-column justify-content-start" x-init="fetchThreads();">
+        <!--form message => success or danger -->
+        <div class="thread_message_wrp"></div>
+
+        <form @submit.prevent="linkThread();" autocomplete="off">
+            {% csrf_token %}
+
+            <input type="hidden" name="thread_id" x-model="formThread.thread_id">
+
+            <div class="my-3 row" x-init="fetchResponses();">
+                <label class="col-md-4 col-form-label">Response: </label>
+                <div class="col-md-8">
+                    <select name="response_id" x-model="formThread.response_id" class="form-control">
+                        <option value="">Select</option>
+                        <template x-for="(val, index) in responses" :key="index">
+                            <option x-bind:value="val.id"><span x-text="val.title"></span></option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group mb-3">
+                <input x-ref="searchThread" x-model="searchThread"
+                    x-on:keydown.window.prevent.slash="$refs.searchThread.focus()" placeholder="Search thread..."
+                    type="text" class="form-control">
+            </div>
+
+            <ul class="list-group mb-3">
+                <template x-for="(thread, index) in filteredThreads" :key="index">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="">
+                            <input type="radio" x-bind:value="thread.id" x-model="formThread.link_id">
+                        </div>
+
+                        <div class="ms-2 me-auto">
+                            <div class="font-weight-500">
+                                <span x-text="thread.title"></span>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-sm-start">
+                        <button type='button' class="btn btn-outline-danger text-medium"
+                            x-on:click="eModal== 'Current_Links'">Cancel</button>
+                        <button type="submit" name="submit" class="btn btn-primary" x-text="buttonSubmit"
+                            :disabled="formLoading"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>

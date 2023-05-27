@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     'crispy_forms',
-    "crispy_bootstrap5",
+    'crispy_bootstrap5',
+    'modeltranslation',
 
     #apps
     'apps.thread',
@@ -107,9 +108,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+# https://docs.djangoproject.com/en/3.1/topics/i18n/
+LANGUAGE_CODE = 'sw'
 
-LANGUAGE_CODE = "en-us"
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('sw', 'Swahili'),
+]
 
 TIME_ZONE = "UTC"
 

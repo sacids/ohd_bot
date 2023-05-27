@@ -19,7 +19,8 @@ class ThreadForm(forms.ModelForm):
         fields  = ('__all__')
 
         widgets = {
-            'title': forms.Textarea(attrs={'class': '', 'id': 'title', 'placeholder': 'Write title...', 'rows': 3 }),
+            'title': forms.Textarea(attrs={'class': '', 'id': 'title', 'placeholder': 'Write title in Swahili...', 'rows': 2 }),
+            'title_en_us': forms.Textarea(attrs={'class': '', 'id': 'title_en', 'placeholder': 'Write title in English...', 'rows': 2 }),
             'block': forms.NumberInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write thread block...', 'required': '' }),
             'db_flag': forms.TextInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write flag...', 'required': '' }),
             'label': forms.TextInput(attrs={'class': 'form-control', 'id': 'label', 'placeholder': 'Write label...', 'required': '' }),
@@ -30,7 +31,8 @@ class ThreadForm(forms.ModelForm):
         } 
 
         labels = {
-            'title': 'Title',
+            'title': 'Title SW',
+            'title_en_us': 'Title EN',
             'block': 'Block',
             'db_flag': 'Flag',
             'label': 'Label',
