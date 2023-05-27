@@ -202,6 +202,8 @@ class WhatsAppWrapper:
                 arr_data.append(data)
 
             #change button message based on language
+            logging.info("class fxn language")
+            logging.info(language)
             if language == "SW":
                 button_txt = "Bonyeza Hapa" 
             elif language == "EN":
