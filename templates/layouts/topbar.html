@@ -73,13 +73,10 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
                     <span class="dropdown-item text-sm">
-                        <a href="#">My Profile</a> 
-                    </span>
-                    <span class="dropdown-item text-sm">
-                        <a href="#">Change Password</a>
+                        <a href="{% url 'change-password' %}">Change Password</a>
                     </span>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-sm text-danger" href="#">Logout</a>
+                    <a class="dropdown-item text-sm text-danger" href="{% url 'logout' %}">Logout</a>
                 </div>
             </div>
         </div>

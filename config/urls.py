@@ -17,14 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.whatsapp import views as whatsapp_views
-from apps.thread.validation import *
+from apps.thread import views, validation
+
 
 urlpatterns = [
+    path('', views.ThreadListView.as_view()),
     path("admin/", admin.site.urls),
+    path('auth/', include('apps.account.urls')),
     path('threads/', include('apps.thread.urls')),
-
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),
-
-    path('api/validation/date', validate_date),
+    path('api/validation/date', validation.validate_date),
 ]

@@ -4,6 +4,7 @@ from . import views
 app_name = 'threads'
 
 urlpatterns = [
+    path('', views.ThreadListView.as_view(), name='lists'),
     path('lists', views.ThreadListView.as_view(), name='lists'),
     path('show/<str:pk>', views.ThreadDetailView.as_view(), name='show'),
     path('create', views.ThreadCreateView.as_view(), name='create'),
