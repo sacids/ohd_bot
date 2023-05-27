@@ -19,6 +19,7 @@ class ThreadWrapper:
         phone          = kwargs['phone']
         flag           = kwargs['flag']
         channel        = kwargs['channel']
+        language       = kwargs['language']
 
         """first thread"""
         thread = Thread.objects.get(db_flag=flag)
@@ -30,7 +31,7 @@ class ThreadWrapper:
         session_id = self.create_thread_session(phone=phone, thread_id=thread.id, uuid=uuid, channel=channel)
 
         """response"""
-        thread_response = self.process_thread(thread.id, uuid)
+        thread_response = self.process_thread(thread.id, uuid, language)
 
         """return response"""
         return thread_response
@@ -69,19 +70,21 @@ class ThreadWrapper:
         thread_id   = kwargs['thread_id']
         key         = kwargs['key']
         channel     = kwargs['channel']
+        language    = kwargs['language']
 
         """thread"""
         thread = Thread.objects.filter(id=thread_id).first()
 
+        #responses
         response = {}
 
         if thread.validation is not None:
             """TODO: validate entries"""
 
             """normal response"""
-            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
+            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
         else: 
-            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel)
+            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
 
         """response"""   
         return response    
@@ -94,6 +97,14 @@ class ThreadWrapper:
         thread_id   = kwargs['thread_id']
         key         = kwargs['key']
         channel     = kwargs['channel']
+        language       = kwargs['language']
+
+        """thread"""
+        thread = Thread.objects.filter(id=thread_id).first()
+
+        #switch language
+        if (thread.db_flag == "thread_services"):
+            language = self.switch_language(uuid, thread.db_flag, language)
 
         """action"""
         action = None
@@ -116,7 +127,7 @@ class ThreadWrapper:
                 self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                request = self.process_thread(thread_link.link_id, uuid)
+                request = self.process_thread(thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
 
                 """thread action"""
@@ -130,6 +141,7 @@ class ThreadWrapper:
                 new_response = {
                     'status': 'success', 
                     'value': key, 
+                    'language': language,
                     'message': response['message'], 
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
@@ -137,10 +149,17 @@ class ThreadWrapper:
                     'actionURL': actionURL
                 }
             else:
+                #change title and description based on language
+                if language == "SW":
+                    message = "Chaguo batili"
+                elif language == "EN":
+                    message = "Invalid Input"
+
                 """new response"""
                 new_response = {
                     "status": 'success', 
-                    "message": "Invalid input", 
+                    'language': language,
+                    "message": message, 
                     "message_type": "TEXT", 
                     "arr_trees": [], 
                     "action": action, 
@@ -156,7 +175,7 @@ class ThreadWrapper:
                 self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                request = self.process_thread(thread_link.link_id, uuid)
+                request = self.process_thread(thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
 
                 """thread action"""
@@ -170,6 +189,7 @@ class ThreadWrapper:
                 new_response = {
                     'status': 'success', 
                     'value': key, 
+                    'language': language,
                     'message': response['message'],
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
@@ -177,10 +197,17 @@ class ThreadWrapper:
                     'actionURL': actionURL
                 }
             else:
+                #change title and description based on language
+                if language == "SW":
+                    message = "Chaguo batili"
+                elif language == "EN":
+                    message = "Invalid Input"
+
                 """new response"""
                 new_response = {
                     "status": 'success', 
-                    "message": "Invalid input", 
+                    'language': language,
+                    "message": message, 
                     "message_type": "TEXT", 
                     "arr_trees": [], 
                     "action": action, 
@@ -191,11 +218,17 @@ class ThreadWrapper:
         return JsonResponse(new_response)
 
 
-    def process_thread(self, thread_id, uuid):
+    def process_thread(self, thread_id, uuid, language):
         """Process Thread"""
         thread       = Thread.objects.get(pk=thread_id)
         message_type = thread.message_type
         message      = thread.title
+        
+        #change message based on language
+        if language == "SW":
+            message = thread.title_sw
+        elif language == "EN":
+            message = thread.title_en_us  
     
         """if there response"""
         sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
@@ -203,16 +236,29 @@ class ThreadWrapper:
         arr_trees = []
         if(sub_threads):
             for val in sub_threads:
+                title = val.title
+                description = val.description
+
+                #change title and description based on language
+                if language == "SW":
+                    title       = val.title_sw
+                    description = val.description_sw
+                elif language == "EN":
+                    title       = val.title_en_us
+                    description = val.description_en_us   
+
+                #create tree
                 tree = {
                     "view_id" : val.view_id,
-                    "title": val.title,
-                    "description": val.description
+                    "title": title,
+                    "description": description
                 }
                 arr_trees.append(tree)
 
         """thread response"""    
         thread_response = {
             "status": 'success', 
+            'language': language,
             "message": message, 
             "message_type": message_type, 
             "arr_trees": arr_trees
@@ -243,6 +289,44 @@ class ThreadWrapper:
 
         """return session ID"""
         return session.id
+
+
+    def switch_language(self, uuid, db_flag, language):
+        """switch language"""
+        thread_session = ThreadSession.objects.filter(code=uuid,flag=db_flag, active=1)
+
+        if thread_session.count() > 0:
+            thread_session = thread_session.last()
+
+            #language values
+            lang_val = thread_session.values
+
+            #query for sub thread
+            sub_thread = SubThread.objects.filter(thread_id=thread_session.thread.id, view_id=lang_val)
+
+            if sub_thread.count() > 0:
+                sub_thread = sub_thread.first()
+
+                if sub_thread.title == "English":
+                    from_number = thread_session.phone
+
+                    #query for language
+                    lbLanguage = CustomerLanguage.objects.filter(phone=from_number)
+
+                    if lbLanguage.count() > 0:
+                        lbLanguage = lbLanguage.first()
+                        current_language = lbLanguage.language
+
+                        if current_language == "EN":
+                            lbLanguage.language = "SW"
+                            language = "SW"
+                        elif current_language == "SW":
+                            lbLanguage.language = "EN"
+                            language = "EN"
+                        lbLanguage.save()     
+
+        #return language
+        return language
 
 
     def process_data(self, **kwargs):

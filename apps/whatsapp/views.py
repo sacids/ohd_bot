@@ -179,6 +179,7 @@ def process_threads(**kwargs):
     key         = kwargs['key']
 
     """initiate variables"""
+    language = 'SW' #declare default language
     message = ""
     message_type = ""
     arr_trees = []
@@ -189,6 +190,20 @@ def process_threads(**kwargs):
     """profile"""
     customer = Customer.objects.filter(phone=from_number)
 
+    #deal with language
+    lbLanguage = CustomerLanguage.objects.filter(phone=from_number)
+
+    if lbLanguage.count() > 0:
+        lbLanguage = lbLanguage.first()
+        #update default language
+        language = lbLanguage.language
+    else:
+        #insert new language
+        lbLanguage = CustomerLanguage()
+        lbLanguage.phone = from_number
+        lbLanguage.language = "SW"  
+        lbLanguage.save()  
+
     if customer.count() == 0:
         """create profile"""
         customer = Customer()
@@ -196,7 +211,7 @@ def process_threads(**kwargs):
         customer.save()
 
         """init thread"""
-        request = wrapper.init_thread(phone=from_number, flag="thread_start", channel="WHATSAPP") 
+        request = wrapper.init_thread(phone=from_number, flag="thread_start", channel="WHATSAPP", language=language) 
         response = json.loads(request.content)
 
         """variables"""
@@ -216,7 +231,7 @@ def process_threads(**kwargs):
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
                 """init service menu"""
-                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP", language=language) 
                 response = json.loads(request.content)
 
                 """variables"""
@@ -234,7 +249,7 @@ def process_threads(**kwargs):
 
                 if thread_response == 'NEXT_MENU':
                     """result"""
-                    request = wrapper.validate_thread(phone=from_number, uuid=OD_uuid, thread_id=OD_thread_id, key=key, channel="WHATSAPP")
+                    request = wrapper.validate_thread(phone=from_number, uuid=OD_uuid, thread_id=OD_thread_id, key=key, channel="WHATSAPP", language=language)
                     response = json.loads(request.content)
 
                     """status"""
@@ -257,14 +272,17 @@ def process_threads(**kwargs):
                             my_data = wrapper.process_data(uuid=OD_uuid)
                             logging.info(my_data)
 
-                    
                     elif status == 'failed':
                         """TODO: if validation failed"""
                         pass
 
                 elif thread_response == 'INVALID_INPUT':
                     """invalid input"""
-                    message = "Chaguo batili, tafadhali chagua tena!"
+                    if language == "SW":
+                        message = "Chaguo batili, tafadhali chagua tena."
+                    elif language == "EN":
+                        message = "Invalid input, Please select option again."
+
                     message_type = response['message_type']
                     arr_trees = response['arr_trees']
 
@@ -285,7 +303,11 @@ def process_threads(**kwargs):
                         """TODO: perform any action in here => PUSH, CALL"""
 
                     """initiate thread session"""
-                    message = "Asante kwa kutumia huduma za Laina Finance" 
+                    if language == "SW":
+                        message = "Asante kwa kutumia huduma za Laina Finance." 
+                    elif language == "EN":
+                        message = "Thank you for using Laina Finance services."
+
                     message_type = "TEXT"  
         else:
             if key.upper() == "LAINA" or key.upper() == "HUDUMA":
@@ -293,7 +315,7 @@ def process_threads(**kwargs):
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
                 """init service menu"""
-                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP") 
+                request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP", language=language) 
                 response = json.loads(request.content)
 
                 """variables"""
@@ -301,11 +323,14 @@ def process_threads(**kwargs):
                 message_type = response['message_type']
                 arr_trees = response['arr_trees']
             else:
-                message = "Karibu Laina Finance, kutumia huduma hii andika neno LAINA au HUDUMA."
+                if language == "SW":
+                    message = "Karibu Laina Finance, kutumia huduma hii andika neno LAINA au HUDUMA."
+                elif language == "EN": 
+                    message = "Welcome Laina Finance, to use this service write keyword LAINA or HUDUMA."   
                 message_type = "TEXT" 
 
     """return response"""
-    return JsonResponse({"status": "success", "message": message, "message_type": message_type, "arr_trees": arr_trees})
+    return JsonResponse({"status": "success", "language": language, "message": message, "message_type": message_type, "arr_trees": arr_trees})
 
     
 def push_data(**kwargs):
