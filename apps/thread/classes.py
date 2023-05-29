@@ -126,8 +126,6 @@ class ThreadWrapper:
                 """process thread"""
                 request = self.process_thread(thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
-                print("New Language")
-                print(response['language'])  
 
                 """thread action"""
                 thread = Thread.objects.get(pk=thread_link.link_id)
@@ -328,9 +326,6 @@ class ThreadWrapper:
                             language = "EN"
                         lbLanguage.save()     
 
-        print("Switched language")
-        print(language)
-
         #return language
         return language
 
@@ -341,6 +336,7 @@ class ThreadWrapper:
 
         """thread sessions"""
         thread_sessions = ThreadSession.objects.filter(code=uuid)
+        print(thread_sessions)
 
         if thread_sessions:
             arr_data = {}
@@ -355,17 +351,13 @@ class ThreadWrapper:
                     if sub_thread_value:
                         thread_value = sub_thread_value.title
                 else:
-                    thread_value = t_session.values
+                    thread_value = t_session.values   
 
                 """assign all data to array"""
                 if thread.label is not None and thread_value is not None:
-                    arr_data[thread.label] = thread_value
-
-            response = {
-                'data': arr_data, 
-            }
+                    arr_data[thread.label] = thread_value   
 
             """response"""
-            return response
+            return JsonResponse({'status': 'success', 'arr_data': arr_data})
         else:
-            return []
+            return JsonResponse({'status': 'failed', 'error_msg': 'No any data!'})

@@ -202,10 +202,7 @@ def process_threads(**kwargs):
         lbLanguage = CustomerLanguage()
         lbLanguage.phone = from_number
         lbLanguage.language = "SW"  
-        lbLanguage.save() 
-
-    print("Language=>")
-    print(language)     
+        lbLanguage.save()     
 
     if customer.count() == 0:
         """create profile"""
@@ -278,7 +275,11 @@ def process_threads(**kwargs):
                         if(response['action'] is not None):
                             """process data"""
                             my_data = wrapper.process_data(uuid=OD_uuid)
-                            logging.info(my_data)
+                            my_data = json.loads(my_data.content)
+
+                            if response['action'] == 'REGISTRATION':
+                                """create profile"""
+                                result = create_profile(phone=from_number, response=my_data)
 
                     elif status == 'failed':
                         """IF VALIDATION FAIL => update thread session"""
@@ -309,7 +310,7 @@ def process_threads(**kwargs):
                         my_data = wrapper.process_data(uuid=OD_uuid)
                         logging.info(my_data)
 
-                        """TODO: perform any action in here => PUSH, CALL"""
+                        """TODO: perform any action in here => REGISTRATION, PUSH, CALL"""
 
                     """initiate thread session"""
                     if language == "SW":
@@ -353,5 +354,27 @@ def push_data(**kwargs):
         
     """response"""
     return JsonResponse({'status': 'success', 'message': "data sent"})
+
+
+def create_profile(**kwargs):
+    """create profile for CUSTOMER"""
+    phone    = kwargs['phone']
+    response = kwargs['response']
+
+    """query for customer"""
+    customer = Customer.objects.filter(phone=phone).first()
+
+    if customer:
+        """process data"""
+        if 'Phone' in response['arr_data']:
+            customer.phone2  = response['arr_data']['Phone']
+
+        if 'NIN' in response['arr_data']:    
+            customer.id_number  = response['arr_data']['NIN']
+
+        customer.status = 'COMPLETED'
+        customer.save()
+
+    return JsonResponse({"error": False, 'success_msg': "Customer data updated"})    
 
 

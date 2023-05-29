@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Thread(models.Model):
     """Thread Model"""
     ACTION_URL_OPTIONS = (
+        ('REGISTRATION', 'REGISTRATION'),
         ('PUSH', 'PUSH'),
         ('PULL', 'PULL'),
     )
@@ -127,6 +128,7 @@ class Customer(models.Model):
     )
   
     phone             = models.CharField(max_length=20, blank=False, null=False, unique = True)
+    phone2             = models.CharField(max_length=20, blank=True, null=True)
     id_type           = models.CharField(max_length=50, choices=ID_TYPE_OPTIONS, blank=True, null=True)
     id_number         = models.CharField(max_length=50, blank=True, null=True) 
     status            = models.CharField(max_length=20, choices=STATUS_OPTIONS,default='PENDING', blank=True, null=True)
