@@ -53,7 +53,6 @@ def facebook(request):
 
     if request.method == 'POST':
         data = json.loads(request.body)
-        logging.info(data)
 
         """extract => field, from, key, message_type"""
         field = data["entry"][0]["changes"][0]["field"]
@@ -179,7 +178,7 @@ def process_threads(**kwargs):
     key         = kwargs['key']
 
     """initiate variables"""
-    language = "SW" #declare default language
+    language = "SW"
     message = ""
     message_type = ""
     arr_trees = []
@@ -247,13 +246,14 @@ def process_threads(**kwargs):
                 OD_uuid = m_session.code
                 OD_thread_id = m_session.thread_id
 
-                if thread_response == 'API_MENU':
+                if thread_response['link'] == 'API_MENU':
                     """Call API """
                     payload = {
-                        'message': key,
-                        'phone': from_number
+                        'msg': key,
+                        'msisdn': from_number,
+                        'sessionId': OD_uuid
                     }
-                    request = requests.request("GET", "http://127.0.0.1:8000/api/pull", data=payload)
+                    request = requests.get(thread_response['api'], params=payload)
                     response = json.loads(request.content)
                     print(response)
                     
@@ -263,7 +263,7 @@ def process_threads(**kwargs):
                     message_type = "TEXT"
                     arr_trees = []
 
-                elif thread_response == 'NEXT_MENU':
+                elif thread_response['link'] == 'NEXT_MENU':
                     """update thread session"""
                     m_session.active = 1
                     m_session.values = key
@@ -304,7 +304,7 @@ def process_threads(**kwargs):
 
                         """ MESSAGE to END USER """
 
-                elif thread_response == 'INVALID_INPUT':
+                elif thread_response['link'] == 'INVALID_INPUT':
                     """invalid input"""
                     if language == "SW":
                         message = "Chaguo batili, tafadhali chagua tena."
@@ -312,7 +312,7 @@ def process_threads(**kwargs):
                         message = "Invalid input, Please select option again."
                     message_type = "TEXT"
 
-                elif thread_response == 'END_MENU':
+                elif thread_response['link'] == 'END_MENU':
                     """update and end thread session"""
                     ThreadSession.objects.filter(code=OD_uuid).update(active=1)
 

@@ -12,8 +12,6 @@ def push_data(request):
     arr_data = {
 
     }
-
-
         
     """response"""
     return JsonResponse({'status': 'success', 'message': "data sent"})
@@ -21,11 +19,13 @@ def push_data(request):
 
 def pull(request):
     """Sample API for pull data """
-    key = request.GET.get('message')
-    from_number = request.GET.get('from_number')
+    msg = request.GET['msg']
+    sessionId = request.GET['sessionId']
+    msisdn = request.GET['msisdn']
 
-    print(key)
-    print(from_number)
+    print(msg)
+    print(msisdn)
+    print(sessionId)
 
     message = "Hello Renfrid, Tafathali chagua huduma zifuatazo\n" \
                 "1. Ngao ya buku\n" \
