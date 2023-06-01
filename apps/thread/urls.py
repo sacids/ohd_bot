@@ -23,7 +23,10 @@ urlpatterns = [
     
     path('links', views.ThreadLinkListView.as_view(), name='links'),
     path('current-links/', views.current_links, name='current-links'),
-    path('linking', views.link_thread, name='link-thread'),
+    path('link_thread2thread', views.link_thread2thread, name='link-thread2thread'),
+    path('link_response2thread', views.link_response2thread, name='link-response2thread'),
+    path('link_response2API', views.link_response2API, name='link-response2API'),
+
     path('delete-link/', views.delete_link, name='delete-link'),
     path('links/delete/<str:pk>', views.ThreadLinkDeleteView.as_view(), name='delete-link'),
 

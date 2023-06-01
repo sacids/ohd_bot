@@ -40,28 +40,33 @@ class ThreadWrapper:
 
     def check_thread_link(self, thread_id, key):
         """Check Thread Link"""
-        sub_thread = SubThread.objects.filter(thread_id=thread_id)
+        thread = Thread.objects.get(pk=thread_id)
 
-        if sub_thread.count() > 0:
-            sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key).first()
+        if thread.action == 'EXTERNAL_API':
+            return 'API_MENU'
+        else:
+            sub_thread = SubThread.objects.filter(thread_id=thread_id)
 
-            if (sub_thread_key):
-                thread_link = ThreadLink.objects.filter(
-                    thread_id=thread_id, sub_thread_id=sub_thread_key.id)
+            if sub_thread.count() > 0:
+                sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key).first()
+
+                if (sub_thread_key):
+                    thread_link = ThreadLink.objects.filter(
+                        thread_id=thread_id, sub_thread_id=sub_thread_key.id)
+
+                    if(thread_link):
+                        return 'NEXT_MENU'
+                    else:
+                        return 'INVALID_INPUT'
+                else:
+                    return 'INVALID_INPUT'      
+            else:
+                thread_link = ThreadLink.objects.filter(thread_id=thread_id)
 
                 if(thread_link):
                     return 'NEXT_MENU'
                 else:
-                    return 'INVALID_INPUT'
-            else:
-                return 'INVALID_INPUT'      
-        else:
-            thread_link = ThreadLink.objects.filter(thread_id=thread_id)
-
-            if(thread_link):
-                return 'NEXT_MENU'
-            else:
-                return 'END_MENU'
+                    return 'END_MENU'
 
 
     def validate_thread(self, **kwargs):

@@ -6,17 +6,29 @@
             Current Links
         </button>
 
-        <button type="button" class="btn waves-effect text-medium btn-sm"
-            :class="{ 'btn-primary': eModal === 'Linking_Thread', 'btn-outline-primary': eModal !='Linking_Thread' }"
-            x-on:click="fetchData(), eModal='Linking_Thread'">
-            Linking Thread
-        </button>
+        <template x-if="rs_length == 0">
+            <button type="button" class="btn waves-effect text-medium btn-sm"
+                :class="{ 'btn-primary': eModal === 'Linking_Thread', 'btn-outline-primary': eModal !='Linking_Thread' }"
+                x-on:click="fetchData(), eModal='Linking_Thread'">
+                Thread 2 Thread
+            </button>
+        </template>
 
-        <button type="button" class="btn waves-effect text-medium btn-sm btn-outline-primary"
-            :class="{ 'btn-primary': eModal === 'Linking_Response', 'btn-outline-primary': eModal !='Linking_Response' }"
-            x-on:click="fetchData(), eModal='Linking_Response'">
-            Linking Response
-        </button>
+        <template x-if="rs_length > 0">
+            <button type="button" class="btn waves-effect text-medium btn-sm btn-outline-primary"
+                :class="{ 'btn-primary': eModal === 'Linking_Response', 'btn-outline-primary': eModal !='Linking_Response' }"
+                x-on:click="fetchData(), eModal='Linking_Response'">
+                Response 2 Thread
+            </button>
+        </template>
+
+        <template x-if="rs_length > 0">
+            <button type="button" class="btn waves-effect text-medium btn-sm btn-outline-primary"
+                :class="{ 'btn-primary': eModal === 'Linking_API', 'btn-outline-primary': eModal !='Linking_API' }"
+                x-on:click="fetchData(), eModal='Linking_API'">
+                Response 2 API
+            </button>
+        </template>
     </div>
 
     <div>
@@ -56,7 +68,7 @@
         <!--form message => success or danger -->
         <div class="thread_message_wrp"></div>
 
-        <form @submit.prevent="linkThread();" autocomplete="off">
+        <form @submit.prevent="linkThread2Thread();" autocomplete="off">
             {% csrf_token %}
 
             <input type="hidden" name="thread_id" x-model="formThread.thread_id">
@@ -103,14 +115,14 @@
         <!--form message => success or danger -->
         <div class="thread_message_wrp"></div>
 
-        <form @submit.prevent="linkThread();" autocomplete="off">
+        <form @submit.prevent="linkResponse2Thread();" autocomplete="off">
             {% csrf_token %}
 
             <input type="hidden" name="thread_id" x-model="formThread.thread_id">
 
             <div class="my-3 row" x-init="fetchResponses();">
-                <label class="col-md-4 col-form-label">Response: </label>
-                <div class="col-md-8">
+                <label class="col-md-3 col-form-label">Response: </label>
+                <div class="col-md-9">
                     <select name="response_id" x-model="formThread.response_id" class="form-control" required>
                         <option value="">Select</option>
                         <template x-for="(val, index) in responses" :key="index">
@@ -141,6 +153,61 @@
                     </li>
                 </template>
             </ul>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-sm-start">
+                        <button type='button' class="btn btn-outline-danger text-medium"
+                            x-on:click="eModal = 'Current_Links'">Cancel</button>
+                        <button type="submit" name="submit" class="btn btn-primary" x-text="buttonSubmit"
+                            :disabled="formLoading"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template x-if="eModal=='Linking_API'">
+    <div class="d-flex flex-column justify-content-start" x-init="fetchThreads();">
+        <!--form message => success or danger -->
+        <div class="thread_message_wrp"></div>
+
+        <form @submit.prevent="linkResponse2API();" autocomplete="off">
+            {% csrf_token %}
+
+            <input type="hidden" name="thread_id" x-model="formAPI.thread_id">
+
+            <div class="my-3 row" x-init="fetchResponses();">
+                <label class="col-md-3 col-form-label">Response: </label>
+                <div class="col-md-9">
+                    <select name="response_id" class="form-control" x-model="formAPI.response_id" required>
+                        <option value="">Select</option>
+                        <template x-for="(val, index) in responses" :key="index">
+                            <option x-bind:value="val.id"><span x-text="val.title"></span></option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
+            <div class="my-3 row">
+                <label class="col-md-3 col-form-label">API Type: </label>
+                <div class="col-md-9">
+                    <select name="api_type" class="form-control" x-model="formAPI.api_type" required>
+                        <option value="">Select</option>
+                        <option value="INTERNAL_API">Internal API</option>
+                        <option value="EXTERNAL_API">External API</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="my-3 row">
+                <label class="col-md-3 col-form-label">API URL: </label>
+                <div class="col-md-9">
+                    <input type="text" name="api_url" placeholder="Write API URL..." class="form-control"
+                        x-model="formAPI.api_url" required />
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-12">

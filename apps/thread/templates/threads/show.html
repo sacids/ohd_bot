@@ -17,7 +17,6 @@
     </div>
 </div>
 
-
 <div x-data="initData()">
     <div class="row">
         <div class="col-lg-6">
@@ -174,6 +173,7 @@
             sidebarOpen: false,
             eModal: "Current_Links",
             responses: [],
+            rs_length: 0,
             thread_id: "{{thread.id}}",
             threads: [],
             current_links: [],
@@ -195,6 +195,12 @@
                 response_id: "",
                 link_id: "",
             },
+            formAPI:{
+                thread_id: "{{thread.id}}",
+                response_id: "",
+                api_type: "",
+                api_url: "",
+            },
             formMessage: "",
             formLoading: false,
             buttonSubmit: "Submit",
@@ -206,6 +212,7 @@
                     .then(res => res.json())
                     .then(data => {
                         this.responses = data;
+                        this.rs_length = data.length;
                     });
             },
 
@@ -326,13 +333,13 @@
                     });
             },
 
-            //linking thread
-            linkThread() {
+            //linking thread 2 thread
+            linkThread2Thread() {
                 this.formMessage = "";
                 this.formLoading = false;
                 this.buttonThreadSubmit= "Linking....",
 
-                fetch("/threads/linking", {
+                fetch("/threads/link_thread2thread", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -346,19 +353,90 @@
                         this.formThread.response_id = ""
                         this.formThread.link_id = ""
 
-                        //set message
                          //set message
                          $('.thread_message_wrp').html(
                             "<div class='alert alert-success rounded-sm'>Thread Linked</div>"
                         );
 
                     }).catch(() => {
-                        //set message
                          //set message
                          $('.thread_message_wrp').html(
                             "<div class='alert alert-danger rounded-sm'>Failed to link thread</div>"
                         );
                         
+                    }).finally(() => {
+                        this.formLoading = false;
+                        this.buttonThreadSubmit = "Submit";
+                    });
+            },
+
+            //linking thread 2 thread
+            linkResponse2Thread() {
+                this.formMessage = "";
+                this.formLoading = false;
+                this.buttonThreadSubmit= "Linking....",
+
+                fetch("/threads/link_response2thread", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRFToken": document.getElementsByName('csrfmiddlewaretoken')[0].value
+                    },
+                    body: JSON.stringify(this.formThread),
+                })
+                    .then(response => response.json())
+                    .then((response) => {
+                        this.formThread.response_id = ""
+                        this.formThread.link_id = ""
+
+                         //set message
+                         $('.thread_message_wrp').html(
+                            "<div class='alert alert-success rounded-sm'>Thread Linked</div>"
+                        );
+
+                    }).catch(() => {
+                         //set message
+                         $('.thread_message_wrp').html(
+                            "<div class='alert alert-danger rounded-sm'>Failed to link thread</div>"
+                        );
+                        
+                    }).finally(() => {
+                        this.formLoading = false;
+                        this.buttonThreadSubmit = "Submit";
+                    });
+            },
+
+            //Linking API
+            linkResponse2API() {
+                this.formMessage = "";
+                this.formLoading = false;
+                this.buttonThreadSubmit= "Linking....",
+
+                fetch("/threads/link_response2API", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRFToken": document.getElementsByName('csrfmiddlewaretoken')[0].value
+                    },
+                    body: JSON.stringify(this.formAPI),
+                })
+                    .then(response => response.json())
+                    .then((response) => {
+                        this.formAPI.response_id = ""
+                        this.formAPI.api_type = ""
+                        this.formAPI.api_url = ""
+
+                         //set message
+                         $('.thread_message_wrp').html(
+                            "<div class='alert alert-success rounded-sm'>Thread Linked</div>"
+                        );
+                    }).catch(() => {            
+                         //set message
+                         $('.thread_message_wrp').html(
+                            "<div class='alert alert-danger rounded-sm'>Failed to link thread</div>"
+                        );  
                     }).finally(() => {
                         this.formLoading = false;
                         this.buttonThreadSubmit = "Submit";

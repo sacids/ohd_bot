@@ -223,7 +223,7 @@ def process_threads(**kwargs):
         customer = customer.first()
 
         """Follow thread session and Trigger follow up menu"""
-        thread_session = ThreadSession.objects.filter(phone=from_number, active=0) 
+        thread_session = ThreadSession.objects.filter(phone=from_number, active=0)
 
         if thread_session.count() > 0:
             if key.upper() == "LAINA" or key.upper() == "HUDUMA":
@@ -247,7 +247,23 @@ def process_threads(**kwargs):
                 OD_uuid = m_session.code
                 OD_thread_id = m_session.thread_id
 
-                if thread_response == 'NEXT_MENU':
+                if thread_response == 'API_MENU':
+                    """Call API """
+                    payload = {
+                        'message': key,
+                        'phone': from_number
+                    }
+                    request = requests.request("GET", "http://127.0.0.1:8000/api/pull", data=payload)
+                    response = json.loads(request.content)
+                    print(response)
+                    
+                    """variables"""
+                    language = language
+                    message = response['message']
+                    message_type = "TEXT"
+                    arr_trees = []
+
+                elif thread_response == 'NEXT_MENU':
                     """update thread session"""
                     m_session.active = 1
                     m_session.values = key

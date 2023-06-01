@@ -52,6 +52,7 @@ class ThreadDetailView(generic.DetailView):
         context['sub_threads'] = sub_threads
         return context
 
+
 def list_threads(request):
     """Lists threads"""
     uuid = request.GET.get("uuid")
@@ -284,15 +285,20 @@ def current_links(request):
 
     thread_links = ThreadLink.objects.filter(thread_id=uuid).order_by('sub_thread__view_id')
 
-    print(thread_links)
 
     arr_data = []
     for val in thread_links:
+        if val.linking_type == 'THREAD_THREAD' or val.linking_type == 'RESPONSE_THREAD':
+            title = val.link.title
+        elif val.linking_type == 'RESPONSE_API':
+            title = val.api_url    
+
+        #create set
         data = {
             'id': val.id,
             'view_id': val.sub_thread.view_id if val.sub_thread else "A",
             'title': val.sub_thread.title if val.sub_thread else "Any Text",
-            'link': val.link.title,
+            'link': title,
         }
         arr_data.append(data)
 
@@ -300,26 +306,56 @@ def current_links(request):
     return JsonResponse(arr_data, safe=False)
 
 
-def link_thread(request):
-    """Linking Thread"""  
+def link_thread2thread(request):
+    """Linking Thread 2 Thread"""  
     if request.method == 'POST':
         post_data = json.loads(request.body)
         thread_id = post_data['thread_id']  
         link_id = post_data['link_id']  
 
-        print(post_data)
+        """update or create menu link"""
+        thread_link, created = ThreadLink.objects.update_or_create(
+            thread_id=thread_id, 
+            defaults={"link_id": link_id, "linking_type": "THREAD_THREAD"})
 
-        response_id = None
-        if post_data['response_id'] != '':
-            response_id = post_data['response_id'] 
+    """response"""
+    return JsonResponse({"error": False, "success_msg": "Thread 2 Thread linked"}, safe=False) 
+
+
+def link_response2thread(request):
+    """Linking Response 2 Thread"""  
+    if request.method == 'POST':
+        post_data = json.loads(request.body)
+        thread_id = post_data['thread_id']  
+        response_id = post_data['response_id'] 
+        link_id = post_data['link_id']  
 
         """update or create menu link"""
         thread_link, created = ThreadLink.objects.update_or_create(
             thread_id=thread_id, sub_thread_id=response_id,  
-            defaults={"link_id" : link_id})
+            defaults={"link_id" : link_id, "linking_type": "RESPONSE_THREAD"})
 
     """response"""
-    return JsonResponse({"error": False, "success_msg": "Thread linked"}, safe=False)  
+    return JsonResponse({"error": False, "success_msg": "Response 2 Thread linked"}, safe=False)  
+
+
+def link_response2API(request):
+    """Linking Response 2 API"""  
+    if request.method == 'POST':
+        post_data = json.loads(request.body)
+        thread_id = post_data['thread_id'] 
+        response_id = post_data['response_id']  
+        api_type = post_data['api_type']  
+        api_url = post_data['api_url']  
+
+        """update or create thread link"""
+        thread_link, created = ThreadLink.objects.update_or_create(
+            thread_id=thread_id, sub_thread_id=response_id,  
+            defaults={"api_type": api_type, 'api_url': api_url, "linking_type": "RESPONSE_API"})
+
+    """response"""
+    return JsonResponse({"error": False, "success_msg": "Response 2 API linked"}, safe=False)  
+        
         
 
 def delete_link(request):

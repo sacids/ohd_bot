@@ -78,12 +78,21 @@ class SubThread(models.Model):
 
 class ThreadLink(models.Model):
     """Thread Link Model"""
-    id          = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    thread      =  models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='thread')
-    sub_thread  =  models.ForeignKey(SubThread, on_delete=models.SET_NULL, blank=True, null=True)
-    link        =  models.ForeignKey(Thread, on_delete=models.SET_NULL, related_name='link', blank=True, null=True)
-    created_at  = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at  = models.DateTimeField(auto_now=True) 
+    LINKING_OPTIONS = (
+        ('THREAD_THREAD', 'Thread 2 Thread'),
+        ('RESPONSE_THREAD', 'Response 2 Thread'),
+        ('RESPONSE_API', 'Response 2 API'),
+    )
+
+    id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    thread       = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='thread')
+    linking_type = models.CharField(max_length=100, choices=LINKING_OPTIONS, default="THREAD_THREAD")
+    sub_thread   = models.ForeignKey(SubThread, on_delete=models.SET_NULL, blank=True, null=True)
+    link         = models.ForeignKey(Thread, on_delete=models.SET_NULL, related_name='link', blank=True, null=True)
+    api_type     = models.CharField(max_length=100, null=True, blank=True)
+    api_url      = models.CharField(max_length=250, null=True, blank=True)
+    created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at   = models.DateTimeField(auto_now=True) 
 
     class Meta:
         db_table = 'lb_thread_links'
