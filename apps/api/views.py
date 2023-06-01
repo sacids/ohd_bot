@@ -9,9 +9,6 @@ def push_data(request):
     key = request.GET.get('key')
     from_number = request.GET.get('from_number')
 
-    arr_data = {
-
-    }
         
     """response"""
     return JsonResponse({'status': 'success', 'message': "data sent"})
