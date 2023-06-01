@@ -24,7 +24,10 @@ urlpatterns = [
     path('', include('apps.account.urls')),
     path("admin/", admin.site.urls),
     path('threads/', include('apps.thread.urls')),
+    path('api/', include('apps.api.urls')),
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),
+
+
     path('api/validation/date', validation.validate_date),
 ]

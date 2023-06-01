@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     #apps
     'apps.thread',
     'apps.account',
+    'apps.api',
 ]
 
 MIDDLEWARE = [
