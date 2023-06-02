@@ -160,6 +160,7 @@ def facebook(request):
 
             """structure the whatsapp response""" 
             response = wrapper.structure_response(from_number, show_type, language, message, arr_trees)
+            logging.info("===== Facebook Response ====")
             logging.info(response)
         else:
             delivery = wrapper.get_delivery(data)
@@ -253,9 +254,8 @@ def process_threads(**kwargs):
                         'msisdn': from_number,
                         'sessionId': OD_uuid
                     }
-                    request = requests.get(thread_response['api'], params=payload)
-                    response = json.loads(request.content)
-                    print(response)
+                    request = requests.post(thread_response['api'], params=payload)
+                    response = request.json()
                     
                     """variables"""
                     language = language
