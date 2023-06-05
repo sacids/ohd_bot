@@ -318,31 +318,51 @@ class ThreadWrapper:
             message = thread.title_sw
         elif language == "EN":
             message = thread.title_en_us  
-    
-        """if there response"""
-        sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
 
-        arr_trees = []
-        if(sub_threads):
-            for val in sub_threads:
-                title = val.title
-                description = val.description
+        if thread.action is not None and thread.action == "PULL":
+            """response"""
+            request = requests.get(thread.action_url, params={"uuid": uuid})
+            response = request.json()["response"]
 
-                #change title and description based on language
-                if language == "SW":
-                    title       = val.title_sw
-                    description = val.description_sw
-                elif language == "EN":
-                    title       = val.title_en_us
-                    description = val.description_en_us   
+            if response['message'] is not None:
+                message = response['message']
 
-                #create tree
-                tree = {
-                    "view_id" : val.view_id,
-                    "title": title,
-                    "description": description
-                }
-                arr_trees.append(tree)
+            arr_trees = []
+            if len(response['arr_message']) > 0:
+                message_type = "LIST MESSAGE"
+                for val in response['arr_message']:
+                    #create tree
+                    tree = {
+                        "view_id" : val["id"],
+                        "title": val["message"],
+                        "description": val['description']
+                    }
+                    arr_trees.append(tree)     
+        else: 
+            """if there response"""
+            sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
+
+            arr_trees = []
+            if(sub_threads):
+                for val in sub_threads:
+                    title = val.title
+                    description = val.description
+
+                    #change title and description based on language
+                    if language == "SW":
+                        title       = val.title_sw
+                        description = val.description_sw
+                    elif language == "EN":
+                        title       = val.title_en_us
+                        description = val.description_en_us   
+
+                    #create tree
+                    tree = {
+                        "view_id" : val.view_id,
+                        "title": title,
+                        "description": description
+                    }
+                    arr_trees.append(tree)
 
         """thread response"""    
         thread_response = {
@@ -413,7 +433,6 @@ class ThreadWrapper:
                             lbLanguage.language = "EN"
                             language = "EN"
                         lbLanguage.save()     
-
         #return language
         return language
 
@@ -424,7 +443,6 @@ class ThreadWrapper:
 
         """thread sessions"""
         thread_sessions = ThreadSession.objects.filter(code=uuid)
-        print(thread_sessions)
 
         if thread_sessions:
             arr_data = {}
