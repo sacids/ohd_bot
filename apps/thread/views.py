@@ -297,8 +297,9 @@ def current_links(request):
         data = {
             'id': val.id,
             'view_id': val.sub_thread.view_id if val.sub_thread else "A",
+            'customer_type': val.customer_type,
             'title': val.sub_thread.title if val.sub_thread else "Any Text",
-            'link': title,
+            'link': f"{title}",
         }
         arr_data.append(data)
 
@@ -310,12 +311,13 @@ def link_thread2thread(request):
     """Linking Thread 2 Thread"""  
     if request.method == 'POST':
         post_data = json.loads(request.body)
-        thread_id = post_data['thread_id']  
+        thread_id = post_data['thread_id'] 
+        customer_type = post_data['customer_type'] 
         link_id = post_data['link_id']  
 
         """update or create menu link"""
         thread_link, created = ThreadLink.objects.update_or_create(
-            thread_id=thread_id, 
+            thread_id=thread_id, customer_type=customer_type,
             defaults={"link_id": link_id, "linking_type": "THREAD_THREAD"})
 
     """response"""
@@ -328,11 +330,12 @@ def link_response2thread(request):
         post_data = json.loads(request.body)
         thread_id = post_data['thread_id']  
         response_id = post_data['response_id'] 
+        customer_type = post_data['customer_type']
         link_id = post_data['link_id']  
 
         """update or create menu link"""
         thread_link, created = ThreadLink.objects.update_or_create(
-            thread_id=thread_id, sub_thread_id=response_id,  
+            thread_id=thread_id, sub_thread_id=response_id, customer_type=customer_type, 
             defaults={"link_id" : link_id, "linking_type": "RESPONSE_THREAD"})
 
     """response"""
@@ -345,12 +348,13 @@ def link_response2API(request):
         post_data = json.loads(request.body)
         thread_id = post_data['thread_id'] 
         response_id = post_data['response_id']  
+        customer_type = post_data['customer_type']
         api_type = post_data['api_type']  
         api_url = post_data['api_url']  
 
         """update or create thread link"""
         thread_link, created = ThreadLink.objects.update_or_create(
-            thread_id=thread_id, sub_thread_id=response_id,  
+            thread_id=thread_id, sub_thread_id=response_id, customer_type=customer_type, 
             defaults={"api_type": api_type, 'api_url': api_url, "linking_type": "RESPONSE_API"})
 
     """response"""

@@ -30,10 +30,13 @@ class Thread(models.Model):
         ('PHONE', 'PHONE'),
         ('NIN', 'NIN'),
         ('DL', 'DRIVER LICENCE'),
+        ('DL_NIN', 'DRIVER LICENCE or NIN'),
+        ('VEHICLE_NUMBER', 'VEHICLE NUMBER'),
         ('MAX_LENGTH', 'MAX LENGTH'),
         ('MIN_LENGTH', 'MIN LENGTH'),
         ('DATE', 'DATE'),
         ('TIME', 'TIME'),
+        ('API', 'API'),
     )
 
     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -42,6 +45,7 @@ class Thread(models.Model):
     db_flag        =  models.CharField(max_length=50, blank=False, null=False)
     label          =  models.CharField(max_length=50, blank=True, null=True)
     validation     =  models.CharField(max_length=200, choices=VALIDATION_RULES_OPTIONS,  blank=True, null=True)
+    validation_url =  models.CharField(max_length=200, blank=True, null=True)
     action         =  models.CharField(max_length=20, choices=ACTION_URL_OPTIONS, blank=True, null=True)
     action_url     =  models.CharField(max_length=200, blank=True, null=True)
     message_type   =  models.CharField(max_length=20, choices=MESSAGE_TYPE_OPTIONS, blank=False, null=False, default="TEXT")
@@ -84,15 +88,22 @@ class ThreadLink(models.Model):
         ('RESPONSE_API', 'Response 2 API'),
     )
 
-    id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    thread       = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='thread')
-    linking_type = models.CharField(max_length=100, choices=LINKING_OPTIONS, default="THREAD_THREAD")
-    sub_thread   = models.ForeignKey(SubThread, on_delete=models.SET_NULL, blank=True, null=True)
-    link         = models.ForeignKey(Thread, on_delete=models.SET_NULL, related_name='link', blank=True, null=True)
-    api_type     = models.CharField(max_length=100, null=True, blank=True)
-    api_url      = models.CharField(max_length=250, null=True, blank=True)
-    created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at   = models.DateTimeField(auto_now=True) 
+    REGISTRATION_OPTIONS = (
+        ('ANY', 'Any User'),
+        ('REGISTERED', 'Registered'),
+        ('NOT_REGISTERED', 'Not Registered'),
+    )
+
+    id            = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    thread        = models.ForeignKey(Thread, on_delete=models.CASCADE, related_name='thread')
+    linking_type  = models.CharField(max_length=100, choices=LINKING_OPTIONS, default="THREAD_THREAD")
+    customer_type = models.CharField(max_length=100, choices=REGISTRATION_OPTIONS, default="ANY")
+    sub_thread    = models.ForeignKey(SubThread, on_delete=models.SET_NULL, blank=True, null=True)
+    link          = models.ForeignKey(Thread, on_delete=models.SET_NULL, related_name='link', blank=True, null=True)
+    api_type      = models.CharField(max_length=100, null=True, blank=True)
+    api_url       = models.CharField(max_length=250, null=True, blank=True)
+    created_at    = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at    = models.DateTimeField(auto_now=True) 
 
     class Meta:
         db_table = 'lb_thread_links'

@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Responses</h4>
+            <h4 class="mb-sm-0 font-size-18">Thread Responses</h4>
 
             <div class="page-title-right">
 
@@ -192,12 +192,14 @@
             },
             formThread: {
                 thread_id: "{{thread.id}}",
+                customer_type: "",
                 response_id: "",
                 link_id: "",
             },
             formAPI:{
                 thread_id: "{{thread.id}}",
                 response_id: "",
+                customer_type: "",
                 api_type: "",
                 api_url: "",
             },
@@ -273,9 +275,7 @@
                 fetch("/threads/delete-response/?uuid=" + uuid, { method: "GET", credentials: 'same-origin' })
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data)
-                        this.responses.splice(this.responses.indexOf(uuid), 1);
-
+  
                         //set message
                         $('.message_wrp').html(
                             "<div class='alert alert-success rounded-sm'>Response deleted</div>"
@@ -449,7 +449,6 @@
                 fetch("/threads/delete-link/?uuid=" + uuid, { method: "GET", credentials: 'same-origin' })
                     .then(res => res.json())
                     .then(data => {
-                        this.current_links.splice(this.current_links.indexOf(uuid), 1);
 
                         //set message
                         $('.thread_message_wrp').html(

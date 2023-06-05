@@ -50,10 +50,11 @@
 
                     <div class="ms-2 me-auto">
                         <div class="fw-bold" x-text="val.title"></div>
+                        Customer Type: <span x-text="val.customer_type"></span><br />
                         <span x-text="val.link"></span>
                     </div>
                     <div class="">
-                        <button type="button" class="btn waves-effect" x-on:click="deleteLink(val.id)">
+                        <button type="button" class="btn waves-effect" x-on:click="current_links = current_links.filter(c => c.id !== val.id); deleteLink(val.id)">
                             <i class='bx bx-trash text-danger'></i>
                         </button>
                     </div>
@@ -72,6 +73,18 @@
             {% csrf_token %}
 
             <input type="hidden" name="thread_id" x-model="formThread.thread_id">
+
+            <div class="my-3 row">
+                <label class="col-md-3 col-form-label">Customer Type: </label>
+                <div class="col-md-9">
+                    <select name="customer_type" x-model="formThread.customer_type" class="form-control" required>
+                        <option value="">Select</option>
+                        <option value="ANY">ANY</option>
+                        <option value="REGISTERED">REGISTERED</option>
+                        <option value="NOT_REGISTERED">NOT REGISTERED</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="input-group mb-3">
                 <input x-ref="searchThread" x-model="searchThread"
@@ -132,6 +145,18 @@
                 </div>
             </div>
 
+            <div class="my-3 row">
+                <label class="col-md-3 col-form-label">Customer Type: </label>
+                <div class="col-md-9">
+                    <select name="customer_type" x-model="formThread.customer_type" class="form-control" required>
+                        <option value="">Select</option>
+                        <option value="ANY">ANY</option>
+                        <option value="REGISTERED">REGISTERED</option>
+                        <option value="NOT_REGISTERED">NOT REGISTERED</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="input-group mb-3">
                 <input x-ref="searchThread" x-model="searchThread"
                     x-on:keydown.window.prevent.slash="$refs.searchThread.focus()" placeholder="Search thread..."
@@ -186,6 +211,18 @@
                         <template x-for="(val, index) in responses" :key="index">
                             <option x-bind:value="val.id"><span x-text="val.title"></span></option>
                         </template>
+                    </select>
+                </div>
+            </div>
+
+            <div class="my-3 row">
+                <label class="col-md-3 col-form-label">Customer Type: </label>
+                <div class="col-md-9">
+                    <select name="customer_type" x-model="formAPI.customer_type" class="form-control" required>
+                        <option value="">Select</option>
+                        <option value="ANY">ANY</option>
+                        <option value="REGISTERED">REGISTERED</option>
+                        <option value="NOT_REGISTERED">NOT REGISTERED</option>
                     </select>
                 </div>
             </div>

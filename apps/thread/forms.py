@@ -25,6 +25,7 @@ class ThreadForm(forms.ModelForm):
             'db_flag': forms.TextInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write flag...', 'required': '' }),
             'label': forms.TextInput(attrs={'class': 'form-control', 'id': 'label', 'placeholder': 'Write label...', 'required': '' }),
             'validation': forms.Select(attrs={'class': 'form-control', 'id': 'validation', 'placeholder': 'Write validation...', }),
+            'validation_url': forms.TextInput(attrs={'class': 'form-control', 'id': 'validation_url', 'placeholder': 'Write validation API url...', }),
             'message_type': forms.Select(attrs={'class': 'form-control', 'id': 'message_type', 'placeholder': 'Write message type...', }),
             'action': forms.Select(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'action...' }),
             'action_url': forms.TextInput(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'Write action url...', }),
@@ -38,6 +39,7 @@ class ThreadForm(forms.ModelForm):
             'label': 'Label',
             'message_type': 'Message Type',
             'validation': 'Validation Rules',
+            'validation_url': 'Validation API',
             'action': 'Action',
             'action_url': 'Action URL',
         }      
