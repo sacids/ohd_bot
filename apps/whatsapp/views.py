@@ -302,7 +302,11 @@ def process_threads(**kwargs):
                         m_session.active = 0
                         m_session.save()
 
-                        """ MESSAGE to END USER """
+                        """variables"""
+                        language = response['language']
+                        message = response['message']
+                        message_type = response['message_type']
+                        arr_trees = response['arr_trees']
 
                 elif thread_response['link'] == 'INVALID_INPUT':
                     """invalid input"""

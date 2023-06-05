@@ -32,8 +32,6 @@ class Thread(models.Model):
         ('DL', 'DRIVER LICENCE'),
         ('DL_NIN', 'DRIVER LICENCE or NIN'),
         ('VEHICLE_NUMBER', 'VEHICLE NUMBER'),
-        ('MAX_LENGTH', 'MAX LENGTH'),
-        ('MIN_LENGTH', 'MIN LENGTH'),
         ('DATE', 'DATE'),
         ('TIME', 'TIME'),
         ('API', 'API'),

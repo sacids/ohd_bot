@@ -8,10 +8,32 @@ def push_data(request):
     """push data to external API"""
     key = request.GET.get('key')
     from_number = request.GET.get('from_number')
+   
+    """response"""
+    return JsonResponse({'status': 'success', 'message': "data sent"})
+
+
+def loans(request):
+    """Sample API for pull data """
+    msisdn = request.GET['msisdn']
+
+    loans = {
+        'msisdn': msisdn,
+        loans: [
+            {
+                "id": 1,
+                "message": "MC 123 (deni 45,000)",
+            },
+            {
+                "id": 2,
+                "message": "MCCX77889 (deni 20,000)",
+            }
+        ]
+    }
 
         
     """response"""
-    return JsonResponse({'status': 'success', 'message': "data sent"})
+    return JsonResponse({'status': 'success', 'response': loans})
 
 
 def pull(request):

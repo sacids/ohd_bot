@@ -5,6 +5,7 @@ import requests
 import json
 import logging
 from django.http import JsonResponse
+from .validation import *
 from .models import *
 
 class ThreadWrapper:
@@ -88,9 +89,87 @@ class ThreadWrapper:
 
         if thread.validation is not None:
             """TODO: validate entries"""
+            if thread.validation == "NUMERIC":
+                validation = validate_numeric(key, language)
 
-            """normal response"""
-            response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "EMAIL":
+                validation = validate_email(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "PHONE":
+                validation = validate_phone(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "NIN":
+                validation = validate_NIN(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "DL":
+                validation = validate_DL(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "DL_NIN":
+                validation = validate_DL_NIN(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "VEHICLE_NUMBER":
+                validation = validate_VN(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "DATE":
+                validation = validate_date(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "TIME":
+                validation = validate_date(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+            
+            elif thread.validation == "API":
+                """validate """
+                result = requests.get(thread.validation_url, params={"value": key})
+                validation = result.json()
+
+                """TODO: Work on API"""
+
+                #response
+                response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
         else: 
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
 

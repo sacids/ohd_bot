@@ -5,4 +5,5 @@ app_name = 'api'
 
 urlpatterns = [
     path('pull', views.pull, name='pull'),
+    path('loans', views.pull, name='pull'),
 ]
