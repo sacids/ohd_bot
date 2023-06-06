@@ -100,3 +100,12 @@ class LogoutView(View):
         logout(request)
         messages.error(request, 'Log out successfully')
         return redirect('login')
+    
+
+class PrivacyPolicyView(View):
+    """Privacy Policy"""
+    form_class = LoginForm
+    template_name = 'privacy_policy.html'
+
+    def get(self, request, *args, **kwargs):
+            return render(request, self.template_name, {})

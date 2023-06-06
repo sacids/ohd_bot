@@ -29,8 +29,5 @@ urlpatterns = [
 
     path('delete-link/', views.delete_link, name='delete-link'),
     path('links/delete/<str:pk>', views.ThreadLinkDeleteView.as_view(), name='delete-link'),
-
-    path('privacy-policy',views.privacy_policy, name="privacy-policy")
-
     
 ]

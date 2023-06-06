@@ -401,14 +401,6 @@ def get_sub_threads(request, *args, **kwargs):
         return render(None, 'threads/select2.html', {'sub_threads': sub_threads})
 
 
-"""privacy policy"""
-def privacy_policy(request):
-    """render view"""
-    return render(request, "threads/privacy_policy.html", {})
-
-
-
-
 
 
 
