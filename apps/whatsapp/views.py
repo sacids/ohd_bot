@@ -39,11 +39,13 @@ def send_test_message(request):
     """send test message"""
     wrapper = WhatsAppWrapper()
 
+    thread = Thread.objects.get(pk="8f13d90b-8a50-4b7b-9bbb-e960d78b4c82")
+
     #send text message now
-    response = wrapper.send_text_message("255717705746", "Hello message") 
+    response = wrapper.send_text_message("255717705746", thread.title) 
     logging.info(response)
 
-    return JsonResponse({"message": "Sent test message"})
+    return HttpResponse("test message sent successfully", status=200)
 
 
 
