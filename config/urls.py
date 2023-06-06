@@ -25,6 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('threads/', include('apps.thread.urls')),
     path('api/', include('apps.api.urls')),
+    path('webhook/send-test-message', whatsapp_views.send_test_message),
     path('webhook/testing', whatsapp_views.testing),
     path('webhook/facebook', whatsapp_views.facebook),
 

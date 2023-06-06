@@ -33,7 +33,22 @@ def testing(request):
         'messages': [
             {"content": response}
         ]
-    }), 'application/json') 
+    }), 'application/json')
+
+
+@csrf_exempt
+def send_test_message(request):
+    """send test message"""
+    wrapper = WhatsAppWrapper()
+
+    #send text message now
+    response = wrapper.send_text_message("255717705746", "Hello message") 
+
+    print(response)
+
+    return HttpResponse({"message": "Sent test message"})
+
+
 
 
 @csrf_exempt
