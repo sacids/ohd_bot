@@ -42,7 +42,7 @@ def send_test_message(request):
     thread = Thread.objects.get(pk="8f13d90b-8a50-4b7b-9bbb-e960d78b4c82")
 
     #send text message now
-    response = wrapper.send_text_message("255717705746", thread.title) 
+    response = wrapper.send_text_message("255717705746", str(thread.title)) 
     logging.info(response)
 
     return HttpResponse("test message sent successfully", status=200)
