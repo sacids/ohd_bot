@@ -171,7 +171,7 @@ class WhatsAppWrapper:
     def structure_response(self, from_number, message_type, language, message, arr_trees):
         """Structure response """
         message = message.replace("<br>", '\n')
-        
+
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
@@ -199,7 +199,7 @@ class WhatsAppWrapper:
                 data = {
                         "id":val['view_id'],
                         "title": val['title'],
-                        "description": val['description'],           
+                        # "description": val['description'],           
                     }
                 arr_data.append(data)
 
