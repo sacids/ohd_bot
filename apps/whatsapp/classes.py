@@ -284,6 +284,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
