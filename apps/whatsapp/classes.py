@@ -202,8 +202,6 @@ class WhatsAppWrapper:
                 arr_data.append(data)
 
             #change button message based on language
-            logging.info("class fxn language")
-            logging.info(language)
             if language == "SW":
                 button_txt = "Bonyeza Hapa" 
             elif language == "EN":
@@ -219,8 +217,6 @@ class WhatsAppWrapper:
                     }
                 ]
             }
-            logging.info(new_arr_data)    
- 
             #send list message 
             response = self.send_interactive_message(from_number, "list", message, new_arr_data)   
         elif message_type == "REPLY BUTTON":
@@ -240,7 +236,6 @@ class WhatsAppWrapper:
             new_arr_data = {
                 "buttons": arr_data
             }
-            logging.info(new_arr_data)
 
             #send button message
             response = self.send_interactive_message(from_number, 'button', message, new_arr_data)
@@ -265,6 +260,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
@@ -307,6 +303,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
@@ -324,6 +321,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
@@ -341,6 +339,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
@@ -358,6 +357,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
@@ -381,6 +381,7 @@ class WhatsAppWrapper:
 
         """response"""
         response = requests.request("POST", f"{self.API_URL}/messages", headers=self.headers, data=payload)
+        logging.info(response.json())
 
         """return response"""
         return response
