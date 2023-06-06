@@ -43,10 +43,9 @@ def send_test_message(request):
 
     #send text message now
     response = wrapper.send_text_message("255717705746", "Hello message") 
+    logging.info(response)
 
-    print(response)
-
-    return HttpResponse({"message": "Sent test message"})
+    return JsonResponse({"message": "Sent test message"})
 
 
 
