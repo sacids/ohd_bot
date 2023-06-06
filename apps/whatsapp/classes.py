@@ -205,9 +205,9 @@ class WhatsAppWrapper:
 
             #change button message based on language
             if language == "SW":
-                button_txt = "Bonyeza Hapa" 
+                button_txt = "Chagua kwenye Orodha " 
             elif language == "EN":
-                button_txt = "Click Here" 
+                button_txt = "Select from Lists" 
 
             #array new data
             new_arr_data = {
