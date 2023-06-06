@@ -25,51 +25,51 @@ def insurance_information(request):
     print(response)
 
     #construct message
-    message = "<b>HAKIKI TAARIFA</b> \n\n" \
+    message = "*HAKIKI TAARIFA* \n\n" \
     
     if 'Insurance_Taarifa' in response['arr_data']:
-        message += "<b>Unatoa Taarifa kama: </b> " + response['arr_data']['Insurance_Taarifa'] + " \n"
+        message += "*Unatoa Taarifa kama: </b> " + response['arr_data']['Insurance_Taarifa'] + " \n"
         
     if 'Insurance_Phone' in response['arr_data']:
-        message += "<b>Namba ya Simu:</b> " + response['arr_data']['Insurance_Phone'] + " \n" 
+        message += "*Namba ya Simu:* " + response['arr_data']['Insurance_Phone'] + " \n" 
 
     if 'Insurance_Vehicle_No' in response['arr_data']:
-        message += "<b>Namba ya usajili wa chombo:</b> " + response['arr_data']['Insurance_Vehicle_No'] + " \n" 
+        message += "*Namba ya usajili wa chombo:* " + response['arr_data']['Insurance_Vehicle_No'] + " \n" 
 
     if 'Insurance_Tarehe' in response['arr_data']:
-        message += "<b>Tarehe Ya Ajali:</b> " + response['arr_data']['Insurance_Tarehe'] + " \n"  
+        message += "*Tarehe Ya Ajali:* " + response['arr_data']['Insurance_Tarehe'] + " \n"  
 
     if 'Insurance_Time' in response['arr_data']:
-        message += "<b>Muda wa Ajali:</b> " + response['arr_data']['Insurance_Time'] + " \n"  
+        message += "*Muda wa Ajali:* " + response['arr_data']['Insurance_Time'] + " \n"  
 
     if 'Insurance_Driver_Licence' in response['arr_data']:
-        message += "<b>Leseni ya Dereva:</b> " + response['arr_data']['Insurance_Driver_Licence'] + " \n"   
+        message += "*Leseni ya Dereva:* " + response['arr_data']['Insurance_Driver_Licence'] + " \n"   
 
     if 'Insurance_Police_Office' in response['arr_data']:
-        message += "<b>Jina la Kituo Cha Polisi:</b> " + response['arr_data']['Insurance_Police_Office'] + " \n" 
+        message += "*Jina la Kituo Cha Polisi:* " + response['arr_data']['Insurance_Police_Office'] + " \n" 
         
     if 'Insurance_Police_Reference' in response['arr_data']:
-        message += "<b>Kumbukumbu Namba ya ajali:</b> " + response['arr_data']['Insurance_Police_Reference'] + " \n" 
+        message += "*Kumbukumbu Namba ya ajali:* " + response['arr_data']['Insurance_Police_Reference'] + " \n" 
     
     if 'Insurance_Accident_Reason' in response['arr_data']:
-        message += "<b>Sababu ya ajali:</b> " + response['arr_data']['Insurance_Accident_Reason'] + " \n" 
+        message += "*Sababu ya ajali:* " + response['arr_data']['Insurance_Accident_Reason'] + " \n" 
 
     if 'Insurance_Damage_Other_Vehicle' in response['arr_data']:
-        message += "<b>Uharibifu wa vyombo vingine:</b> " + response['arr_data']['Insurance_Damage_Other_Vehicle'] + " \n" 
+        message += "*Uharibifu wa vyombo vingine:* " + response['arr_data']['Insurance_Damage_Other_Vehicle'] + " \n" 
 
     if 'Insurance_Accident_Vehicle' in response['arr_data']:
-        message += "<b>Namba za usajili wa vyombo vingine :</b> " + response['arr_data']['Insurance_Accident_Vehicle'] + " \n" 
+        message += "*Namba za usajili wa vyombo vingine :* " + response['arr_data']['Insurance_Accident_Vehicle'] + " \n" 
 
     if 'Insurance_Property_Damage' in response['arr_data']:
-        message += "<b>Hasara kwa mali zingine:</b> " + response['arr_data']['Insurance_Property_Damage'] + " \n" 
+        message += "*Hasara kwa mali zingine:* " + response['arr_data']['Insurance_Property_Damage'] + " \n" 
 
     if 'Insurance_People_Damage' in response['arr_data']:
-        message += "<b>Majeruhi kwa watu:</b> " + response['arr_data']['Insurance_People_Damage'] + " \n" 
+        message += "*Majeruhi kwa watu:* " + response['arr_data']['Insurance_People_Damage'] + " \n" 
 
     if 'Insurance_No_Casualties' in response['arr_data']:
-        message += "<b>Idadi ya Majeruhi:</b> " + response['arr_data']['Insurance_No_Casualties'] + " \n" 
+        message += "*Idadi ya Majeruhi:* " + response['arr_data']['Insurance_No_Casualties'] + " \n\n" 
 
-    message += "<b>Declaration (Tamko):</b> Mimi/Sisi nina/tunatoa tamko ya kwamba maelezo yaliyotolewa hapo juu pamoja na muhtasari wake ni ya ukweli na yamekamilika. Kama sivyo ni/tutawajibika kwa yatakayojiri."
+    message += "*Declaration (Tamko):* Mimi/Sisi nina/tunatoa tamko ya kwamba maelezo yaliyotolewa hapo juu pamoja na muhtasari wake ni ya ukweli na yamekamilika. Kama sivyo ni/tutawajibika kwa yatakayojiri."
 
     response = {
         "message": message,

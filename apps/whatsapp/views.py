@@ -19,8 +19,6 @@ def testing(request):
     message = request.GET.get('message')
     from_number = request.GET.get('from_number')
 
-    wrapper = WhatsAppWrapper()
-
     print("key => " + message)
     print("from number => " + from_number)
 
