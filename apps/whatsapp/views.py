@@ -257,6 +257,9 @@ def process_threads(**kwargs):
                 m_session = ThreadSession.objects.filter(phone=from_number, active=0).latest('id')
                 thread_response = wrapper.check_thread_link(m_session.thread_id, key) 
 
+                print("thread")
+                print(thread_response)
+
                 """ menu session data """
                 OD_uuid = m_session.code
                 OD_thread_id = m_session.thread_id

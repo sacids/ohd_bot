@@ -147,7 +147,7 @@ def validate_VN(key, language):
 
 def validate_date(key, language):
     """validate date"""
-    format = "%Y-%m-%d"
+    format = "%d-%m-%Y"
 
     # checking if format matches the date
     res = True
@@ -164,9 +164,9 @@ def validate_date(key, language):
     else:
         message = ""
         if language == "SW":
-            message = 'Umekosea kuandika tarehe, tafadhali rudia. mfano: 2023-04-13'
+            message = 'Umekosea kuandika tarehe, tafadhali rudia. mfano: 13-04-2023'
         elif language == "EN":
-            message =  "Valid date required here. e.g: 2023-04-13"
+            message =  "Valid date required here. e.g: 13-04-2023"
 
         #response    
         return {'error': True, 'message': message}

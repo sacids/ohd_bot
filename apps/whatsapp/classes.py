@@ -169,7 +169,7 @@ class WhatsAppWrapper:
 
 
     def structure_response(self, from_number, message_type, language, message, arr_trees):
-        """__summary__: Structure response """
+        """Structure response """
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
@@ -198,7 +198,7 @@ class WhatsAppWrapper:
                         "id":val['view_id'],
                         "title": val['title'],
                         "description": val['description'],           
-                        }
+                    }
                 arr_data.append(data)
 
             #change button message based on language
@@ -245,7 +245,7 @@ class WhatsAppWrapper:
 
 
     def send_template_message(self, template_name, language_code, phone_number):
-        """__summary__: Send templete message """
+        """Send templete message """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "to": phone_number,
@@ -266,7 +266,7 @@ class WhatsAppWrapper:
         return response
 
     def send_text_message(self, phone_number, message):
-        """__summary__: Send text message """
+        """Send text message """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "preview_url": False,
@@ -287,7 +287,7 @@ class WhatsAppWrapper:
     
 
     def send_location(self, phone_number, latitude, longitude, name, address):
-        """__summary__: Send Location """
+        """Send Location """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -310,7 +310,7 @@ class WhatsAppWrapper:
     
 
     def send_audio(self, phone_number, audioURL):
-        """__summary__: Send Audio """
+        """Send Audio """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -328,7 +328,7 @@ class WhatsAppWrapper:
     
 
     def send_video(self, phone_number, videoURL, caption):
-        """__summary__: Send video """
+        """: Send video """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -346,7 +346,7 @@ class WhatsAppWrapper:
     
 
     def send_document(self, phone_number, documentURL, caption):
-        """__summary__: Send document """
+        """Send document """
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
@@ -364,7 +364,7 @@ class WhatsAppWrapper:
 
 
     def send_interactive_message(self, phone_number, message_type, body, actions):
-        """__summary__: Send interactive message"""
+        """Send interactive message"""
         payload = json.dumps({
             "messaging_product": "whatsapp",
             "recipient_type": "individual",
