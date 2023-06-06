@@ -170,6 +170,8 @@ class WhatsAppWrapper:
 
     def structure_response(self, from_number, message_type, language, message, arr_trees):
         """Structure response """
+        message = message.replace("<br>", '\n')
+        
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
@@ -177,7 +179,7 @@ class WhatsAppWrapper:
             message = message + "\r\n" + sub_message
 
             #send text message now
-            response = self.send_text_message(from_number, message)  
+            response = self.send_text_message(from_number, message)
         elif message_type == "DOCUMENT":
             pass
         elif message_type == "IMAGE":
