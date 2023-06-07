@@ -28,7 +28,7 @@ def insurance_information(request):
     message = "*HAKIKI TAARIFA* \n\n" \
     
     if 'Insurance_Taarifa' in response['arr_data']:
-        message += "*Unatoa Taarifa kama: </b> " + response['arr_data']['Insurance_Taarifa'] + " \n"
+        message += "*Unatoa Taarifa kama:* " + response['arr_data']['Insurance_Taarifa'] + " \n"
         
     if 'Insurance_Phone' in response['arr_data']:
         message += "*Namba ya Simu:* " + response['arr_data']['Insurance_Phone'] + " \n" 
@@ -67,7 +67,7 @@ def insurance_information(request):
         message += "*Majeruhi kwa watu:* " + response['arr_data']['Insurance_People_Damage'] + " \n" 
 
     if 'Insurance_No_Casualties' in response['arr_data']:
-        message += "*Idadi ya Majeruhi:* " + response['arr_data']['Insurance_No_Casualties'] + " \n\n" 
+        message += "*Idadi ya Majeruhi:* " + response['arr_data']['Insurance_No_Casualties'] + " \n\n\n\n" 
 
     message += "*Declaration (Tamko):* Mimi/Sisi nina/tunatoa tamko ya kwamba maelezo yaliyotolewa hapo juu pamoja na muhtasari wake ni ya ukweli na yamekamilika. Kama sivyo ni/tutawajibika kwa yatakayojiri."
 
