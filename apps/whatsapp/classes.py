@@ -182,9 +182,9 @@ class WhatsAppWrapper:
             if main_thread == True:
                 back_msg = ""
                 if language == "SW":
-                    back_msg = "_Andika *#* kurudi ↩ *Menyu kuu*_"
+                    back_msg = "_Andika *#* kurudi ⬅️ *Menyu kuu*_"
                 elif language == "EN":
-                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
+                    back_msg = "_Reply *#* - to go ⬅️ to the *Main Menu*_"
 
                 message = message + "\n\n" + back_msg
 
