@@ -230,6 +230,7 @@ class ThreadWrapper:
                     'message': response['message'], 
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
+                    "main_thread": response['main_thread'],
                     'action': action, 
                     'actionURL': actionURL
                 }
@@ -247,6 +248,7 @@ class ThreadWrapper:
                     "message": message, 
                     "message_type": "TEXT", 
                     "arr_trees": [], 
+                    "main_thread": False,
                     "action": action, 
                     "actionURL": actionURL 
                 }    
@@ -278,6 +280,7 @@ class ThreadWrapper:
                     'message': response['message'],
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
+                    "main_thread": response['main_thread'],
                     'action': action, 
                     'actionURL': actionURL
                 }
@@ -295,6 +298,7 @@ class ThreadWrapper:
                     "message": message, 
                     "message_type": "TEXT", 
                     "arr_trees": [], 
+                    "main_thread": False,
                     "action": action, 
                     "actionURL": actionURL 
                 }
@@ -334,8 +338,7 @@ class ThreadWrapper:
                     #create tree
                     tree = {
                         "view_id" : val["id"],
-                        "title": val["message"],
-                        "description": val['description']
+                        "title": val["message"]
                     }
                     arr_trees.append(tree) 
             else:
@@ -345,21 +348,17 @@ class ThreadWrapper:
                 if(sub_threads):
                     for val in sub_threads:
                         title = val.title
-                        description = val.description
 
                         #change title and description based on language
                         if language == "SW":
                             title       = val.title_sw
-                            description = val.description_sw
                         elif language == "EN":
-                            title       = val.title_en_us
-                            description = val.description_en_us   
+                            title       = val.title_en_us 
 
                         #create tree
                         tree = {
                             "view_id" : val.view_id,
-                            "title": title,
-                            "description": description
+                            "title": title
                         }
                         arr_trees.append(tree)
         else: 
@@ -370,21 +369,17 @@ class ThreadWrapper:
             if(sub_threads):
                 for val in sub_threads:
                     title = val.title
-                    description = val.description
 
                     #change title and description based on language
                     if language == "SW":
                         title       = val.title_sw
-                        description = val.description_sw
                     elif language == "EN":
                         title       = val.title_en_us
-                        description = val.description_en_us   
 
                     #create tree
                     tree = {
                         "view_id" : val.view_id,
-                        "title": title,
-                        "description": description
+                        "title": title
                     }
                     arr_trees.append(tree)
         
@@ -394,7 +389,8 @@ class ThreadWrapper:
             'language': language,
             "message": message, 
             "message_type": message_type, 
-            "arr_trees": arr_trees
+            "arr_trees": arr_trees,
+            "main_thread": thread.main_thread
         } 
 
         """Return message""" 

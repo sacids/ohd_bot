@@ -169,13 +169,14 @@ def facebook(request):
                 response = json.loads(request.content)  
 
             """data"""
-            language  = response['language']
-            message   = response['message']
-            show_type = response['message_type']
-            arr_trees = response['arr_trees']     
+            language     = response['language']
+            message      = response['message']
+            show_type    = response['message_type']
+            arr_trees    = response['arr_trees']  
+            main_thread  = response['main_thread']   
 
             """structure the whatsapp response""" 
-            response = wrapper.structure_response(from_number, show_type, language, message, arr_trees)
+            response = wrapper.structure_response(from_number, show_type, language, message, arr_trees, main_thread)
             logging.info("===== Facebook Response ====")
             logging.info(response)
         else:
@@ -251,16 +252,14 @@ def process_threads(**kwargs):
                 response = json.loads(request.content)
 
                 """variables"""
-                language = response['language']
-                message = response['message']
+                language     = response['language']
+                message      = response['message']
                 message_type = response['message_type']
-                arr_trees = response['arr_trees']
+                arr_trees    = response['arr_trees']
+                main_thread  = response['main_thread']
             else:
                 m_session = ThreadSession.objects.filter(phone=from_number, active=0).latest('id')
                 thread_response = wrapper.check_thread_link(m_session.thread_id, key) 
-
-                print("thread")
-                print(thread_response)
 
                 """ menu session data """
                 OD_uuid = m_session.code
@@ -277,10 +276,11 @@ def process_threads(**kwargs):
                     response = request.json()
                     
                     """variables"""
-                    language = language
-                    message = response['message']
+                    language     = language
+                    message      = response['message']
                     message_type = "TEXT"
-                    arr_trees = []
+                    arr_trees    = []
+                    main_thread  = response['main_thread']
 
                 elif thread_response['link'] == 'NEXT_MENU':
                     """update thread session"""
@@ -301,10 +301,11 @@ def process_threads(**kwargs):
                         m_session.save()
 
                         """variables"""
-                        language = response['language']
-                        message = response['message']
+                        language     = response['language']
+                        message      = response['message']
                         message_type = response['message_type']
-                        arr_trees = response['arr_trees']
+                        arr_trees    = response['arr_trees']
+                        main_thread  = response['main_thread']
 
                         """check for action = None"""
                         if(response['action'] is not None):
@@ -322,10 +323,11 @@ def process_threads(**kwargs):
                         m_session.save()
 
                         """variables"""
-                        language = response['language']
-                        message = response['message']
+                        language     = response['language']
+                        message      = response['message']
                         message_type = response['message_type']
-                        arr_trees = response['arr_trees']
+                        arr_trees    = response['arr_trees']
+                        main_thread  = response['main_thread']
 
                 elif thread_response['link'] == 'INVALID_INPUT':
                     """invalid input"""
@@ -367,10 +369,11 @@ def process_threads(**kwargs):
                 response = json.loads(request.content)
 
                 """variables"""
-                language = response['language']
-                message = response['message']
+                language     = response['language']
+                message      = response['message']
                 message_type = response['message_type']
-                arr_trees = response['arr_trees']
+                arr_trees    = response['arr_trees']
+                main_thread  = response['main_thread']
             else:
                 if language == "SW":
                     message = "Karibu Laina Finance, kutumia huduma hii andika neno LAINA au HUDUMA."
@@ -379,7 +382,7 @@ def process_threads(**kwargs):
                 message_type = "TEXT" 
 
     """return response"""
-    return JsonResponse({"status": "success", "language": language, "message": message, "message_type": message_type, "arr_trees": arr_trees})
+    return JsonResponse({"status": "success", "language": language, "message": message, "message_type": message_type, "arr_trees": arr_trees, "main_thread": main_thread})
 
     
 def push_data(**kwargs):

@@ -168,15 +168,25 @@ class WhatsAppWrapper:
             return data['statuses'][0]['status']              
 
 
-    def structure_response(self, from_number, message_type, language, message, arr_trees):
+    def structure_response(self, from_number, message_type, language, message, arr_trees, main_thread):
         """Structure response """
         message = message.replace("<br>", '\n')
 
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
-                sub_message += val['view_id'] + ". " + val['title'] + "\r\n"
-            message = message + "\r\n" + sub_message
+                sub_message += val['view_id'] + ". " + val['title'] + "\n\n"
+            message = message + "\n\n" + sub_message
+
+            #TODO: check for back to MAIN MENU
+            if main_thread == True:
+                back_msg = ""
+                if language == "SW":
+                    back_msg = "_Andika *#* kurudi ↩ *Menyu kuu*_"
+                elif language == "EN":
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
+
+                message = message + "\n\n\n" + back_msg
 
             #send text message now
             response = self.send_text_message(from_number, message)
@@ -198,8 +208,7 @@ class WhatsAppWrapper:
             for val in arr_trees:
                 data = {
                         "id":val['view_id'],
-                        "title": val['title'],
-                        # "description": val['description'],           
+                        "title": val['title']           
                     }
                 arr_data.append(data)
 
@@ -219,6 +228,17 @@ class WhatsAppWrapper:
                     }
                 ]
             }
+
+            #TODO: check for back to MAIN MENU
+            if main_thread == True:
+                back_msg = ""
+                if language == "SW":
+                    back_msg = "_Andika *#* kurudi ↩ *Menyu kuu*_"
+                elif language == "EN":
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
+
+                message = message + "\n\n\n" + back_msg
+
             #send list message 
             response = self.send_interactive_message(from_number, "list", message, new_arr_data)   
         elif message_type == "REPLY BUTTON":
@@ -238,6 +258,16 @@ class WhatsAppWrapper:
             new_arr_data = {
                 "buttons": arr_data
             }
+
+            #TODO: check for back to MAIN MENU
+            if main_thread == True:
+                back_msg = ""
+                if language == "SW":
+                    back_msg = "_Andika *#* kurudi ↩ *Menyu kuu*_"
+                elif language == "EN":
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
+
+                message = message + "\n\n\n" + back_msg
 
             #send button message
             response = self.send_interactive_message(from_number, 'button', message, new_arr_data)
