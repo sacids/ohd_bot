@@ -175,7 +175,7 @@ class WhatsAppWrapper:
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
-                sub_message += val['view_id'] + ". " + val['title'] + "\n\n"
+                sub_message += "*" + val['view_id'] + "*" + ". " + val['title'] + "\r\n"
             message = message + "\n\n" + sub_message
 
             #TODO: check for back to MAIN MENU
@@ -186,7 +186,7 @@ class WhatsAppWrapper:
                 elif language == "EN":
                     back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
 
-                message = message + "\n\n\n" + back_msg
+                message = message + "\n\n" + back_msg
 
             #send text message now
             response = self.send_text_message(from_number, message)
