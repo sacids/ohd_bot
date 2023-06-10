@@ -47,6 +47,7 @@ class Thread(models.Model):
     action         =  models.CharField(max_length=20, choices=ACTION_URL_OPTIONS, blank=True, null=True)
     action_url     =  models.CharField(max_length=200, blank=True, null=True)
     message_type   =  models.CharField(max_length=20, choices=MESSAGE_TYPE_OPTIONS, blank=False, null=False, default="TEXT")
+    main_thread    = models.BooleanField(default=False)      
     created_at     = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at     = models.DateTimeField(auto_now=True) 
     created_by     =  models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)

@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="row mb-2">
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label>Response</label>
                                     <textarea name="title" id="title" class="form-control"
@@ -51,35 +51,15 @@
                                         required></textarea>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="row mb-2">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="form-group">
                                     <label>Response EN</label>
                                     <textarea name="title_en" id="title_en" class="form-control"
                                         placeholder="Write response title in English..." rows="2"
                                         x-model="formData.title_en" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea name="description" id="description" class="form-control"
-                                        placeholder="Write response description..." rows="2"
-                                        x-model="formData.description" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-2">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-group">
-                                    <label>Description EN</label>
-                                    <textarea name="description_en" id="description_en" class="form-control"
-                                        placeholder="Write response description in English..." rows="2"
-                                        x-model="formData.description_en"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +166,6 @@
                 response_id: "",
                 title: "",
                 title_en: "",
-                description: "",
-                description_en: "",
                 view_id: "",
             },
             formThread: {
@@ -262,8 +240,6 @@
                         this.formData.action = "edit"
                         this.formData.title = data.title
                         this.formData.title_en = data.title_en
-                        this.formData.description = data.description
-                        this.formData.description_en = data.description_en
                         this.formData.view_id = data.view_id
                     });
                 this.buttonSubmit = "Update"
@@ -275,7 +251,6 @@
                 fetch("/threads/delete-response/?uuid=" + uuid, { method: "GET", credentials: 'same-origin' })
                     .then(res => res.json())
                     .then(data => {
-  
                         //set message
                         $('.message_wrp').html(
                             "<div class='alert alert-success rounded-sm'>Response deleted</div>"
@@ -303,8 +278,6 @@
                         this.formData.action = "create";
                         this.formData.title = "";
                         this.formData.title_en = "";
-                        this.formData.description = "";
-                        this.formData.description_en = "";
                         this.formData.view_id = ""
 
                         //set message
@@ -456,7 +429,6 @@
                         );
                     });
             },
-
 
         }
     }

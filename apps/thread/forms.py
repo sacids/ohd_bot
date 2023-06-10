@@ -19,8 +19,8 @@ class ThreadForm(forms.ModelForm):
         fields  = ('__all__')
 
         widgets = {
-            'title': forms.Textarea(attrs={'class': '', 'id': 'title', 'placeholder': 'Write title in Swahili...', 'rows': 2 }),
-            'title_en_us': forms.Textarea(attrs={'class': '', 'id': 'title_en', 'placeholder': 'Write title in English...', 'rows': 2 }),
+            'title': forms.Textarea(attrs={'class': '', 'id': 'title', 'placeholder': 'Write title in Swahili...', 'rows': 3 }),
+            'title_en_us': forms.Textarea(attrs={'class': '', 'id': 'title_en', 'placeholder': 'Write title in English...', 'rows': 3 }),
             'block': forms.NumberInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write thread block...', 'required': '' }),
             'db_flag': forms.TextInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write flag...', 'required': '' }),
             'label': forms.TextInput(attrs={'class': 'form-control', 'id': 'label', 'placeholder': 'Write label...', 'required': '' }),
@@ -29,6 +29,7 @@ class ThreadForm(forms.ModelForm):
             'message_type': forms.Select(attrs={'class': 'form-control', 'id': 'message_type', 'placeholder': 'Write message type...', }),
             'action': forms.Select(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'action...' }),
             'action_url': forms.TextInput(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'Write action url...', }),
+            'main_thread': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'main_thread'})
         } 
 
         labels = {
@@ -42,4 +43,5 @@ class ThreadForm(forms.ModelForm):
             'validation_url': 'Validation API',
             'action': 'Action',
             'action_url': 'Action URL',
+            'main_thread': 'Back Main Menu',
         }      

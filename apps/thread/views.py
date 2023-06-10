@@ -86,7 +86,6 @@ def list_responses(request):
             'id': val.id,
             'view_id': val.view_id,
             'title': val.title,
-            'description': val.description,
         }
         arr_data.append(data)
 
@@ -105,9 +104,7 @@ def edit_response(request):
         'id': response.id,
         'view_id': response.view_id,
         'title': response.title,
-        'title_en': response.title_en_us,
-        'description': response.description,
-        'description_en': response.description_en_us,
+        'title_en': response.title_en_us
     }
 
     """response"""
@@ -136,8 +133,6 @@ def create_response(request):
             new_sub                   = SubThread()
             new_sub.title             = post_data['title']
             new_sub.title_en_us       = post_data['title_en']
-            new_sub.description       = post_data['description']
-            new_sub.description_en_us = post_data['description_en']
             new_sub.view_id           = post_data['view_id']
             new_sub.thread_id         = post_data["thread_id"]
             new_sub.save()
@@ -150,8 +145,6 @@ def create_response(request):
             sub_thread  = SubThread.objects.get(pk=response_id)
             sub_thread.title             = post_data['title']
             sub_thread.title_en_us       = post_data['title_en']
-            sub_thread.description       = post_data['description']
-            sub_thread.description_en_us = post_data['description_en']
             sub_thread.view_id           = post_data['view_id']
             sub_thread.save()
 
