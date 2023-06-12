@@ -429,6 +429,8 @@ class ThreadWrapper:
                     }
                     arr_trees.append(tree)
         
+        #replace message text
+
         """thread response"""    
         thread_response = {
             "status": 'success', 
