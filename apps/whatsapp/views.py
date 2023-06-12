@@ -51,7 +51,6 @@ def send_test_message(request):
 
 
 
-
 @csrf_exempt
 def facebook(request):
     """__summary__: Get message from the webhook"""
@@ -243,7 +242,7 @@ def process_threads(**kwargs):
         thread_session = ThreadSession.objects.filter(phone=from_number, active=0)
 
         if thread_session.count() > 0:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA":
+            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key == 0:
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
