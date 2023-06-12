@@ -33,7 +33,7 @@ class ThreadWrapper:
         session_id = self.create_thread_session(phone=phone, thread_id=thread.id, uuid=uuid, channel=channel)
 
         """response"""
-        thread_response = self.process_thread(thread.id, uuid, language)
+        thread_response = self.process_thread(phone, thread.id, uuid, language)
 
         """return response"""
         return thread_response
@@ -212,7 +212,7 @@ class ThreadWrapper:
                 self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                request = self.process_thread(thread_link.link_id, uuid, language)
+                request = self.process_thread(phone, thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
 
                 """thread action"""
@@ -262,7 +262,7 @@ class ThreadWrapper:
                 self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
                 """process thread"""
-                request = self.process_thread(thread_link.link_id, uuid, language)
+                request = self.process_thread(phone, thread_link.link_id, uuid, language)
                 response = json.loads(request.content)
 
                 """thread action"""
@@ -307,7 +307,7 @@ class ThreadWrapper:
         return JsonResponse(new_response)
 
 
-    def process_thread(self, thread_id, uuid, language):
+    def process_thread(self, phone, thread_id, uuid, language):
         """Process Thread"""
         thread       = Thread.objects.get(pk=thread_id)
         message_type = thread.message_type
@@ -323,9 +323,13 @@ class ThreadWrapper:
         elif language == "EN":
             message = thread.title_en_us  
 
-        if thread.action is not None and thread.action == "PULL":
-            """response"""
-            request = requests.get(thread.action_url, params={"uuid": uuid})
+        #start processing thread on 
+        if thread.action is not None and thread.action == "VERIFICATION":
+            #build params
+            arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
+
+            #call verification api
+            request = requests.get(thread.action_url, params=arr_params)
             response = request.json()["response"]
 
             if response['message'] is not None:
@@ -333,7 +337,49 @@ class ThreadWrapper:
 
             arr_trees = []
             if len(response['arr_message']) > 0:
-                message_type = "LIST MESSAGE"
+                message_type = "TEXT"
+                for val in response['arr_message']:
+                    #create tree
+                    tree = {
+                        "view_id" : val["id"],
+                        "title": val["message"]
+                    }
+                    arr_trees.append(tree) 
+            else:
+                """if there response"""
+                sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
+
+                if(sub_threads):
+                    for val in sub_threads:
+                        title = val.title
+
+                        #change title and description based on language
+                        if language == "SW":
+                            title       = val.title_sw
+                        elif language == "EN":
+                            title       = val.title_en_us 
+
+                        #create tree
+                        tree = {
+                            "view_id" : val.view_id,
+                            "title": title
+                        }
+                        arr_trees.append(tree)    
+
+        elif thread.action is not None and thread.action == "PULL":
+            #build params
+            arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
+        
+            #call pull api
+            request = requests.get(thread.action_url, params=arr_params)
+            response = request.json()["response"]
+
+            if response['message'] is not None:
+                message = response['message']
+
+            arr_trees = []
+            if len(response['arr_message']) > 0:
+                message_type = "TEXT"
                 for val in response['arr_message']:
                     #create tree
                     tree = {
@@ -455,6 +501,30 @@ class ThreadWrapper:
                         lbLanguage.save()     
         #return language
         return language
+
+
+    def build_payload(self, **kwargs):
+        """Build Payload""" 
+        payload  = kwargs["payload"]  
+        msisdn  = kwargs["msisdn"]  
+        uuid  = kwargs["uuid"]  
+
+        #process data
+        my_data = self.process_data(uuid = uuid)
+        my_data = json.loads(my_data.content)
+
+        arr_params = {}
+        arr_params['msisdn'] = msisdn
+
+        if payload is not None:
+            arr_payload = payload.split(',')
+
+            for val in arr_payload:
+                if val in my_data['arr_data']:
+                    arr_params[val] = my_data['arr_data'][val]
+        
+        #return params
+        return arr_params
 
 
     def process_data(self, **kwargs):

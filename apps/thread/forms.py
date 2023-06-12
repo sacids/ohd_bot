@@ -29,6 +29,7 @@ class ThreadForm(forms.ModelForm):
             'message_type': forms.Select(attrs={'class': 'form-control', 'id': 'message_type', 'placeholder': 'Write message type...', }),
             'action': forms.Select(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'action...' }),
             'action_url': forms.TextInput(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'Write action url...', }),
+            'payload': forms.Textarea(attrs={'class': 'form-control', 'id': 'payload', 'placeholder': 'Write payload here...', 'rows': 2 }),
             'main_thread': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'main_thread'})
         } 
 
@@ -43,5 +44,6 @@ class ThreadForm(forms.ModelForm):
             'validation_url': 'Validation API',
             'action': 'Action',
             'action_url': 'Action URL',
+            'payload': 'Payload',
             'main_thread': 'Back Main Menu',
         }      

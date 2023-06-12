@@ -7,6 +7,7 @@ class Thread(models.Model):
     """Thread Model"""
     ACTION_URL_OPTIONS = (
         ('REGISTRATION', 'REGISTRATION'),
+        ('VERIFICATION', 'VERIFICATION'),
         ('PUSH', 'PUSH'),
         ('PULL', 'PULL'),
     )
@@ -46,6 +47,7 @@ class Thread(models.Model):
     validation_url =  models.CharField(max_length=200, blank=True, null=True)
     action         =  models.CharField(max_length=20, choices=ACTION_URL_OPTIONS, blank=True, null=True)
     action_url     =  models.CharField(max_length=200, blank=True, null=True)
+    payload        =  models.TextField(blank=True, null=True)
     message_type   =  models.CharField(max_length=20, choices=MESSAGE_TYPE_OPTIONS, blank=False, null=False, default="TEXT")
     main_thread    = models.BooleanField(default=False)      
     created_at     = models.DateTimeField(auto_now_add=True, blank=True, null=True)

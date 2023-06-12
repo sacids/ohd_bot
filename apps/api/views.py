@@ -79,6 +79,41 @@ def insurance_information(request):
     """response"""
     return JsonResponse({'status': 'success', 'response': response})
 
+
+def vn_verification(request):
+    """verify vehicle registration number"""
+    msisdn = request.GET['msisdn']
+    Vehicle_Number = request.GET['Vehicle_Number']
+    
+    response = {
+        'msisdn': msisdn,
+        "message": f"Je Renfrid Ngolongolo ndo mmiliki halali wa chombo {Vehicle_Number}?",
+        "arr_message": []
+    }
+  
+    """response"""
+    return JsonResponse({'status': 'success', 'response': response})
+
+
+def vn_insurance_calculation(request):
+    """verify vehicle registration number"""
+    msisdn = request.GET['msisdn']
+    Vehicle_Number = request.GET['Vehicle_Number']
+    Insurance_Type = request.GET['Insurance_Type']
+    # Insurance_Age = request.GET['Insurance_Age']
+
+    message = f"Namba ya Chombo {Vehicle_Number} <br> Bei + VAT 118,000<br>Ada ya mkopo 28,000<br>Jumla 146,000<br>Rejesho kwa Siku 1,000"
+    
+    response = {
+        'msisdn': msisdn,
+        "message": message,
+        "arr_message": []
+    }
+  
+    """response"""
+    return JsonResponse({'status': 'success', 'response': response})
+
+
 def loans(request):
     """Sample API for pull data """
     msisdn = request.GET['msisdn']
