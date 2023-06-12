@@ -177,7 +177,7 @@ class WhatsAppWrapper:
             for val in arr_trees:
                 sub_message += "*" + val['view_id'] + "*" + ". " + val['title'] + "\r\n"
 
-            if sub_message is not None:    
+            if sub_message != "":  
                 message = message + "\n\n" + sub_message
 
             #TODO: check for back to MAIN MENU
