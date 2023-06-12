@@ -35,9 +35,10 @@
                     <thead>
                         <tr>
                             <th style="width: 40px">#</th>
-                            <th width="54%">Thread</th>
-                            <th width="14%">Rules</th>
-                            <th width="16%">Message Type</th>
+                            <th width="48%">Thread</th>
+                            <th width="10%">Block</th>
+                            <th width="12%">Rules</th>
+                            <th width="14%">Message Type</th>
                             <th width="10%">Created</th>
                             <th style="width: 20px">Action</th>
                         </tr>
@@ -49,6 +50,7 @@
                                 <i class='bx bx-message-square-dots font-size-24 text-success'></i>
                             </td>
                             <td>{{ val.title }}</td>
+                            <td>{{ val.block }}</td>
                             <td>{{ val.validation|default:"No" }}</td>
                             <td>{{ val.message_type }}</td>
                             <td>{{ val.created_at|date:"d-m-Y" }}</td>
