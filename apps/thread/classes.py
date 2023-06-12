@@ -329,8 +329,9 @@ class ThreadWrapper:
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
 
             #call verification api
-            request = requests.get(thread.action_url, params=arr_params)
+            request = requests.post(thread.action_url, params=arr_params)
             response = request.json()["response"]
+            logging.info(response)
 
             if response['message'] is not None:
                 message = response['message']
@@ -371,8 +372,9 @@ class ThreadWrapper:
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
         
             #call pull api
-            request = requests.get(thread.action_url, params=arr_params)
+            request = requests.post(thread.action_url, params=arr_params)
             response = request.json()["response"]
+            logging.info(response)
 
             if response['message'] is not None:
                 message = response['message']
