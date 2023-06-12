@@ -330,7 +330,7 @@ class ThreadWrapper:
 
             #call verification api
             request = requests.post(thread.action_url, params=arr_params)
-            response = request.json()["response"]
+            response = request.json()
             logging.info(response)
 
             if response['message'] is not None:
@@ -373,7 +373,7 @@ class ThreadWrapper:
         
             #call pull api
             request = requests.post(thread.action_url, params=arr_params)
-            response = request.json()["response"]
+            response = request.json()
             logging.info(response)
 
             if response['message'] is not None:
