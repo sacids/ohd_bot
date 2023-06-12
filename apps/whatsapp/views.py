@@ -199,6 +199,7 @@ def process_threads(**kwargs):
     message = ""
     message_type = ""
     arr_trees = []
+    main_thread = False
 
     """thread wrapper"""
     wrapper = ThreadWrapper()
