@@ -327,7 +327,7 @@ def process_threads(**kwargs):
                         message      = response['message']
                         message_type = response['message_type']
                         arr_trees    = response['arr_trees']
-                        main_thread  = response['main_thread']
+                        main_thread  = False
 
                 elif thread_response['link'] == 'INVALID_INPUT':
                     """invalid input"""
