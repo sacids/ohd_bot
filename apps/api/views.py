@@ -5,15 +5,6 @@ from django.http import JsonResponse
 from apps.thread.models import Thread, ThreadSession
 from apps.thread.classes import ThreadWrapper
 
-# Create your views here.
-def push_data(request):
-    """push data to external API"""
-    key = request.GET.get('key')
-    from_number = request.GET.get('from_number')
-   
-    """response"""
-    return JsonResponse({'status': 'success', 'message': "data sent"})
-
 
 def insurance_information(request):
     """Sample API for pull data """
@@ -22,7 +13,6 @@ def insurance_information(request):
     wrapper = ThreadWrapper()
     request = wrapper.process_data(uuid= uuid)
     response = json.loads(request.content)
-    print(response)
 
     #construct message
     message = "*_Hakiki Taarifa za madai ya BIMA_* \n\n" \
