@@ -11,11 +11,11 @@ from django.views.decorators.csrf import csrf_exempt
 def insurance_information(request):
     """Sample API for pull data """
     if request.method == "POST":
-        data = json.loads(request.body)
-        logging.info(data['uuid'])
+        uuid = request.POST['uuid']
+        logging.info(uuid)
 
         wrapper = ThreadWrapper()
-        request = wrapper.process_data(uuid=data['uuid'])
+        request = wrapper.process_data(uuid=uuid)
         response = json.loads(request.content)
 
         if response['status'] == 'success':
