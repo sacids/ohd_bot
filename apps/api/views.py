@@ -12,11 +12,10 @@ def insurance_information(request):
     """Sample API for pull data """
     if request.method == "POST":
         data = json.loads(request.body)
-        uuid = data["uuid"]
-        logging.info("UUID" + uuid)
+        logging.info(data['uuid'])
 
         wrapper = ThreadWrapper()
-        request = wrapper.process_data(uuid=uuid)
+        request = wrapper.process_data(uuid=data['uuid'])
         response = json.loads(request.content)
 
         if response['status'] == 'success':
