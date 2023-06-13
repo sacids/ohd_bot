@@ -519,6 +519,7 @@ class ThreadWrapper:
 
         arr_params = {}
         arr_params['msisdn'] = msisdn
+        arr_params['uuid'] = uuid
 
         if payload is not None:
             arr_payload = payload.split(',')
