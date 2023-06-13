@@ -177,8 +177,7 @@ def pull(request):
 
     message = "Hello Renfrid, Tafathali chagua huduma zifuatazo\n" \
                 "1. Ngao ya buku\n" \
-                "2. BimaPap\n" \
-                "3. Huduma kwa wateja\n" \
+                "2. Huduma kwa wateja\n" \
 
         
     """response"""

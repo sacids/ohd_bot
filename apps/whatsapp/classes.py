@@ -175,7 +175,7 @@ class WhatsAppWrapper:
         if message_type == "TEXT":
             sub_message = ""
             for val in arr_trees:
-                sub_message += "*" + val['view_id'] + "*" + ". " + val['title'] + "\r\n"
+                sub_message += "*" + str(val['view_id']) + "*" + ". " + val['title'] + "\r\n"
 
             if sub_message != "":  
                 message = message + "\n\n" + sub_message
