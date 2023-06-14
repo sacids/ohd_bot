@@ -243,7 +243,7 @@ def process_threads(**kwargs):
         thread_session = ThreadSession.objects.filter(phone=from_number, active=0)
 
         if thread_session.count() > 0:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key == "0":
+            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key == "0":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
@@ -360,7 +360,7 @@ def process_threads(**kwargs):
                         message = "Thank you for using Laina Finance services."
                     message_type = "TEXT"  
         else:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA":
+            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key == "0":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
