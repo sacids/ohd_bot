@@ -1,10 +1,10 @@
+import os
 import json
 import requests
+import logging
+from pathlib import Path
 from django.http import HttpResponse, JsonResponse
 from decouple import config
-import os
-from pathlib import Path
-import logging
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,7 +125,7 @@ class WhatsAppWrapper:
 
         # create a temporary file
         try:
-            file_path = os.path.join('./assets/uploads/', f"{file_name}.{extension}")
+            file_path = os.path.join('/assets/uploads/', f"{file_name}.{extension}")
 
             #open 
             with open(file_path, "wb") as f:
@@ -168,7 +168,7 @@ class WhatsAppWrapper:
             return data['statuses'][0]['status']              
 
 
-    def structure_response(self, from_number, message_type, language, message, arr_trees, main_thread):
+    def structure_response(self, from_number, message_type, language, message, attachment, arr_trees, main_thread):
         """Structure response """
         message = message.replace("<br>", '\n')
 
@@ -192,6 +192,11 @@ class WhatsAppWrapper:
 
             #send text message now
             response = self.send_text_message(from_number, message)
+
+            #check for document attachment
+            if attachment is not None:
+                response_1 = self.send_document(from_number, attachment, "")
+
         elif message_type == "DOCUMENT":
             pass
         elif message_type == "IMAGE":

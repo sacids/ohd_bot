@@ -95,7 +95,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "EMAIL":
                 validation = validate_email(key, language)
@@ -111,7 +111,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "NIN":
                 validation = validate_NIN(key, language)
@@ -119,7 +119,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "DL":
                 validation = validate_DL(key, language)
@@ -127,7 +127,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "DL_NIN":
                 validation = validate_DL_NIN(key, language)
@@ -135,7 +135,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "VEHICLE_NUMBER":
                 validation = validate_VN(key, language)
@@ -143,7 +143,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "DATE":
                 validation = validate_date(key, language)
@@ -151,7 +151,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "TIME":
                 validation = validate_date(key, language)
@@ -159,7 +159,7 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "API":
                 """validate """
@@ -228,6 +228,7 @@ class ThreadWrapper:
                     'value': key, 
                     'language': response['language'],
                     'message': response['message'], 
+                    'attachment': response['attachment'],
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
                     "main_thread": response['main_thread'],
@@ -246,6 +247,7 @@ class ThreadWrapper:
                     "status": 'success', 
                     'language': language,
                     "message": message, 
+                    'attachment': None,
                     "message_type": "TEXT", 
                     "arr_trees": [], 
                     "main_thread": False,
@@ -278,6 +280,7 @@ class ThreadWrapper:
                     'value': key, 
                     'language': response['language'],
                     'message': response['message'],
+                    'attachment': response['attachment'],
                     "message_type": response['message_type'], 
                     "arr_trees": response['arr_trees'], 
                     "main_thread": response['main_thread'],
@@ -296,6 +299,7 @@ class ThreadWrapper:
                     "status": 'success', 
                     'language': language,
                     "message": message, 
+                    'attachment': None,
                     "message_type": "TEXT", 
                     "arr_trees": [], 
                     "main_thread": False,
@@ -312,6 +316,8 @@ class ThreadWrapper:
         thread       = Thread.objects.get(pk=thread_id)
         message_type = thread.message_type
         message      = thread.title
+        attachment   = None
+             
 
         #switch language
         if (thread.db_flag == "thread_services"):
@@ -335,6 +341,10 @@ class ThreadWrapper:
 
             if response['message'] is not None:
                 message = response['message']
+
+            if 'attachment' in response:
+                if response['attachment'] is not None:
+                    attachment = response['attachment'] 
 
             arr_trees = []
             if len(response['arr_message']) > 0:
@@ -370,15 +380,17 @@ class ThreadWrapper:
         elif thread.action is not None and thread.action == "PULL":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
-            logging.info(arr_params)
         
             #call pull api
             request = requests.post(thread.action_url, data=arr_params)
             response = request.json()
-            logging.info(response)
 
             if response['message'] is not None:
                 message = response['message']
+
+            if 'attachment' in response:
+                if response['attachment'] is not None:
+                    attachment = response['attachment']    
 
             arr_trees = []
             if len(response['arr_message']) > 0:
@@ -410,6 +422,22 @@ class ThreadWrapper:
                             "title": title
                         }
                         arr_trees.append(tree)
+        elif thread.action is not None and thread.action == "PUSH":
+            #build params
+            arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
+        
+            #call pull api
+            request = requests.post(thread.action_url, data=arr_params)
+            response = request.json()
+
+            if response['message'] is not None:
+                message = response['message']
+
+            if 'attachment' in response:
+                if response['attachment'] is not None:
+                    attachment = response['attachment']
+
+            arr_trees = []
         else: 
             """if there response"""
             sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
@@ -439,6 +467,7 @@ class ThreadWrapper:
             "status": 'success', 
             'language': language,
             "message": message, 
+            "attachment": attachment,
             "message_type": message_type, 
             "arr_trees": arr_trees,
             "main_thread": thread.main_thread

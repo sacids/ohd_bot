@@ -127,8 +127,11 @@ def facebook(request):
                 image_filename = wrapper.download_media(image_url, mime_type, image_id)
                 logging.info(f"{from_number} sent file {image_filename}")
 
+                #image path
+                image_path = f"https://chatbot.lainafinance.co.tz{image_filename}"
+
                 """process thread"""
-                request = process_threads(from_number=from_number, key=image_filename)
+                request = process_threads(from_number=from_number, key=image_path)
                 response = json.loads(request.content)
 
             elif message_type == 'document':
@@ -139,8 +142,11 @@ def facebook(request):
                 file_filename = wrapper.download_media(file_url, mime_type, file_id)
                 logging.info(f"{from_number} sent file {file_filename}")
 
+                #file path
+                file_path = f"https://chatbot.lainafinance.co.tz{file_filename}"
+
                 """process thread"""
-                request = process_threads(from_number=from_number, key=file_filename)
+                request = process_threads(from_number=from_number, key=file_path)
                 response = json.loads(request.content)
 
             elif message_type == 'audio':
@@ -151,8 +157,11 @@ def facebook(request):
                 audio_filename = wrapper.download_media(audio_url, mime_type, audio_id)
                 logging.info(f"{from_number} sent audio {audio_filename}")
 
+                #audio path
+                audio_path = f"https://chatbot.lainafinance.co.tz{audio_filename}"
+
                 """process thread"""
-                request = process_threads(from_number=from_number, key=audio_filename)
+                request = process_threads(from_number=from_number, key=audio_path)
                 response = json.loads(request.content)
 
             elif message_type == "video":
@@ -163,19 +172,23 @@ def facebook(request):
                 video_filename = wrapper.download_media(video_url, mime_type, video_id)
                 logging.info(f"{from_number} sent video {video_filename}")  
 
+                #video path
+                video_path = f"https://chatbot.lainafinance.co.tz{video_filename}"
+
                 """process thread"""
-                request = process_threads(from_number=from_number, key=video_filename)
+                request = process_threads(from_number=from_number, key=video_path)
                 response = json.loads(request.content)  
 
             """data"""
             language     = response['language']
             message      = response['message']
+            attachment   = response['attachment']
             show_type    = response['message_type']
             arr_trees    = response['arr_trees']  
             main_thread  = response['main_thread']   
 
             """structure the whatsapp response""" 
-            response = wrapper.structure_response(from_number, show_type, language, message, arr_trees, main_thread)
+            response = wrapper.structure_response(from_number, show_type, language, message, attachment, arr_trees, main_thread)
             logging.info("===== Facebook Response ====")
             logging.info(response)
         else:
@@ -197,6 +210,7 @@ def process_threads(**kwargs):
     """initiate variables"""
     language = "SW"
     message = ""
+    attachment = None
     message_type = ""
     arr_trees = []
     main_thread = False
@@ -233,6 +247,7 @@ def process_threads(**kwargs):
 
         """variables"""
         message = response['message']
+        attachment = response['attachment']
         message_type = response['message_type']
         arr_trees = response['arr_trees']
     else:
@@ -243,7 +258,7 @@ def process_threads(**kwargs):
         thread_session = ThreadSession.objects.filter(phone=from_number, active=0)
 
         if thread_session.count() > 0:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key == "0":
+            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
@@ -254,6 +269,7 @@ def process_threads(**kwargs):
                 """variables"""
                 language     = response['language']
                 message      = response['message']
+                attachment   = response['attachment']
                 message_type = response['message_type']
                 arr_trees    = response['arr_trees']
                 main_thread  = response['main_thread']
@@ -303,6 +319,7 @@ def process_threads(**kwargs):
                         """variables"""
                         language     = response['language']
                         message      = response['message']
+                        attachment   = response['attachment']
                         message_type = response['message_type']
                         arr_trees    = response['arr_trees']
                         main_thread  = response['main_thread']
@@ -325,6 +342,7 @@ def process_threads(**kwargs):
                         """variables"""
                         language     = response['language']
                         message      = response['message']
+                        attachment   = response['attachment']
                         message_type = response['message_type']
                         arr_trees    = response['arr_trees']
                         main_thread  = False
@@ -360,7 +378,7 @@ def process_threads(**kwargs):
                         message = "Thank you for using Laina Finance services."
                     message_type = "TEXT"  
         else:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key == "0":
+            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
@@ -371,6 +389,7 @@ def process_threads(**kwargs):
                 """variables"""
                 language     = response['language']
                 message      = response['message']
+                attachment   = response['attachment']
                 message_type = response['message_type']
                 arr_trees    = response['arr_trees']
                 main_thread  = response['main_thread']
@@ -382,7 +401,7 @@ def process_threads(**kwargs):
                 message_type = "TEXT" 
 
     """return response"""
-    return JsonResponse({"status": "success", "language": language, "message": message, "message_type": message_type, "arr_trees": arr_trees, "main_thread": main_thread})
+    return JsonResponse({"status": "success", "language": language, "message": message, "attachment": attachment, "message_type": message_type, "arr_trees": arr_trees, "main_thread": main_thread})
 
     
 def push_data(**kwargs):
