@@ -65,7 +65,7 @@ def validate_phone(key, language):
 
 def validate_NIN(key, language):
     """validate national identification ID"""
-    pattern = "^[0-9]{24}$"
+    pattern = "^[0-9]{20}$"
 
     #remove space
     key = key.replace(' ', '')
@@ -105,7 +105,7 @@ def validate_DL(key, language):
 
 def validate_DL_NIN(key, language):
     """Validate Driver Licence or NIN"""
-    NIN_pattern = "^[0-9]{24}$"
+    NIN_pattern = "^[0-9]{20}$"
     DL_pattern = "^400[0-9]{7}$"
 
     #remove space
