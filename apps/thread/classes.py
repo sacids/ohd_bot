@@ -394,7 +394,8 @@ class ThreadWrapper:
         elif thread.action is not None and thread.action == "PULL":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
-            logging.info(response)
+            logging.info("params")
+            logging.info(arr_params)
         
             #call pull api
             request = requests.post(thread.action_url, data=arr_params)
