@@ -191,7 +191,7 @@ def validate_past_date(key, language):
     """check if validation pass on date format"""
     if res == True:
         """comparing menu"""
-        past = datetime.strptime(key, "%d/%m/%Y")
+        past = datetime.strptime(key, "%d-%m-%Y")
         present = datetime.now() 
  
         if past.date() <= present.date():
