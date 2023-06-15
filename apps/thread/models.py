@@ -34,6 +34,7 @@ class Thread(models.Model):
         ('DL_NIN', 'DRIVER LICENCE or NIN'),
         ('VEHICLE_NUMBER', 'VEHICLE NUMBER'),
         ('DATE', 'DATE'),
+        ('PAST_DATE', '<= TODAY DATE'),
         ('TIME', 'TIME'),
         ('API', 'API'),
     )

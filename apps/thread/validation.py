@@ -149,7 +149,7 @@ def validate_VN(key, language):
 
 
 def validate_date(key, language):
-    """validate date"""
+    """validate date format"""
     format = "%d-%m-%Y"
 
     # checking if format matches the date
@@ -169,11 +169,52 @@ def validate_date(key, language):
         if language == "SW":
             message = 'Umekosea kuandika tarehe, tafadhali rudia. mfano: 13-04-2023'
         elif language == "EN":
-            message =  "Valid date required here. e.g: 13-04-2023"
+            message =  "only valid date required here. e.g: 13-04-2023"
 
         #response    
         return {'error': True, 'message': message}
 
+
+def validate_past_date(key, language):
+    """validate less than today than date"""
+    format = "%d-%m-%Y"
+
+    # checking if format matches the date
+    res = True
+    
+    # using try-except to check for truth value
+    try:
+        res = bool(datetime.strptime(key, format))
+    except ValueError:
+        res = False
+
+    """check if validation pass on date format"""
+    if res == True:
+        """comparing menu"""
+        past = datetime.strptime(key, "%d/%m/%Y")
+        present = datetime.now() 
+ 
+        if past.date() <= present.date():
+            """validation True"""
+            return {'error': False, 'value': key}
+        else:
+            message = ""
+            if language == "SW":
+                message = 'Tarehe haitakiwi kuzidi tarehe ya leo'
+            elif language == "EN":
+                message =  "Date should not exceed Today Date"
+
+            """Invalid input"""
+            return {'error': True, 'message': message}
+    else:
+        message = ""
+        if language == "SW":
+            message = 'Umekosea kuandika tarehe, tafadhali rudia. mfano: 13-04-2023'
+        elif language == "EN":
+            message =  "only valid date required here. e.g: 13-04-2023"
+
+        """Invalid input"""
+        return {'error': True, 'message': message}
 
 
 

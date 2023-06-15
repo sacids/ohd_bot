@@ -152,6 +152,14 @@ class ThreadWrapper:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
+
+            elif thread.validation == "PAST_DATE":
+                validation = validate_past_date(key, language)
+
+                if validation['error'] == False:
+                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "TIME":
                 validation = validate_date(key, language)
