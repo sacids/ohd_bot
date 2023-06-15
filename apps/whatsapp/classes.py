@@ -195,7 +195,7 @@ class WhatsAppWrapper:
 
             #check for document attachment
             if attachment is not None:
-                response_1 = self.send_document(from_number, attachment, "Ngao Ya Buku Claim Form")
+                response_1 = self.send_document(from_number, attachment, "Ngao Ya Buku - Fomu ya madai")
 
         elif message_type == "DOCUMENT":
             pass
