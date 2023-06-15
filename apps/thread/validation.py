@@ -132,6 +132,9 @@ def validate_VN(key, language):
     #remove space
     key = key.replace(' ', '')
 
+    #force key to be uppercase
+    key = key.upper()
+
     if re.match(VN_pattern, key) or re.match(MT_pattern, key):
         return {'error': False, 'value': key}
     else:
