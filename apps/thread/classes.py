@@ -194,66 +194,72 @@ class ThreadWrapper:
         actionURL = None
    
         """sub thread"""
-        sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key)
+        sub_thread = SubThread.objects.filter(thread_id=thread_id)
 
-        new_response = {}
-        if (sub_thread_key):
-            sub_thread_key = sub_thread_key.first()
+        if sub_thread.count() > 0:
+            #response
+            new_response = {}
+        
+            #sub thread key    
+            sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key)
 
-            """todo: check for registered or not registered link"""
+            if sub_thread_key.count() > 0:
+                sub_thread_key = sub_thread_key.first()
 
-            """thread link"""
-            thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
+                """todo: check for registered or not registered link"""
 
-            if(thread_link):
-                thread_link = thread_link.first()
+                """thread link"""
+                thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
 
-                """create new session"""
-                self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
+                if(thread_link):
+                    thread_link = thread_link.first()
 
-                """process thread"""
-                request = self.process_thread(phone, thread_link.link_id, uuid, language)
-                response = json.loads(request.content)
+                    """create new session"""
+                    self.create_thread_session(phone=phone, thread_id=thread_link.link_id, uuid=uuid, channel=channel)
 
-                """thread action"""
-                thread = Thread.objects.get(pk=thread_link.link_id)
+                    """process thread"""
+                    request = self.process_thread(phone, thread_link.link_id, uuid, language)
+                    response = json.loads(request.content)
 
-                if thread.action is not None:
-                    action = thread.action
-                    actionURL = thread.action_url 
+                    """thread action"""
+                    thread = Thread.objects.get(pk=thread_link.link_id)
 
-                """new response"""
-                new_response = {
-                    'status': 'success', 
-                    'value': key, 
-                    'language': response['language'],
-                    'message': response['message'], 
-                    'attachment': response['attachment'],
-                    "message_type": response['message_type'], 
-                    "arr_trees": response['arr_trees'], 
-                    "main_thread": response['main_thread'],
-                    'action': action, 
-                    'actionURL': actionURL
-                }
-            else:
-                #change title and description based on language
-                if language == "SW":
-                    message = "Chaguo batili"
-                elif language == "EN":
-                    message = "Invalid Input"
+                    if thread.action is not None:
+                        action = thread.action
+                        actionURL = thread.action_url 
 
-                """new response"""
-                new_response = {
-                    "status": 'success', 
-                    'language': language,
-                    "message": message, 
-                    'attachment': None,
-                    "message_type": "TEXT", 
-                    "arr_trees": [], 
-                    "main_thread": False,
-                    "action": action, 
-                    "actionURL": actionURL 
-                }    
+                    """new response"""
+                    new_response = {
+                        'status': 'success', 
+                        'value': key, 
+                        'language': response['language'],
+                        'message': response['message'], 
+                        'attachment': response['attachment'],
+                        "message_type": response['message_type'], 
+                        "arr_trees": response['arr_trees'], 
+                        "main_thread": response['main_thread'],
+                        'action': action, 
+                        'actionURL': actionURL
+                    }
+                else:
+                    #change title and description based on language
+                    if language == "SW":
+                        message = "Chaguo batili"
+                    elif language == "EN":
+                        message = "Invalid Input"
+
+                    """new response"""
+                    new_response = {
+                        "status": 'success', 
+                        'language': language,
+                        "message": message, 
+                        'attachment': None,
+                        "message_type": "TEXT", 
+                        "arr_trees": [], 
+                        "main_thread": False,
+                        "action": action, 
+                        "actionURL": actionURL 
+                    }    
         else:
             thread_link = ThreadLink.objects.filter(thread_id=thread_id)
 
@@ -429,6 +435,7 @@ class ThreadWrapper:
             #call pull api
             request = requests.post(thread.action_url, data=arr_params)
             response = request.json()
+            logging.info(response)
 
             if response['message'] is not None:
                 message = response['message']
