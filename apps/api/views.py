@@ -86,13 +86,13 @@ def insurance_information(request):
                 message += "*Majeruhi kwa watu:* " + response['arr_data']['People_Damage'] + " \r\n" 
 
             if 'Number_of_Casualties' in response['arr_data']:
-                message += "*Idadi ya Majeruhi:* " + response['arr_data']['Number_of_Casualties'] + " \r\n\n\n\n" 
+                message += "*Idadi ya Majeruhi:* " + response['arr_data']['Number_of_Casualties'] + " \r\n" 
 
             Full_Name = ""
             if 'Full_Name' in response['arr_data']:
-                Full_Name = response['arr_data']['Full_Name']   
+                Full_Name = response['arr_data']['Full_Name']
 
-            message += f"*Declaration (Tamko):* Mimi {Full_Name}, ninakiri kwamba maelezo yaliyotolewa hapo juu pamoja na muhtasari wake ni sahihi na ya ukweli na yamekamilika. Kama sivyo nitawajibika ipasavyo."
+            message += f"\r\n\n*Declaration (Tamko):* Mimi *{Full_Name}*, ninakiri kwamba maelezo yaliyotolewa hapo juu pamoja na muhtasari wake ni sahihi na ya ukweli na yamekamilika. Kama sivyo nitawajibika ipasavyo."
         
         elif response['status'] == 'failed':
             message = response['error_msg'] 
