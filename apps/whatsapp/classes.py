@@ -195,7 +195,7 @@ class WhatsAppWrapper:
 
             #check for document attachment
             if attachment is not None:
-                response_1 = self.send_document(from_number, attachment, "")
+                response_1 = self.send_document(from_number, attachment, "Ngao Ya Buku Claim Form")
 
         elif message_type == "DOCUMENT":
             pass
@@ -391,7 +391,7 @@ class WhatsAppWrapper:
             "recipient_type": "individual",
             "to": phone_number,
             "type": "document",
-                "document": {"link": documentURL, "caption": caption},
+                "document": {"link": documentURL, "caption": caption, "filename": "Ngao_Ya_Buku.pdf"},
         })
 
         """response"""
