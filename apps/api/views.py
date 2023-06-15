@@ -86,7 +86,7 @@ def insurance_information(request):
                 message += "*Majeruhi kwa watu:* " + response['arr_data']['People_Damage'] + " \r\n" 
 
             if 'Number_of_Casualties' in response['arr_data']:
-                message += "*Idadi ya Majeruhi:* " + response['arr_data']['Number_of_Casualties'] + " \r\n\n\n" 
+                message += "*Idadi ya Majeruhi:* " + response['arr_data']['Number_of_Casualties'] + " \r\n\n\n\n" 
 
             Full_Name = ""
             if 'Full_Name' in response['arr_data']:
