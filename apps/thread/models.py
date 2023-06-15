@@ -67,7 +67,7 @@ class SubThread(models.Model):
     """Sub Thread Model"""
     id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     thread       = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    view_id      = models.IntegerField(blank=False, null=False)
+    view_id      = models.CharField(max_length=10, blank=False, null=False)
     created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     updated_at   = models.DateTimeField(auto_now=True) 
     title        = models.TextField(blank=False, null=False)
