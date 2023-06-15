@@ -456,6 +456,35 @@ class ThreadWrapper:
                     attachment = response['attachment']
 
             arr_trees = []
+            if len(response['arr_message']) > 0:
+                message_type = "TEXT"
+                for val in response['arr_message']:
+                    #create tree
+                    tree = {
+                        "view_id" : val["id"],
+                        "title": val["message"]
+                    }
+                    arr_trees.append(tree) 
+            else:
+                """if there response"""
+                sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
+
+                if(sub_threads):
+                    for val in sub_threads:
+                        title = val.title
+
+                        #change title and description based on language
+                        if language == "SW":
+                            title       = val.title_sw
+                        elif language == "EN":
+                            title       = val.title_en_us 
+
+                        #create tree
+                        tree = {
+                            "view_id" : val.view_id,
+                            "title": title
+                        }
+                        arr_trees.append(tree)        
         else: 
             """if there response"""
             sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
