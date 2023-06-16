@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
 
+import requests
+import logging
+
 
 class ThreadListView(generic.ListView):
     model = Thread
