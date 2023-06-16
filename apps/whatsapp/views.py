@@ -128,7 +128,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent file {image_filename}")
 
                 #image path
-                image_path = image_filename
+                image_path = f"https://chatbot.lainafinance.co.tz/{image_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=image_path)
@@ -143,7 +143,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 #file path
-                file_path = f"https://chatbot.lainafinance.co.tz{file_filename}"
+                file_path = f"https://chatbot.lainafinance.co.tz/{file_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=file_path)
@@ -158,7 +158,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent audio {audio_filename}")
 
                 #audio path
-                audio_path = f"https://chatbot.lainafinance.co.tz{audio_filename}"
+                audio_path = f"https://chatbot.lainafinance.co.tz/{audio_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=audio_path)
