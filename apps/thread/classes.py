@@ -457,25 +457,25 @@ class ThreadWrapper:
                 else:
                     logging.info("Error Code")
                     logging.info(request.status_code)
-                    message = "Tafadhali subiri kuna tatizo, tunalifanyia kazi"
+                    message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
                     arr_trees = []
 
             except requests.exceptions.HTTPError as errh:
                 logging.info("Http Error:" + errh)
-                message = "Tafadhali subiri kuna tatizo, tunalifanyia kazi"
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
                 arr_trees = []
             except requests.exceptions.ConnectionError as errc:
                 logging.info("Error Connecting:" + errc)
-                message = "Tafadhali subiri kuna tatizo, tunalifanyia kazi"
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
                 arr_trees = []
 
             except requests.exceptions.Timeout as errt:
                 logging.info("Timeout Error:" + errt)
-                message = "Tafadhali subiri kuna tatizo, tunalifanyia kazi"
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
                 arr_trees = []
             except requests.exceptions.RequestException as err:
                 logging.info("OOps: Something Else:" + err)
-                message = "Tafadhali subiri kuna tatizo, tunalifanyia kazi"
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
                 arr_trees = []
         else: 
             """if there response"""
