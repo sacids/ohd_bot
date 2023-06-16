@@ -128,7 +128,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent file {image_filename}")
 
                 #image path
-                image_path = f"https://chatbot.lainafinance.co.tz{image_filename}"
+                image_path = image_filename
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=image_path)
@@ -173,7 +173,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent video {video_filename}")  
 
                 #video path
-                video_path = f"https://chatbot.lainafinance.co.tz{video_filename}"
+                video_path = f"https://chatbot.lainafinance.co.tz/{video_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=video_path)

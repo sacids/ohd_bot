@@ -125,7 +125,7 @@ class WhatsAppWrapper:
 
         # create a temporary file
         try:
-            file_path = os.path.join('/assets/uploads/', f"{file_name}.{extension}")
+            file_path = os.path.join('./assets/uploads/', f"{file_name}.{extension}")
 
             #open 
             with open(file_path, "wb") as f:
