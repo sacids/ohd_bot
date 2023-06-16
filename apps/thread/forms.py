@@ -15,7 +15,7 @@ class ThreadForm(forms.ModelForm):
 
     class Meta:
         model  = Thread
-        exclude = ('created_by', 'updated_by')
+        exclude = ('created_by', 'updated_by', 'map_data')
         fields  = ('__all__')
 
         widgets = {
