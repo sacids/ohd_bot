@@ -220,7 +220,7 @@ class ThreadWrapper:
             if sub_thread_key.count() > 0:
                 sub_thread_key = sub_thread_key.first()
 
-                """todo: check for registered or not registered link"""
+                """TODO: check for registered or not registered link"""
 
                 """thread link"""
                 thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
