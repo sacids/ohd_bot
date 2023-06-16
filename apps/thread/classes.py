@@ -488,6 +488,7 @@ class ThreadWrapper:
         elif thread.action is not None and thread.action == "PUSH":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
+            logging.info(arr_params)
 
             try:
                 request = requests.post(thread.action_url, data=arr_params)
@@ -646,7 +647,10 @@ class ThreadWrapper:
             for val in arr_payload:
                 if val in my_data['arr_data']:
                     arr_params[val] = my_data['arr_data'][val]
-        
+
+        else:
+            arr_params = my_data['arr_data']            
+       
         #return params
         return arr_params
 
