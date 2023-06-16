@@ -393,48 +393,73 @@ class ThreadWrapper:
         elif thread.action is not None and thread.action == "PULL":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
-        
-            #call pull api
-            request = requests.post(thread.action_url, data=arr_params)
-            response = request.json()
 
-            if response['message'] is not None:
-                message = response['message']
+            try:
+                request = requests.post(thread.action_url, data=arr_params)
 
-            if 'attachment' in response:
-                if response['attachment'] is not None:
-                    attachment = response['attachment']    
+                # The following line give us the response code
+                if request.status_code == 200:
+                    response = request.json()
 
-            arr_trees = []
-            if len(response['arr_message']) > 0:
-                message_type = "TEXT"
-                for val in response['arr_message']:
-                    #create tree
-                    tree = {
-                        "view_id" : val["id"],
-                        "title": val["message"]
-                    }
-                    arr_trees.append(tree) 
-            else:
-                """if there response"""
-                sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
+                    if response['message'] is not None:
+                        message = response['message']
 
-                if(sub_threads):
-                    for val in sub_threads:
-                        title = val.title
+                    if 'attachment' in response:
+                        if response['attachment'] is not None:
+                            attachment = response['attachment']
 
-                        #change title and description based on language
-                        if language == "SW":
-                            title       = val.title_sw
-                        elif language == "EN":
-                            title       = val.title_en_us 
+                    arr_trees = []
+                    if len(response['arr_message']) > 0:
+                        message_type = "TEXT"
+                        for val in response['arr_message']:
+                            #create tree
+                            tree = {
+                                "view_id" : val["id"],
+                                "title": val["message"]
+                            }
+                            arr_trees.append(tree) 
+                    else:
+                        """if there response"""
+                        sub_threads = SubThread.objects.filter(thread_id=thread_id).order_by('view_id')
 
-                        #create tree
-                        tree = {
-                            "view_id" : val.view_id,
-                            "title": title
-                        }
-                        arr_trees.append(tree)
+                        if(sub_threads):
+                            for val in sub_threads:
+                                title = val.title
+
+                                #change title and description based on language
+                                if language == "SW":
+                                    title       = val.title_sw
+                                elif language == "EN":
+                                    title       = val.title_en_us 
+
+                                #create tree
+                                tree = {
+                                    "view_id" : val.view_id,
+                                    "title": title
+                                }
+                                arr_trees.append(tree)
+                else:
+                    logging.info("Error Code")
+                    logging.info(request.status_code)
+                    message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
+                    arr_trees = []
+            except requests.exceptions.HTTPError as errh:
+                logging.info("Http Error:" + errh)
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
+                arr_trees = []
+            except requests.exceptions.ConnectionError as errc:
+                logging.info("Error Connecting:" + errc)
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
+                arr_trees = []
+
+            except requests.exceptions.Timeout as errt:
+                logging.info("Timeout Error:" + errt)
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
+                arr_trees = []
+            except requests.exceptions.RequestException as err:
+                logging.info("OOps: Something Else:" + err)
+                message = "Huduma haipatikani kwa sasa, Tafadhali jaribu tena baadae."
+                arr_trees = []     
         elif thread.action is not None and thread.action == "PUSH":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
