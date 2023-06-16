@@ -236,6 +236,10 @@ def process_threads(**kwargs):
         lbLanguage.save()     
 
     if customer.count() == 0:
+        #TODO: Query user details to the main system
+
+
+
         """create profile"""
         customer = Customer()
         customer.phone = from_number

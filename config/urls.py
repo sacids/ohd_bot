@@ -19,6 +19,9 @@ from django.urls import path, include
 from apps.whatsapp import views as whatsapp_views
 from apps.thread import views, validation
 
+from django.conf import settings
+from django.conf.urls.static import static 
+
 
 urlpatterns = [
     path('', include('apps.account.urls')),
@@ -31,4 +34,4 @@ urlpatterns = [
 
 
     path('api/validation/date', validation.validate_date),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
