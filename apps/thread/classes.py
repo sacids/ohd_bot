@@ -44,25 +44,31 @@ class ThreadWrapper:
         sub_thread = SubThread.objects.filter(thread_id=thread_id)
 
         if sub_thread.count() > 0:
-            sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key)
+            # Number Pattern
+            pattern = "^\\d+$"
 
-            if sub_thread_key.count() > 0:
-                sub_thread_key = sub_thread_key.first()
+            if re.match(pattern, key):
+                sub_thread_key = SubThread.objects.filter(thread_id=thread_id, view_id=key)
 
-                #thread link
-                thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
+                if sub_thread_key.count() > 0:
+                    sub_thread_key = sub_thread_key.first()
 
-                if thread_link.count() > 0:
-                    thread_link = thread_link.first()
+                    #thread link
+                    thread_link = ThreadLink.objects.filter(thread_id=thread_id, sub_thread_id=sub_thread_key.id)
 
-                    if thread_link.linking_type == "RESPONSE_THREAD":
-                        return {"link": "NEXT_MENU", "api": None}
-                    elif thread_link.linking_type == "RESPONSE_API":
-                        return {"link": "API_MENU", "api": thread_link.api_url}
+                    if thread_link.count() > 0:
+                        thread_link = thread_link.first()
+
+                        if thread_link.linking_type == "RESPONSE_THREAD":
+                            return {"link": "NEXT_MENU", "api": None}
+                        elif thread_link.linking_type == "RESPONSE_API":
+                            return {"link": "API_MENU", "api": thread_link.api_url}
+                    else:
+                        return {"link": "INVALID_INPUT", "api": None}
                 else:
-                    return {"link": "INVALID_INPUT", "api": None}
+                    return {"link": "INVALID_INPUT", "api": None} 
             else:
-                return {"link": "INVALID_INPUT", "api": None}    
+                return {"link": "INVALID_INPUT", "api": None}       
         else:
             thread_link = ThreadLink.objects.filter(thread_id=thread_id)
 
