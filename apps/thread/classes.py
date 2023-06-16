@@ -644,12 +644,15 @@ class ThreadWrapper:
         arr_params['msisdn'] = msisdn
         arr_params['uuid'] = uuid
 
-        if payload is not None:
+        if payload != "":
             arr_payload = payload.split(',')
 
             for val in arr_payload:
                 if val in my_data['arr_data']:
-                    arr_params[val] = my_data['arr_data'][val]           
+                    arr_params[val] = my_data['arr_data'][val]  
+
+        else:
+            arr_params = my_data['arr_data']                   
        
         #return params
         return arr_params
