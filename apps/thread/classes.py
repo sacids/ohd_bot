@@ -633,6 +633,9 @@ class ThreadWrapper:
         msisdn  = kwargs["msisdn"]  
         uuid  = kwargs["uuid"]  
 
+        logging.info("payload")
+        logging.info(payload)
+
         #process data
         my_data = self.process_data(uuid = uuid)
         my_data = json.loads(my_data.content)
