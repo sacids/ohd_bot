@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 class Thread(models.Model):
     """Thread Model"""
     ACTION_URL_OPTIONS = (
-        ('REGISTRATION', 'REGISTRATION'),
         ('VERIFICATION', 'VERIFICATION'),
         ('PUSH', 'PUSH'),
         ('PULL', 'PULL'),
@@ -31,8 +30,6 @@ class Thread(models.Model):
         ('PHONE', 'PHONE'),
         ('NIN', 'NIN'),
         ('DL', 'DRIVER LICENCE'),
-        ('DL_NIN', 'DRIVER LICENCE or NIN'),
-        ('VEHICLE_NUMBER', 'VEHICLE NUMBER'),
         ('DATE', 'DATE'),
         ('PAST_DATE', '<= TODAY DATE'),
         ('TIME', 'TIME'),
@@ -117,6 +114,7 @@ class ThreadSession(models.Model):
     """Thread Session Model"""
     CHANNEL_OPTIONS = (
         ('WHATSAPP', 'Whatsapp'),
+        ('TELEGRAM', 'Telegram'),
     )
 
     id          =  models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

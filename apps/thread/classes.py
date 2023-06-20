@@ -133,24 +133,8 @@ class ThreadWrapper:
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
-            
-            elif thread.validation == "DL_NIN":
-                validation = validate_DL_NIN(key, language)
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})   
 
-                if validation['error'] == False:
-                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
-                elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
-            
-            elif thread.validation == "VEHICLE_NUMBER":
-                validation = validate_VN(key, language)
-
-                if validation['error'] == False:
-                    response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
-                elif validation['error'] == True:
-                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
-            
             elif thread.validation == "DATE":
                 validation = validate_date(key, language)
 

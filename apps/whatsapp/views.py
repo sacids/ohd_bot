@@ -246,7 +246,7 @@ def process_threads(**kwargs):
         customer.save()
 
         """init thread"""
-        request = wrapper.init_thread(phone=from_number, flag="thread_start", channel="WHATSAPP", language=language) 
+        request = wrapper.init_thread(phone=from_number, flag="thread_services", channel="WHATSAPP", language=language) 
         response = json.loads(request.content)
 
         """variables"""
