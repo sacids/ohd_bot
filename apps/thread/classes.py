@@ -325,6 +325,7 @@ class ThreadWrapper:
 
         #switch language
         if (thread.db_flag == "thread_services"):
+            print("language => " + language) 
             language = self.switch_language(uuid, thread.db_flag, language) 
         
         #change message based on language
@@ -596,7 +597,7 @@ class ThreadWrapper:
             if sub_thread.count() > 0:
                 sub_thread = sub_thread.first()
 
-                if sub_thread.title == "Switch_Language":
+                if sub_thread.switch_language == 1:
                     from_number = thread_session.phone
 
                     #query for language

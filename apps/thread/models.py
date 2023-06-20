@@ -64,13 +64,14 @@ class Thread(models.Model):
 
 class SubThread(models.Model):
     """Sub Thread Model"""
-    id           = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    thread       = models.ForeignKey(Thread, on_delete=models.CASCADE)
-    view_id      = models.IntegerField(blank=False, null=False)
-    created_at   = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    updated_at   = models.DateTimeField(auto_now=True) 
-    title        = models.TextField(blank=False, null=False)
-    description  = models.TextField(blank=True, null=True)
+    id               = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    thread           = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    view_id          = models.IntegerField(blank=False, null=False)
+    created_at       = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    updated_at       = models.DateTimeField(auto_now=True) 
+    title            = models.TextField(blank=False, null=False)
+    description      = models.TextField(blank=True, null=True)
+    switch_language  = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'lb_sub_threads'
