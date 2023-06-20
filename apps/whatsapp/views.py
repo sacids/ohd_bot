@@ -401,7 +401,7 @@ def process_threads(**kwargs):
                 if language == "SW":
                     message = "Karibu kituo cha Taifa cha Operesheni na Mawasiliano ya Dharura, andika/tuma neno TAARIFA, TUKIO."
                 elif language == "EN": 
-                    message = "Welcome Laina Finance, to use this service write keyword LAINA or HUDUMA."   
+                    message = "Welcome National Disaster Center, write TAARIFA or TUKIO for reporting new event."   
                 message_type = "TEXT" 
 
     """return response"""

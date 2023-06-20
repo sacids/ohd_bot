@@ -596,7 +596,7 @@ class ThreadWrapper:
             if sub_thread.count() > 0:
                 sub_thread = sub_thread.first()
 
-                if sub_thread.title == "English":
+                if sub_thread.title == "Switch_Language":
                     from_number = thread_session.phone
 
                     #query for language
