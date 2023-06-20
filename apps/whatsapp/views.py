@@ -232,7 +232,7 @@ def process_threads(**kwargs):
         #insert new language
         lbLanguage = CustomerLanguage()
         lbLanguage.phone = from_number
-        lbLanguage.language = "SW"  
+        lbLanguage.language = "EN"  
         lbLanguage.save()     
 
     if customer.count() == 0:
