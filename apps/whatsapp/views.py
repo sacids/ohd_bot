@@ -128,7 +128,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent file {image_filename}")
 
                 #image path
-                image_path = f"https://chatbot.lainafinance.co.tz/{image_filename}"
+                image_path = f"https://net.sacids.org/{image_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=image_path)
@@ -143,7 +143,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent file {file_filename}")
 
                 #file path
-                file_path = f"https://chatbot.lainafinance.co.tz/{file_filename}"
+                file_path = f"https://net.sacids.org/{file_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=file_path)
@@ -158,7 +158,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent audio {audio_filename}")
 
                 #audio path
-                audio_path = f"https://chatbot.lainafinance.co.tz/{audio_filename}"
+                audio_path = f"https://net.sacids.org/{audio_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=audio_path)
@@ -173,7 +173,7 @@ def facebook(request):
                 logging.info(f"{from_number} sent video {video_filename}")  
 
                 #video path
-                video_path = f"https://chatbot.lainafinance.co.tz/{video_filename}"
+                video_path = f"https://net.sacids.org/{video_filename}"
 
                 """process thread"""
                 request = process_threads(from_number=from_number, key=video_path)
@@ -262,7 +262,7 @@ def process_threads(**kwargs):
         thread_session = ThreadSession.objects.filter(phone=from_number, active=0)
 
         if thread_session.count() > 0:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "":
+            if key.upper() == "TAARIFA" or key.upper() == "TUKIO" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "#" or key == "":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
@@ -377,12 +377,12 @@ def process_threads(**kwargs):
 
                     """initiate thread session"""
                     if language == "SW":
-                        message = "Asante kwa kutumia huduma za Laina Finance." 
+                        message = "Asante kwa kuripoti taarifa, tunazichambua taarifa zako na kuzifanyia kazi." 
                     elif language == "EN":
-                        message = "Thank you for using Laina Finance services."
+                        message = "Thank you for reporting, we will review reporting information and respond to it."
                     message_type = "TEXT"  
         else:
-            if key.upper() == "LAINA" or key.upper() == "HUDUMA" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "":
+            if key.upper() == "TAARIFA" or key.upper() == "TUKIO" or key.upper() == "HI" or key.upper() == "HELLO" or key.upper() == "MAMBO" or key.upper() == "ANZA" or key.upper() == "HABARI" or key == "0" or key == "#" or key == "":
                 """update all menu sessions"""
                 ThreadSession.objects.filter(phone=from_number).update(active=1)
 
@@ -399,7 +399,7 @@ def process_threads(**kwargs):
                 main_thread  = response['main_thread']
             else:
                 if language == "SW":
-                    message = "Karibu Laina Finance, kutumia huduma hii andika neno LAINA au HUDUMA."
+                    message = "Karibu kituo cha Taifa cha Operesheni na Mawasiliano ya Dharura, andika/tuma neno TAARIFA, TUKIO."
                 elif language == "EN": 
                     message = "Welcome Laina Finance, to use this service write keyword LAINA or HUDUMA."   
                 message_type = "TEXT" 

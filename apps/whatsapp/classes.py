@@ -184,9 +184,9 @@ class WhatsAppWrapper:
             if main_thread == True:
                 back_msg = ""
                 if language == "SW":
-                    back_msg = "_Andika *0* kurudi ⬅️ *Menyu kuu*_"
+                    back_msg = "_Andika *#* kurudi ↩️ *Menyu kuu*_"
                 elif language == "EN":
-                    back_msg = "_Reply *0* - to go ⬅️ to the *Main Menu*_"
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
 
                 message = message + "\n\n" + back_msg
 
@@ -195,7 +195,7 @@ class WhatsAppWrapper:
 
             #check for document attachment
             if attachment is not None:
-                response_1 = self.send_document(from_number, attachment, "Ngao Ya Buku - Fomu ya madai")
+                response_1 = self.send_document(from_number, attachment, "Disaster_Digital_Platform")
 
         elif message_type == "DOCUMENT":
             pass
@@ -230,7 +230,7 @@ class WhatsAppWrapper:
                 "button": buttonTXT,
                 "sections": [
                     {
-                        "title" : "Laina Finance",
+                        "title" : "Prime Minister Office (PMO)",
                         "rows": arr_data
                     }
                 ]
@@ -240,9 +240,9 @@ class WhatsAppWrapper:
             if main_thread == True:
                 back_msg = ""
                 if language == "SW":
-                    back_msg = "_Andika *0* kurudi ⬅️ *Menyu kuu*_"
+                    back_msg = "_Andika *#* kurudi ↩️ *Menyu kuu*_"
                 elif language == "EN":
-                    back_msg = "_Reply *0* - to go ⬅️ to the *Main Menu*_"
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
 
                 message = message + "\n\n" + back_msg
 
@@ -270,9 +270,9 @@ class WhatsAppWrapper:
             if main_thread == True:
                 back_msg = ""
                 if language == "SW":
-                    back_msg = "_Andika *0* kurudi ⬅️ *Menyu kuu*_"
+                    back_msg = "_Andika *#* kurudi ↩️ *Menyu kuu*_"
                 elif language == "EN":
-                    back_msg = "_Reply *0* - to go ⬅️ to the *Main Menu*_"
+                    back_msg = "_Reply *#* - to go ↩️ to the *Main Menu*_"
 
                 message = message + "\n\n" + back_msg
 
@@ -391,7 +391,7 @@ class WhatsAppWrapper:
             "recipient_type": "individual",
             "to": phone_number,
             "type": "document",
-                "document": {"link": documentURL, "caption": caption, "filename": "Ngao_Ya_Buku.pdf"},
+                "document": {"link": documentURL, "caption": caption, "filename": "Digital_Platform.pdf"},
         })
 
         """response"""
