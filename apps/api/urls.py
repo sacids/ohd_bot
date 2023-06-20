@@ -4,5 +4,5 @@ from . import views
 app_name = 'api'
 
 urlpatterns = [
-    path('insurance-information', views.insurance_information, name='insurance-information'),
+    path('rumor-information', views.rumor_information, name='rumor-information'),
 ]
