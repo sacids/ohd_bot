@@ -24,7 +24,7 @@ a {
 }
 
 a:hover, a:focus {
-  color: #153567;
+  color: #1B5E20;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-primary {
-  color: #153567 !important;
+  color: #1B5E20 !important;
 }
 
 .text-secondary {
@@ -89,7 +89,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-dark-blue {
-  color: #153567 !important;
+  color: #1B5E20 !important;
 }
 
 .text-light-blue {
@@ -145,7 +145,7 @@ Sidebar
 }
 
 #sidebar-menu ul li a:hover, #sidebar-menu ul li a:hover i {
-  color: #153567;
+  color: #1B5E20;
 }
 
 #sidebar-menu ul li .badge {
@@ -177,7 +177,7 @@ Sidebar
 
 
 .mm-active .active, .mm-active .active i, .mm-active>a, .mm-active>a i, .mm-active>i {
-  color: #153567 !important;
+  color: #1B5E20 !important;
   font-weight: 600;
   border-radius: 0;
 }
@@ -187,7 +187,7 @@ Sidebar
 Background Color
 ================================================*/
 .bg-primary {
-  background: #153567 !important;
+  background: #1B5E20 !important;
 }
 
 .bg-success {
@@ -240,15 +240,15 @@ Button
 }
 
 .btn-primary {
-  background: #153567;
-  border-color: #153567;
+  background: #1B5E20;
+  border-color: #1B5E20;
   color: #ffffff;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
   color: #ffffff;
-  background-color: #153567;
-  border-color: #153567;
+  background-color: #1B5E20;
+  border-color: #1B5E20;
 }
 
 .btn-primary:active, .btn-primary.active, .open .dropdown-toggle.btn-primary {
@@ -257,13 +257,13 @@ Button
 
 .btn-outline-primary {
   background: #ffffff;
-  border-color: #153567;
-  color: #153567;
+  border-color: #1B5E20;
+  color: #1B5E20;
 }
 
 .btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:active, .btn-outline-primary.active, .open .dropdown-toggle.btn-outline-primary {
-  background: #153567;
-  border-color: #153567;
+  background: #1B5E20;
+  border-color: #1B5E20;
   color: #FFFFFF;
 }
 
