@@ -96,7 +96,7 @@ class ThreadWrapper:
         if thread.validation is not None:
             """TODO: validate entries"""
             if thread.validation == "NUMERIC":
-                validation = validate_numeric(key, language)
+                validation = validate_numeric(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -104,7 +104,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "EMAIL":
-                validation = validate_email(key, language)
+                validation = validate_email(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -112,7 +112,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "PHONE":
-                validation = validate_phone(key, language)
+                validation = validate_phone(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -120,7 +120,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "NIN":
-                validation = validate_NIN(key, language)
+                validation = validate_NIN(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -128,7 +128,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "DL":
-                validation = validate_DL(key, language)
+                validation = validate_DL(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -136,7 +136,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})   
 
             elif thread.validation == "DATE":
-                validation = validate_date(key, language)
+                validation = validate_date(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -144,7 +144,7 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
 
             elif thread.validation == "PAST_DATE":
-                validation = validate_past_date(key, language)
+                validation = validate_past_date(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
@@ -152,27 +152,71 @@ class ThreadWrapper:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
             elif thread.validation == "TIME":
-                validation = validate_date(key, language)
+                validation = validate_date(uuid, key, language)
 
                 if validation['error'] == False:
                     response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
                 elif validation['error'] == True:
                    response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
             
-            elif thread.validation == "API":
-                """validate """
-                result = requests.get(thread.validation_url, params={"value": key})
-                validation = result.json()
+            elif thread.validation == "VILLAGE":
+                validation = validate_village(uuid, key, language)
 
-                """TODO: Work on API"""
-
-                #response
-                response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                if validation['error'] == False:
+                    if validation['data'] == "NEXT_MENU":
+                        response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
+                    elif validation['data'] == 'WARD_MENU':
+                        """current thread"""
+                        ct_thread = Thread.objects.filter(flag='thread_ward').first()
+                        response = self.current_thread(phone=phone, uuid=uuid, thread_id=ct_thread.pk, key=key, channel=channel, language=language)   
+                elif validation['error'] == True:
+                   response = JsonResponse({"status": 'failed', 'language': language, "message": validation['message'], "attachment": None, "message_type": "TEXT", "arr_trees": []})
         else: 
             response = self.next_thread(phone=phone, uuid=uuid, thread_id=thread_id, key=key, channel=channel, language=language)
 
         """response"""   
         return response    
+
+
+    def current_thread(self, **kwargs):
+        """Triggering current thread"""
+        phone       = kwargs['phone']
+        uuid        = kwargs['uuid']
+        thread_id   = kwargs['thread_id']
+        key         = kwargs['key']
+        channel     = kwargs['channel']
+        language    = kwargs['language']
+
+        """action"""
+        action = None
+        actionURL = None
+
+        """thread"""
+        thread = Thread.objects.get(pk=thread_id)
+
+        """create new session"""
+        session_id = self.create_thread_session(phone=phone, thread_id=thread.pk, uuid=uuid, channel=channel)
+
+        """process thread"""
+        request = self.process_thread(phone, thread.pk, uuid, language)
+        response = json.loads(request.content)
+
+        """new response"""
+        new_response = {
+            'status': 'success', 
+            'value': key, 
+            'language': response['language'],
+            'message': response['message'], 
+            'attachment': response['attachment'],
+            "message_type": response['message_type'], 
+            "arr_trees": response['arr_trees'], 
+            "main_thread": response['main_thread'],
+            'action': action, 
+            'actionURL': actionURL
+        }
+
+        """return response"""
+        return JsonResponse(new_response)
 
 
     def next_thread(self, **kwargs):
@@ -479,6 +523,13 @@ class ThreadWrapper:
         elif thread.action is not None and thread.action == "PUSH":
             #build params
             arr_params = self.build_payload(payload=thread.payload, msisdn=phone, uuid=uuid)
+        
+            #create payload for sending
+            arr_params = {
+                'contents': arr_params, 
+                'channel': "WHATSAPP", 
+                'contact': phone
+            }
             logging.info(arr_params)
 
             try:

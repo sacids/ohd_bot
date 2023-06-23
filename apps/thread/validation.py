@@ -1,10 +1,13 @@
 import re
+import requests
+import json
+import logging
 from datetime import datetime, date
 from django.http import JsonResponse
 from apps.thread.models import *
 
 
-def validate_numeric(key, language):
+def validate_numeric(uuid, key, language):
     """Validate numeric value"""
     number_pattern = "^\\d+$"
     if re.match(number_pattern, key):
@@ -19,11 +22,11 @@ def validate_numeric(key, language):
         return {'error': True, 'message': message}
 
 
-def validate_required(key):
+def validate_required(uuid, key):
     pass
 
 
-def validate_email(key, language):
+def validate_email(uuid, key, language):
     """validate email address"""
     pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
 
@@ -43,7 +46,7 @@ def validate_email(key, language):
         return {'error': True, 'message': message}
 
 
-def validate_phone(key, language):
+def validate_phone(uuid, key, language):
     """Validate phone number"""
     pattern = "^0[6-7]{1}[0-9]{8}$"
 
@@ -63,7 +66,7 @@ def validate_phone(key, language):
         return {'error': True, 'message': message}
     
 
-def validate_NIN(key, language):
+def validate_NIN(uuid, key, language):
     """validate national identification ID"""
     pattern = "^[0-9]{20}$"
 
@@ -83,7 +86,7 @@ def validate_NIN(key, language):
         return {'error': True, 'message': message}
 
 
-def validate_DL(key, language):
+def validate_DL(uuid, key, language):
     """validate Driver Licence => 4002759734"""
     pattern = "^400[0-9]{7}$"
 
@@ -101,54 +104,9 @@ def validate_DL(key, language):
 
         #response
         return {'error': True, 'message': message}
-    
-
-def validate_DL_NIN(key, language):
-    """Validate Driver Licence or NIN"""
-    NIN_pattern = "^[0-9]{20}$"
-    DL_pattern = "^400[0-9]{7}$"
-
-    #remove space
-    key = key.replace(' ', '')
-
-    if re.match(DL_pattern, key) or re.match(NIN_pattern, key):
-        return {'error': False, 'value': key}
-    else:
-        message = ""
-        if language == "SW":
-            message = 'Umekosea leseni ya udereva au Kitambulisho cha taifa.'
-        elif language == "EN":
-            message =  "Valid Driver Licence or NIDA Number required here."
-
-        #response
-        return {'error': True, 'message': message}
-    
-
-def validate_VN(key, language):
-    """validate Vehicle/Motor Cycle Registration Number"""
-    VN_pattern = "^T[0-9]{3}[a-zA-Z]{3}$"
-    MT_pattern = "^MC[0-9]{3}[a-zA-Z]{3}$"
-
-    #remove space
-    key = key.replace(' ', '')
-
-    #force key to be uppercase
-    key = key.upper()
-
-    if re.match(VN_pattern, key) or re.match(MT_pattern, key):
-        return {'error': False, 'value': key}
-    else:
-        message = ""
-        if language == "SW":
-            message = 'Umekosea kuandika namba ya chombo chako. mfano: MC874AXC'
-        elif language == "EN":
-            message =  "Valid Vehicle/Motorcycle number required here. e.g: MC874AXC"
-
-        #response
-        return {'error': True, 'message': message}
 
 
-def validate_date(key, language):
+def validate_date(uuid, key, language):
     """validate date format"""
     format = "%d-%m-%Y"
 
@@ -167,15 +125,15 @@ def validate_date(key, language):
     else:
         message = ""
         if language == "SW":
-            message = 'Umekosea kuandika tarehe, tafadhali rudia. mfano: 13-04-2023'
+            message = 'Umekosea kuandika tarehe, tafadhali rudia. Mfano: 08-11-2023'
         elif language == "EN":
-            message =  "only valid date required here. e.g: 13-04-2023"
+            message =  "Only valid date required here. E.g: 08-11-2023"
 
         #response    
         return {'error': True, 'message': message}
 
 
-def validate_past_date(key, language):
+def validate_past_date(uuid, key, language):
     """validate less than today than date"""
     format = "%d-%m-%Y"
 
@@ -217,6 +175,69 @@ def validate_past_date(key, language):
         return {'error': True, 'message': message}
 
 
+def validate_village(uuid, key, language):
+    """validate for village"""
+    try:
+        request = requests.get("", data={"village": key})
+
+        # The following line give us the response code
+        if request.status_code == 200:
+            response = request.json()
+
+            if response['no_of_village'] == 1:
+                #response  
+                return {'error': False, 'value': key, 'data': 'NEXT_MENU'}
+            elif response['no_of_village'] > 1:
+                #response  
+                return {'error': False, 'value': key, 'data': 'WARD_MENU'}
+            elif response['no_of_village'] == 0:
+                message = ""
+                if language == "SW":
+                    message = 'Umekosea kijiji/mtaa. Tafadhali rudia'
+                elif language == "EN":
+                    message =  "Wrong village name entered, please enter valid village." 
+                #response      
+                return {'error': True, 'message': message}
+    except requests.exceptions.HTTPError as errh:
+        logging.info("Http Error:" + errh)
+
+    except requests.exceptions.ConnectionError as errc:
+        logging.info("Error Connecting:" + errc)
+
+    except requests.exceptions.Timeout as errt:
+        logging.info("Timeout Error:" + errt)
+
+    except requests.exceptions.RequestException as err:
+        logging.info("OOps: Something Else:" + err)
+       
+
+
+def validate_ward(uuid, key, language):
+    """validate ward"""
+    village_thread = Thread.objects.filter(flag='thread_village').first()
+
+    """GET data from previous thread"""
+    thread_session = ThreadSession.objects.filter(thread_id=village_thread.pk, uuid=uuid).first()
+    village = thread_session.values
+    
+    try:
+        request = requests.get("", data={"village": village, "ward": key})
+
+        # The following line give us the response code
+        if request.status_code == 200:
+            response = request.json()
+
+    except requests.exceptions.HTTPError as errh:
+        logging.info("Http Error:" + errh)
+
+    except requests.exceptions.ConnectionError as errc:
+        logging.info("Error Connecting:" + errc)
+
+    except requests.exceptions.Timeout as errt:
+        logging.info("Timeout Error:" + errt)
+
+    except requests.exceptions.RequestException as err:
+        logging.info("OOps: Something Else:" + err)
 
 
 
