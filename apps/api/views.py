@@ -17,6 +17,7 @@ def rumor_information(request):
         wrapper = ThreadWrapper()
         request = wrapper.process_data(uuid=uuid)
         response = json.loads(request.content)
+        logging.info(response)
 
         if response['status'] == 'success':
             #construct message
