@@ -530,7 +530,6 @@ class ThreadWrapper:
                 'channel': "WHATSAPP", 
                 'contact': phone
             }
-            logging.info(arr_params)
 
             try:
                 request = requests.post(thread.action_url, data=arr_params)
@@ -538,9 +537,10 @@ class ThreadWrapper:
                 # The following line give us the response code
                 if request.status_code == 200:
                     response = request.json()
-
-                    if response['message'] is not None:
-                        message = response['message']
+                    
+                    if 'message' in response:
+                        if response['message'] is not None:
+                            message = response['message']
 
                     if 'attachment' in response:
                         if response['attachment'] is not None:
@@ -674,9 +674,6 @@ class ThreadWrapper:
         payload  = kwargs["payload"]  
         msisdn  = kwargs["msisdn"]  
         uuid  = kwargs["uuid"]  
-
-        logging.info("payload")
-        logging.info(payload)
 
         #process data
         my_data = self.process_data(uuid = uuid)
