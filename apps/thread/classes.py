@@ -527,13 +527,12 @@ class ThreadWrapper:
             #create payload for sending
             arr_params = {
                 'contents': arr_params, 
-                'channel': "WhatsApp", 
+                'channel': "WHATSAPP", 
                 'contact': phone
             }
-            logging.info(arr_params)
 
             try:
-                request = requests.post(thread.action_url, data = json.dumps(arr_params), headers={"Content-Type": "application/json; charset=utf-8"})
+                request = requests.post(thread.action_url, data=arr_params)
 
                 # The following line give us the response code
                 if request.status_code == 200:
