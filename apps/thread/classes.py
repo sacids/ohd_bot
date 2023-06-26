@@ -530,6 +530,7 @@ class ThreadWrapper:
                 'channel': "WHATSAPP", 
                 'contact': phone
             }
+            logging.info(arr_params)
 
             try:
                 request = requests.post(thread.action_url, data=arr_params)
