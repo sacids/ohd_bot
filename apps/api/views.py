@@ -42,7 +42,7 @@ def rumor_information(request):
                 message += "*Mahali(GPS):* " + response['arr_data']['location'] + " \r\n"  
 
 
-            message += f"\r\n\n*Hakiki taarifa zako na endelea kwa kuzituma."
+            message += f"\r\n\n*Bonyeza Endelea kukamilisha utumaji wa taarifa zako.*"
         
         elif response['status'] == 'failed':
             message = response['error_msg'] 
