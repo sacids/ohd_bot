@@ -538,7 +538,7 @@ class ThreadWrapper:
                 # The following line give us the response code
                 if request.status_code == 200:
                     response = request.json()
-                    ß
+                    
                     if 'message' in response:
                         if response['message'] is not None:
                             message = response['message']
