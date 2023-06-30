@@ -21,7 +21,7 @@ def rumor_information(request):
 
         if response['status'] == 'success':
             #construct message
-            message = "*Hakiki Taarifa* \n\n" \
+            message = "*Hakiki Taarifa zako* \n\n" \
             
             if 'text' in response['arr_data']:
                 message += "*Maelezo ya Tukio:* " + response['arr_data']['text'] + " \r\n"
@@ -42,7 +42,7 @@ def rumor_information(request):
                 message += "*Mahali(GPS):* " + response['arr_data']['location'] + " \r\n"  
 
 
-            message += f"\r\n\n*Tamko: Ninathibitisha maelezo ni ya ukweli na ni sahihi."
+            message += f"\r\n\n*Hakiki taarifa zako na endelea kwa kuzituma."
         
         elif response['status'] == 'failed':
             message = response['error_msg'] 

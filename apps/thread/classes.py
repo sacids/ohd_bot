@@ -532,12 +532,13 @@ class ThreadWrapper:
             }
 
             try:
-                request = requests.post(thread.action_url, data=arr_params)
+                request = requests.post(thread.action_url, data = json.dumps(arr_params), headers={"Content-Type": "application/json; charset=utf-8"})
+                logging.info(request)
 
                 # The following line give us the response code
                 if request.status_code == 200:
                     response = request.json()
-                    
+                    ß
                     if 'message' in response:
                         if response['message'] is not None:
                             message = response['message']
